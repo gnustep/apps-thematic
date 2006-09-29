@@ -1,0 +1,21 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    AppController = {
+	Actions = (
+	    "newDocument:",
+	    "openInspector:",
+	    "showPrefPanel:"
+	);
+	Outlets = (
+	    inspector
+	);
+	Super = NSObject;
+    };
+    FirstResponder = {
+	Actions = (
+	    "openInspector:",
+	    "showPrefPanel:"
+	);
+	Super = NSObject;
+    };
+}

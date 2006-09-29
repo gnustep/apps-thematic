@@ -1,0 +1,20 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    ThemeDocument = {
+	Actions = (
+	    "saveDocument:",
+	    "saveDocumentAs:",
+	    "saveDocumentTo:"
+	);
+	Outlets = (
+	    window,
+	    colorsView,
+	    imagesView,
+	    menusView,
+	    windowsView,
+	    extraView,
+	    _inspector
+	);
+	Super = NSObject;
+    };
+}

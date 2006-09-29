@@ -1,0 +1,111 @@
+{
+    APPLICATIONICON = Thematic.png;
+    APP_DOCUMENT_BASED = NO;
+    CLASS_FILES = (
+	AppController.m,
+	ThemeDocument.m,
+	ThemeElement.m,
+	ImageElement.m,
+	MenusElement.m,
+	WindowsElement.m,
+	MiscElement.m
+    );
+    COMPILEROPTIONS = "";
+    CPPOPTIONS = "";
+    CREATION_DATE = "2006-09-18 14:00:14 +0100";
+    DOCU_FILES = (
+    );
+    FRAMEWORKS = (
+    );
+    HEADER_FILES = (
+	AppController.h,
+	ThemeDocument.h,
+	ThemeElement.h,
+	ColorElement.h,
+	ImageElement.h,
+	MenusElement.h,
+	WindowsElement.h,
+	MiscElement.h
+    );
+    HELP_FILE = ThematicHelp.rtfd;
+    IMAGES = (
+	Thematic.png
+    );
+    INSTALLDIR = "$(HOME)/GNUstep";
+    INTERFACES = (
+	Thematic.gorm,
+	ThemeInspector.gorm,
+	ColorElement.gorm,
+	ThemeDocument.gorm,
+	ImageElement.gorm,
+	WindowsElement.gorm,
+	MenusElement.gorm,
+	MiscElement.gorm
+    );
+    LANGUAGE = English;
+    LAST_EDITING = "2006-09-29 18:09:23 +0000";
+    LIBRARIES = (
+	"gnustep-base",
+	"gnustep-gui"
+    );
+    LINKEROPTIONS = "";
+    LOCALIZED_RESOURCES = (
+    );
+    MAININTERFACE = Thematic.gorm;
+    MAKEFILEDIR = "$(GNUSTEP_MAKEFILES)";
+    OBJC_COMPILEROPTIONS = "";
+    OTHER_RESOURCES = (
+	"Info-gnustep.plist",
+	ThematicHelp.rtfd
+    );
+    OTHER_SOURCES = (
+	main.m,
+	ColorElement.m
+    );
+    PC_WINDOWS = {
+	ProjectBuild = "1 241 482 356 0 0  1280 1024 ";
+	ProjectWindow = "214 445 562 482 0 0  1280 1024 ";
+	ShowToolbar = YES;
+    };
+    PRINCIPAL_CLASS = NSApplication;
+    PROJECT_AUTHORS = (
+	"Richard Frith-Macdonald"
+    );
+    PROJECT_COPYRIGHT = "Copyright (C) 2006";
+    PROJECT_COPYRIGHT_DESC = "Released under ... the GPL2";
+    PROJECT_CREATOR = "richard,,,";
+    PROJECT_DESCRIPTION = "The Theme editor for GNUstep";
+    PROJECT_DOCUMENTTYPES = (
+	{
+	    NSDocumentClass = NSDocumentClass;
+	    NSHumanReadableName = "";
+	    NSIcon = Thematic.png;
+	    NSName = "";
+	    NSRole = "";
+	    NSUnixExtensions = (
+		theme
+	    );
+	}
+    );
+    PROJECT_GROUP = "No group avaliable!";
+    PROJECT_MAINTAINER = "richard,,,";
+    PROJECT_NAME = Thematic;
+    PROJECT_RELEASE = 0.1;
+    PROJECT_SUMMARY = "No summary avaliable!";
+    PROJECT_TYPE = Application;
+    PROJECT_URL = "";
+    SEARCH_HEADER_DIRS = (
+    );
+    SEARCH_LIB_DIRS = (
+    );
+    SUBPROJECTS = (
+    );
+    SUPPORTING_FILES = (
+	GNUmakefile.preamble,
+	GNUmakefile,
+	GNUmakefile.postamble
+    );
+    USER_LANGUAGES = (
+	English
+    );
+}

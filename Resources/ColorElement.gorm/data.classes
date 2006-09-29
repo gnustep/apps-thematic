@@ -1,0 +1,42 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    AppController = {
+	Actions = (
+	    "newDocument:",
+	    "openInspector:",
+	    "showPrefPanel:"
+	);
+	Outlets = (
+	    inspector
+	);
+	Super = NSObject;
+    };
+    ColorElement = {
+	Actions = (
+	    "takeNameFrom:"
+	);
+	Outlets = (
+	    colorMenu,
+	    colorWell
+	);
+	Super = ThemeElement;
+    };
+    FirstResponder = {
+	Actions = (
+	    "openInspector:",
+	    "showPrefPanel:",
+	    "takeColorFrom:",
+	    "takeNameFrom:"
+	);
+	Super = NSObject;
+    };
+    ThemeElement = {
+	Actions = (
+	    "takeColorFrom:"
+	);
+	Outlets = (
+	    window
+	);
+	Super = NSObject;
+    };
+}

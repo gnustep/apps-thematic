@@ -1,0 +1,25 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    FirstResponder = {
+	Actions = (
+	    "takeMenuStyleFrom:"
+	);
+	Super = NSObject;
+    };
+    MenusElement = {
+	Actions = (
+	    "takeMenuStyleFrom:"
+	);
+	Outlets = (
+	);
+	Super = ThemeElement;
+    };
+    ThemeElement = {
+	Actions = (
+	);
+	Outlets = (
+	    window
+	);
+	Super = NSObject;
+    };
+}

@@ -1,0 +1,25 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    FirstResponder = {
+	Actions = (
+	    "takeWindowStyleFrom:"
+	);
+	Super = NSObject;
+    };
+    ThemeElement = {
+	Actions = (
+	);
+	Outlets = (
+	    window
+	);
+	Super = NSObject;
+    };
+    WindowsElement = {
+	Actions = (
+	    "takeWindowStyleFrom:"
+	);
+	Outlets = (
+	);
+	Super = ThemeElement;
+    };
+}

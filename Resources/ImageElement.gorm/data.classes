@@ -1,0 +1,20 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    ImageElement = {
+	Actions = (
+	);
+	Outlets = (
+	    scrollView,
+	    description
+	);
+	Super = ThemeElement;
+    };
+    ThemeElement = {
+	Actions = (
+	);
+	Outlets = (
+	    window
+	);
+	Super = NSObject;
+    };
+}

@@ -1,0 +1,39 @@
+{\rtf1\ansi\ansicpg10000\cocoartf102{\fonttbl\f0\fswiss Helvetica;}
+\pard\tx0\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\ql\f0\fs24 \uc0 This is a theme editor for GNUstep.  It is at an early stage of development ...\par
+\par
+Theming has to be built into the GNUstep GUI in order for a theme editor to be useful, and this will be an incremental process, with capabilities being added to the editor as they are added to the GUI library. \par
+                \par
+Building the theme editor requires the *latest* version of the theme branch of the GUI from SVN.\par
+\par
+Current capabilities are ...\par
+\par
+1. Control of system colors\par
+Click on the color wheel icon in the main theme window to raise an inspector which permits you to redefine all the system colors used in drawing controls in the GUI.\par
+\par
+2. Control of system images\par
+\cf0 \uc0 Click on the \uc0 images\cf0 \uc0  icon in \uc0 the \cf0 \uc0 main theme window to raise an inspector which permits you to redefine all the system \uc0 images\cf0 \uc0  used in drawing controls in the GUI.\par
+\uc0 \par
+3. Control of menus\par
+Click on the menus icon to raise an inspector allowing you to change menu style.\par
+In future this should allow detailed control over how menus are drawn.\par
+\par
+4. Control of windows and panels\par
+\cf0 \uc0 Click on the \uc0 windows\cf0 \uc0  icon to raise an inspector allowing you to change \uc0 whether window decorations are handled by the GUI (themed) or drawn natively by the backend.\par
+\cf0 \uc0 In future this should allow \uc0 detailed\cf0 \uc0  control over how menus are drawn.\par
+\uc0 \par
+5. General/miscellaneous settings\par
+Click on the GNUstep logo to set attributes for the theme being edited/created ...\par
+The authorship, the icon to identify the theme.\par
+\par
+In future the aim is to have \par
+\par
+6. Drawing controls by tiling images ...\par
+Clicking on a control in the maiun theme window should raise an inspector allowing you to define the image to be tiled to draw that control and the portions of the image to use for different purposes whn tiling.\par
+\par
+7. Implementing new methods to draw controls ...\par
+Eventually, in addition to defining tiling, the editor will let you code replacement methods to draw each control and will let you test those methods dynamically.\par
+\par
+The design of the editor is that any theme changes should take effect immediately and be applied to the running application so that you can effectively preview them.\par
+\par
+\par
+}
