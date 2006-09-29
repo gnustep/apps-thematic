@@ -4,19 +4,18 @@ Theming has to be built into the GNUstep GUI in order for a theme editor
 to be useful ... this will be an incremental process, with capabilities
 being added to the editor as they are added to the gui library.
 
-Building the current editor requires the *latest* version of the
-theme branch of the GUI from SVN.
+The editor is already capable of building simple themes!
 
-Current capabilities are ...
+Look for more information on the application in Resources/Thematic.rtfd
 
-1. control of system colors
-2. control of system images
-3. control of menu and window user defaults
+Building/using the current editor requires the *latest* version of the
+theme branch of the GUI from SVN.  The major task in theming is now
+changing all the control drawing code to be themable ... identifying
+a minimal set of drawing methods for each control and defining the 
+number of tile images needed for each, and updating the code in the
+GUI library.
 
-In future the aim is to have 
-
-4. Drawing controls by tiling images ...
-the editor will let you define the tiles.
-5. Implementing new methods to draw controls ...
-the editor will let you code and test those methods.
+To work on Thematic, you also need Gorm.app and ProjectCenter.app,
+and a copy of an rtfd editor such as Ink.app if you wish to improve the
+online help (Resources/Thematic.rtfd).
 
