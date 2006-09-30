@@ -138,11 +138,30 @@ static AppController	*shared = nil;
   NSArray	*fileTypes = [NSArray arrayWithObject: @"theme"];
   NSOpenPanel	*oPanel = [NSOpenPanel openPanel];
   int		result;
+  NSFileManager	*mgr = [NSFileManager defaultManager];
+  BOOL		isDir;
+  NSString	*base;
+
+  base = [NSSearchPathForDirectoriesInDomains
+    (NSAllLibrariesDirectory, NSUserDomainMask, YES) lastObject];
+  if (base != nil)
+    {
+      base = [base stringByAppendingPathComponent: @"Themes"];
+      if ([mgr fileExistsAtPath: base isDirectory: &isDir] == NO
+	|| isDir == NO)
+	{
+	  base = nil;
+	}
+    }
+  if (base == nil)
+    {
+      base = NSHomeDirectory();
+    }
 
   [oPanel setAllowsMultipleSelection: NO];
   [oPanel setCanChooseFiles: YES];
   [oPanel setCanChooseDirectories: NO];
-  result = [oPanel runModalForDirectory: nil
+  result = [oPanel runModalForDirectory: base
 				   file: nil
 				  types: fileTypes];
   if (result == NSOKButton)

@@ -47,9 +47,7 @@
 {
   NSString	*path;
 
-  path = [[self bundle] bundlePath];
-  path = [path stringByAppendingPathComponent: @"Resources"];
-  path = [path stringByAppendingPathComponent: @"Info-gnustep.plist"];
+  path = [[self bundle] pathForResource: @"Info-gnustep" ofType: @"plist"];
   return [NSDictionary dictionaryWithContentsOfFile: path];
 }
 @end
@@ -455,6 +453,17 @@ static NSMutableSet	*untitledName = nil;
   [_info writeToFile: [_rsrc stringByAppendingPathComponent:
     @"Info-gnustep.plist"] atomically: NO];
 
+  /* If there is no icon for the theme, set a default one.
+   */
+  if ([_info objectForKey: @"GSThemeIcon"] == nil)
+    {
+      NSString	*s;
+      
+      s = [[NSBundle mainBundle] pathForResource: @"Thematic" ofType: @"png"];
+      [self setResource: s forKey: @"GSThemeIcon"];
+      [window setDocumentEdited: NO];
+    }
+
   _theme = [[TestTheme alloc] initWithBundle: [NSBundle bundleWithPath: _work]];
   [GSTheme setTheme: _theme];
 
@@ -482,6 +491,7 @@ static NSMutableSet	*untitledName = nil;
   RELEASE(view);
 
   [self setPath: path];
+
   [self activate];
   [window orderFront: self];
   return self;
@@ -520,15 +530,57 @@ static NSMutableSet	*untitledName = nil;
     }
 }
 
+- (NSString*) saveDirectory
+{
+  NSFileManager	*mgr = [NSFileManager defaultManager];
+  BOOL		isDir;
+  NSString	*base;
+
+  base = [NSSearchPathForDirectoriesInDomains
+    (NSAllLibrariesDirectory, NSUserDomainMask, YES) lastObject];
+  if (base != nil)
+    {
+      base = [base stringByAppendingPathComponent: @"Themes"];
+      if ([mgr fileExistsAtPath: base isDirectory: &isDir] == NO
+	|| isDir == NO)
+	{
+	  int	ret;
+
+	  ret = NSRunAlertPanel(@"Warning",
+	    @"Your personal theme directory (%@) does not exist",
+	    @"Create it", @"Ignore", nil, base);
+	  if (ret == 1)
+	    {
+	      if ([mgr createDirectoryAtPath: base attributes: nil] == NO)
+		{
+		  NSRunAlertPanel(@"Alert",
+		    @"Unable to create directory at %@",
+		    @"OK", nil, nil, base);
+		  base = nil;
+		}
+	    }
+	  else
+	    {
+	      base = nil;
+	    }
+	}
+    }
+  if (base == nil)
+    {
+      base = NSHomeDirectory();
+    }
+  return base;
+}
+
 - (void) saveDocumentAs: (id)sender
 {
-  NSSavePanel		*sp;
-  int			result;
+  NSSavePanel	*sp;
+  int		result;
 
   sp = [NSSavePanel savePanel];
   [sp setRequiredFileType: @"theme"];
   [sp setTitle: _(@"Save theme as...")];
-  result = [sp runModalForDirectory: NSHomeDirectory() file: _name];
+  result = [sp runModalForDirectory: [self saveDirectory] file: _name];
   if (result == NSOKButton)
     {
       [self setPath: [sp filename]];
@@ -545,7 +597,7 @@ static NSMutableSet	*untitledName = nil;
   sp = [NSSavePanel savePanel];
   [sp setRequiredFileType: @"theme"];
   [sp setTitle: _(@"Save theme to...")];
-  result = [sp runModalForDirectory: NSHomeDirectory() file: _name];
+  result = [sp runModalForDirectory: [self saveDirectory] file: _name];
   if (result == NSOKButton)
     {
       NSString *path = [sp filename];
@@ -715,7 +767,7 @@ static NSMutableSet	*untitledName = nil;
 {
   if ([window isDocumentEdited])
     {
-      BOOL ret;
+      int ret;
 
       [window makeKeyAndOrderFront:self];
 
@@ -724,7 +776,7 @@ static NSMutableSet	*untitledName = nil;
 	@"Save and Close", @"Don't save", @"Cancel", 
 	[_path lastPathComponent]);
 
-      if (ret == YES)
+      if (ret == 1)
 	{
 	  [self saveDocument: self];
 	  if ([window isDocumentEdited])
@@ -739,7 +791,7 @@ static NSMutableSet	*untitledName = nil;
 	      return YES;
 	    }
 	}
-      else if (ret == NO) // Close but don't save
+      else if (ret == 0) // Close but don't save
 	{
 	  return YES;
 	}
@@ -800,7 +852,7 @@ static NSMutableSet	*untitledName = nil;
 
 	  tmp = [NSString stringWithFormat: @"%@%d", tmp, ++count];
 	  tmp = [tmp stringByAppendingPathExtension: [name pathExtension]];
-	  file = [_rsrc stringByAppendingPathComponent: name];
+	  file = [_rsrc stringByAppendingPathComponent: tmp];
 	}
       name = [file lastPathComponent];
       if ([mgr copyPath: path toPath: file handler: nil] == NO)
@@ -814,7 +866,13 @@ static NSMutableSet	*untitledName = nil;
 	  [_info setObject: name forKey: key];
 	}
     }
-
+  if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
+    @"Info-gnustep.plist"] atomically: NO] == NO)
+    {
+      NSRunAlertPanel(_(@"Problem changing setting"),
+	@"Could not save Info-gnustep.plist into theme",
+	nil, nil, nil);
+    }
   [window setDocumentEdited: YES];
   [self activate];			// Preview
 }
