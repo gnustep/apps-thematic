@@ -209,15 +209,30 @@ static NSMutableSet	*untitledName = nil;
 
 - (void) close
 {
+  /* Remove our information from the inspector
+   */
+  if (_selected != nil)
+    {
+      [_selected deselect];
+      _selected = nil;
+    }
+
+  /* Stop our theme being the active theme.
+   */
   [GSTheme setTheme: nil];
   RELEASE(_theme);
+
+  /* Remove our temporary work area.
+   */
   if (_work != nil)
     {
       NSFileManager	*mgr = [NSFileManager defaultManager];
 
       [mgr removeFileAtPath: _work handler: nil];
     }
-  // This should deallocate us.
+
+  /* Remove self from app controller ... this should deallocate us.
+   */
   [[AppController sharedController] removeDocument: self];
 }
 

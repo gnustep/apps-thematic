@@ -72,7 +72,7 @@
   [oPanel setAllowsMultipleSelection: NO];
   [oPanel setCanChooseFiles: YES];
   [oPanel setCanChooseDirectories: NO];
-  result = [oPanel runModalForDirectory: nil
+  result = [oPanel runModalForDirectory: NSHomeDirectory()
 				   file: nil
 				  types: fileTypes];
   if (result == NSOKButton)

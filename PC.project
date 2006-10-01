@@ -43,7 +43,7 @@
 	MiscElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2006-09-30 18:29:50 +0000";
+    LAST_EDITING = "2006-09-30 18:35:09 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -63,8 +63,8 @@
 	ColorElement.m
     );
     PC_WINDOWS = {
-	ProjectBuild = "1 241 482 356 0 0  1280 1024 ";
-	ProjectWindow = "214 445 562 482 0 0  1280 1024 ";
+	ProjectBuild = "7 71 482 356 0 0  1280 1024 ";
+	ProjectWindow = "328 123 562 482 0 0  1280 1024 ";
 	ShowToolbar = YES;
     };
     PRINCIPAL_CLASS = NSApplication;
