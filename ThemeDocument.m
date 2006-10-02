@@ -110,6 +110,27 @@ static NSMutableSet	*untitledName = nil;
   return YES;
 }
 
+- (void) helpRequested: (NSEvent*)theEvent
+{
+  NSPoint	loc = [theEvent locationInWindow];
+  NSView	*hit = [super hitTest: loc];
+
+  if (hit != nil)
+    {
+      while (hit != self)
+        {
+	  if ([[NSHelpManager sharedHelpManager]
+	    showContextHelpForObject: hit
+	    locationHint: loc] == YES)
+	    {
+	      return;	// Found/
+	    }
+	  hit = [hit superview];
+        }
+    }
+  [super helpRequested: theEvent];
+}
+
 
 /*
  *	Intercepting events in the view and handling them
@@ -169,9 +190,14 @@ static NSMutableSet	*untitledName = nil;
 
 - (void) activate
 {
-  /*
-   * Tell the system that our theme is now active.
+  /* Tell the system that our theme is now active.
+   * If we are already active, we deactivate first so that the
+   * new activation can take effect cleanly.
    */
+  if ([GSTheme theme] == _theme)
+    {
+      [_theme deactivate];
+    }
   [_theme activate];
 }
 
@@ -507,6 +533,13 @@ static NSMutableSet	*untitledName = nil;
 
   [self setPath: path];
 
+{
+  NSAttributedString *s;
+
+  s = [[NSAttributedString alloc] initWithString: @"This raises the theme images inspector, which displays all the images used in drawing standard GUI elements (excluding images used for tiling), double-clicking any image will oproduce an open panel, allowing you to specify a replacement image to be used by your theme."];
+  [[NSHelpManager sharedHelpManager] setContextHelp: s forObject: imagesView];
+  RELEASE(s);
+}
   [self activate];
   [window orderFront: self];
   return self;
@@ -515,7 +548,6 @@ static NSMutableSet	*untitledName = nil;
 - (void) notified: (NSNotification*)n
 {
   NSString	*name = [n name];
-  id		object = [n object];
 
   if ([name isEqualToString: NSWindowDidBecomeMainNotification]
     || [name isEqualToString: NSWindowDidBecomeKeyNotification])
@@ -526,7 +558,7 @@ static NSMutableSet	*untitledName = nil;
     {
       [self close];
     }
-  NSLog(@"Received %@ from %@", name, object);
+  // NSLog(@"Received %@ from %@", name, [n object]);
 }
 
 - (void) saveDocument: (id)sender

@@ -43,7 +43,7 @@
 	MiscElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2006-09-30 18:35:09 +0000";
+    LAST_EDITING = "2006-10-02 09:46:02 +0100";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"

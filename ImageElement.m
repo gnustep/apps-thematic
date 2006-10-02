@@ -240,32 +240,6 @@
   [[self window] flushWindow];
 }
 
-- (void) mouseDown: (NSEvent*)theEvent
-{
-  if ([theEvent modifierFlags] & NSControlKeyMask)
-    {
-      NSPoint	loc = [theEvent locationInWindow];
-      int	r = 0, c = 0;
-      int	pos = 0;
-      id	obj = nil;
-
-      loc = [self convertPoint: loc fromView: nil];
-      [self getRow: &r column: &c forPoint: loc];
-      pos = r * [self numberOfColumns] + c;
-      if (pos >= 0 && pos < [objects count])
-	{
-	  obj = [objects objectAtIndex: pos];
-	}
-      if (obj != nil && obj != selected)
-	{
-	  [self selectObject: obj];
-	  [self makeSelectionVisible: YES];
-	}
-    }
-
-  [super mouseDown: theEvent];
-}
-
 - (void) refreshCells
 {
   unsigned	count = [objects count];
