@@ -391,7 +391,7 @@ static NSMutableSet	*untitledName = nil;
       if ([mgr copyPath: path toPath: _work handler: nil] == NO)
 	{
 	  NSRunAlertPanel(_(@"Alert"),
-	    @"Unable to load theme into work area from %@",
+	    _(@"Unable to load theme into work area from %@"),
 	    nil, nil, nil, path);
 	  return NO;
 	}
@@ -401,9 +401,9 @@ static NSMutableSet	*untitledName = nil;
     {
       if ([mgr createDirectoryAtPath: _work attributes: nil] == NO)
 	{
-	  NSRunAlertPanel(@"Alert",
-	    @"Unable to create working directory for theme",
-	    @"OK", nil, nil);
+	  NSRunAlertPanel(_(@"Alert"),
+	    _(@"Unable to create working directory for theme"),
+	    _(@"OK"), nil, nil);
 	  DESTROY(self);
 	  return nil;
 	}
@@ -414,9 +414,9 @@ static NSMutableSet	*untitledName = nil;
     {
       if ([mgr createDirectoryAtPath: _rsrc attributes: nil] == NO)
 	{
-	  NSRunAlertPanel(@"Alert",
-	    @"Unable to create Resources directory for theme",
-	    @"OK", nil, nil);
+	  NSRunAlertPanel(_(@"Alert"),
+	    _(@"Unable to create Resources directory for theme"),
+	    _(@"OK"), nil, nil);
 	  DESTROY(self);
 	  return nil;
 	}
@@ -427,9 +427,9 @@ static NSMutableSet	*untitledName = nil;
     {
       if ([mgr createDirectoryAtPath: s attributes: nil] == NO)
 	{
-	  NSRunAlertPanel(@"Alert",
-	    @"Unable to create working images subdirectory for theme",
-	    @"OK", nil, nil);
+	  NSRunAlertPanel(_(@"Alert"),
+	    _(@"Unable to create working images subdirectory for theme"),
+	    _(@"OK"), nil, nil);
 	  DESTROY(self);
 	  return nil;
 	}
@@ -539,7 +539,14 @@ static NSMutableSet	*untitledName = nil;
   s = [[NSAttributedString alloc] initWithString: @"This raises the theme images inspector, which displays all the images used in drawing standard GUI elements (excluding images used for tiling), double-clicking any image will oproduce an open panel, allowing you to specify a replacement image to be used by your theme."];
   [[NSHelpManager sharedHelpManager] setContextHelp: s forObject: imagesView];
   RELEASE(s);
+
 }
+  [colorsView setToolTip: _(@"system colors")];
+  [imagesView setToolTip: _(@"system images")];
+  [menusView setToolTip: _(@"menu settings")];
+  [windowsView setToolTip: _(@"window settings")];
+  [extraView setToolTip: _(@"general information")];
+
   [self activate];
   [window orderFront: self];
   return self;
@@ -593,16 +600,16 @@ static NSMutableSet	*untitledName = nil;
 	{
 	  int	ret;
 
-	  ret = NSRunAlertPanel(@"Warning",
-	    @"Your personal theme directory (%@) does not exist",
-	    @"Create it", @"Ignore", nil, base);
+	  ret = NSRunAlertPanel(_(@"Warning"),
+	    _(@"Your personal theme directory (%@) does not exist"),
+	    _(@"Create it"), _(@"Ignore"), nil, base);
 	  if (ret == 1)
 	    {
 	      if ([mgr createDirectoryAtPath: base attributes: nil] == NO)
 		{
-		  NSRunAlertPanel(@"Alert",
-		    @"Unable to create directory at %@",
-		    @"OK", nil, nil, base);
+		  NSRunAlertPanel(_(@"Alert"),
+		    _(@"Unable to create directory at %@"),
+		    _(@"OK"), nil, nil, base);
 		  base = nil;
 		}
 	    }
@@ -665,7 +672,7 @@ static NSMutableSet	*untitledName = nil;
       if (isDirectory == NO)
         {
 	  NSRunAlertPanel(_(@"Problem saving theme"),
-	    @"A file already exists at %@",
+	    _(@"A file already exists at %@"),
 	    nil, nil, nil, path);
 	  return NO;
 	}
@@ -675,7 +682,7 @@ static NSMutableSet	*untitledName = nil;
 	  if ([mgr removeFileAtPath: backup handler: nil] == NO)
 	    {
 	      NSRunAlertPanel(_(@"Problem saving theme"),
-		@"Unable to remove old backup at %@",
+		_(@"Unable to remove old backup at %@"),
 		nil, nil, nil, backup);
 	      return NO;
 	    }
@@ -683,7 +690,7 @@ static NSMutableSet	*untitledName = nil;
       if ([mgr movePath: path toPath: backup handler: nil] == NO)
         {
 	  NSRunAlertPanel(_(@"Problem saving theme"),
-	    @"Unable to move backup theme to %@",
+	    _(@"Unable to move backup theme to %@"),
 	    nil, nil, nil, backup);
 	  return NO;
 	}
@@ -692,7 +699,7 @@ static NSMutableSet	*untitledName = nil;
   if ([mgr copyPath: _work toPath: path handler: nil] == NO)
     {
       NSRunAlertPanel(_(@"Problem saving theme"),
-	@"Unable to copy work area to %@",
+	_(@"Unable to copy work area to %@"),
 	nil, nil, nil, path);
       return NO;
     }
@@ -712,7 +719,7 @@ static NSMutableSet	*untitledName = nil;
     [_rsrc stringByAppendingPathComponent: @"ThemeColors.clr"]] == NO)
     {
       NSRunAlertPanel(_(@"Problem changing color"),
-	@"Could not save colors into theme",
+	_(@"Could not save colors into theme"),
 	nil, nil, nil);
     }
   else
@@ -736,7 +743,7 @@ static NSMutableSet	*untitledName = nil;
     @"Info-gnustep.plist"] atomically: NO] == NO)
     {
       NSRunAlertPanel(_(@"Problem changing setting"),
-	@"Could not save Info-gnustep.plist into theme",
+	_(@"Could not save Info-gnustep.plist into theme"),
 	nil, nil, nil);
     }
   else
@@ -775,7 +782,7 @@ static NSMutableSet	*untitledName = nil;
   if ([mgr copyPath: path toPath: file handler: nil] == NO)
     {
       NSRunAlertPanel(_(@"Problem loading image"),
-	@"Could not copy file into theme",
+	_(@"Could not copy file into theme"),
 	nil, nil, nil);
     }
   else
@@ -800,7 +807,7 @@ static NSMutableSet	*untitledName = nil;
     @"Info-gnustep.plist"] atomically: NO] == NO)
     {
       NSRunAlertPanel(_(@"Problem changing setting"),
-	@"Could not save Info-gnustep.plist into theme",
+	_(@"Could not save Info-gnustep.plist into theme"),
 	nil, nil, nil);
     }
   else
@@ -818,9 +825,9 @@ static NSMutableSet	*untitledName = nil;
 
       [window makeKeyAndOrderFront:self];
 
-      ret = NSRunAlertPanel(@"Close Theme",
-	@"Theme %@ has been modified",
-	@"Save and Close", @"Don't save", @"Cancel", 
+      ret = NSRunAlertPanel(_(@"Close Theme"),
+	_(@"Theme %@ has been modified"),
+	_(@"Save and Close"), _(@"Don't save"), _(@"Cancel"), 
 	[_path lastPathComponent]);
 
       if (ret == 1)
@@ -828,9 +835,9 @@ static NSMutableSet	*untitledName = nil;
 	  [self saveDocument: self];
 	  if ([window isDocumentEdited])
 	    {
-	      NSRunAlertPanel(@"Alert",
-		@"Error when saving theme '%@'!",
-		@"OK", nil, nil, [_path lastPathComponent]);
+	      NSRunAlertPanel(_(@"Alert"),
+		_(@"Error when saving theme '%@'!"),
+		_(@"OK"), nil, nil, [_path lastPathComponent]);
 	      return NO;
 	    }
 	  else
@@ -904,9 +911,9 @@ static NSMutableSet	*untitledName = nil;
       name = [file lastPathComponent];
       if ([mgr copyPath: path toPath: file handler: nil] == NO)
         {
-	  NSRunAlertPanel(@"Alert",
-	    @"Error copying '%@' into work area!",
-	    @"OK", nil, nil, [_path lastPathComponent]);
+	  NSRunAlertPanel(_(@"Alert"),
+	    _(@"Error copying '%@' into work area!"),
+	    _(@"OK"), nil, nil, [_path lastPathComponent]);
 	}
       else
         {
@@ -917,7 +924,7 @@ static NSMutableSet	*untitledName = nil;
     @"Info-gnustep.plist"] atomically: NO] == NO)
     {
       NSRunAlertPanel(_(@"Problem changing setting"),
-	@"Could not save Info-gnustep.plist into theme",
+	_(@"Could not save Info-gnustep.plist into theme"),
 	nil, nil, nil);
     }
   [window setDocumentEdited: YES];

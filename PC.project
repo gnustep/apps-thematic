@@ -1,6 +1,8 @@
 {
     APPLICATIONICON = Thematic.png;
     APP_DOCUMENT_BASED = NO;
+    BuildTarget = Debug;
+    BuildTargetArgs = "";
     CLASS_FILES = (
 	AppController.m,
 	ThemeDocument.m,
@@ -43,7 +45,7 @@
 	MiscElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2006-10-02 09:46:02 +0100";
+    LAST_EDITING = "2006-10-04 10:13:42 +0100";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -64,7 +66,7 @@
     );
     PC_WINDOWS = {
 	ProjectBuild = "7 71 482 356 0 0  1280 1024 ";
-	ProjectWindow = "328 123 562 482 0 0  1280 1024 ";
+	ProjectWindow = "525 97 562 482 0 0  1280 1024 ";
 	ShowToolbar = YES;
     };
     PRINCIPAL_CLASS = NSApplication;
