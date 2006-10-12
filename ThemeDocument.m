@@ -50,6 +50,15 @@
   path = [[self bundle] pathForResource: @"Info-gnustep" ofType: @"plist"];
   return [NSDictionary dictionaryWithContentsOfFile: path];
 }
+
+/* Method to bypass normal name display so we don't see the temporary
+ * work directory name.
+ */
+- (NSString*) name
+{
+  return [[[[AppController sharedController] selectedDocument] name]
+    stringByDeletingPathExtension];
+}
 @end
 
 
