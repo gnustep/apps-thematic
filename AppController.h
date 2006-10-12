@@ -33,7 +33,7 @@
 {
   id			inspector;
   NSMutableArray	*documents;
-  ThemeDocument		*currentDocument;
+  ThemeDocument		*currentDocument;	// Not retained
 }
 
 + (void) initialize;
@@ -50,7 +50,6 @@
 - (BOOL) application: (NSApplication *)application
             openFile: (NSString *)fileName;
 
-- (void) addDocument: (ThemeDocument*)sender;
 - (NSWindow*) inspector;
 - (void) newDocument: (id)sender;
 - (void) openDocument: (id)sender;

@@ -43,6 +43,7 @@
   [[[AppController sharedController] inspector] setContentView: nil];
   [window setContentView: v];
   RELEASE(v);
+  [[window contentView] setNeedsDisplay: YES];
 }
 
 - (id) initWithView: (NSView*)aView
@@ -68,6 +69,7 @@
   [window setContentView: nil];
   [[[AppController sharedController] inspector] setContentView: v];
   RELEASE(v);
+  [[window contentView] setNeedsDisplay: YES];
   [[[AppController sharedController] inspector] orderFront: self];
 }
 

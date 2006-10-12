@@ -100,6 +100,7 @@
 - (NSDictionary*) infoDictionary;
 
 - (id) initWithPath: (NSString*)path;
+- (NSString*) name;
 - (void) notified: (NSNotification*)n;
 - (BOOL) saveToPath: (NSString*)path;
 
@@ -135,7 +136,7 @@
  * Informs the document that a change has been made to information
  * to be stored in Info-gnustep.plist.
  */
-- (void) setInfo: (NSString*)value forKey: (NSString*)key;
+- (void) setInfo: (id)value forKey: (NSString*)key;
 
 /**
  * Set the path this document should be saved to, and change its window

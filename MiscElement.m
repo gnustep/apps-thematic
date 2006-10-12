@@ -32,34 +32,41 @@
 
 @implementation MiscElement
 
+- (void) deselect
+{
+  NSNotification	*n;
+
+  n = [NSNotification notificationWithName: @"dummy"
+				    object: authors
+				  userInfo: nil];
+  [self textDidEndEditing: n];
+  n = [NSNotification notificationWithName: @"dummy"
+				    object: details
+				  userInfo: nil];
+  [self textDidEndEditing: n];
+  [super deselect];
+}
+
 - (void) selectAt: (NSPoint)mouse
 {
   ThemeDocument *doc = [[AppController sharedController] selectedDocument];
   NSDictionary	*info = [doc infoDictionary];
   NSArray	*arr;
-  NSString	*str;
 
   arr = [info objectForKey: @"GSThemeAuthors"];
   if ([arr count] > 0)
     {
-      [author setStringValue: [arr objectAtIndex: 0]];
+      [authors setStringValue: [arr objectAtIndex: 0]];
     }
-  str = [info objectForKey: @"GSThemeIcon"];
-  if (str != nil)
+  arr = [info objectForKey: @"GSThemeDetails"];
+  if ([arr count] > 0)
     {
-      [iconName setStringValue: str];
+      [details setStringValue: [arr objectAtIndex: 0]];
     }
   [iconView setImage: [[GSTheme theme] icon]];
+  [themeName setFont: [NSFont boldSystemFontOfSize: 32]];
+  [themeName setStringValue: [[doc name] stringByDeletingPathExtension]];
   [super selectAt: mouse];
-}
-
-- (void) takeAuthor: (id)sender
-{
-  ThemeDocument *doc = [[AppController sharedController] selectedDocument];
-  NSString	*s = [sender stringValue];
-
-  [doc setInfo: [NSArray arrayWithObject: s] forKey: @"GSThemeAuthors"];
-  NSLog(@"takeAuthor: %@", s);
 }
 
 - (void) takeIcon: (id)sender
@@ -95,11 +102,43 @@
         {
 	  [doc setResource: path forKey: @"GSThemeIcon"];
 	  [iconView setImage: image];
-	  [iconName setStringValue: [path lastPathComponent]];
 	  RELEASE(image);
 	}
     }
 }
 
+- (void) textDidEndEditing: (NSNotification*)aNotification
+{
+  ThemeDocument *doc = [[AppController sharedController] selectedDocument];
+  NSTextView *sender = [aNotification object];
+  NSString	*s = [sender string];
+
+
+//NSLog(@"End editing %@", aNotification);
+  if (sender == details)
+    {
+      [doc setInfo: s forKey: @"GSThemeDetails"];
+    }
+
+  if (sender == authors)
+    {
+      NSMutableArray    *a;
+      unsigned		count;
+
+      a = [[s componentsSeparatedByString: @"\n"] mutableCopy];
+      count = [a count];
+      while (count-- > 0)
+        {
+          NSString    *line = [a objectAtIndex: count];
+
+          if ([[line stringByTrimmingSpaces] length] == 0)
+            {
+              [a removeObjectAtIndex: count];
+	    }
+        }
+      [doc setInfo: a forKey: @"GSThemeAuthors"];
+      RELEASE(a);
+    }
+}
 @end
 

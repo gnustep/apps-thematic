@@ -86,14 +86,6 @@ static AppController	*shared = nil;
   [super dealloc];
 }
 
-- (void) addDocument: (ThemeDocument*)sender
-{
-  if ([documents indexOfObjectIdenticalTo: sender] == NSNotFound)
-    {
-      [documents addObject: sender];
-    }
-}
-
 - (void) awakeFromNib
 {
   [[NSApp mainMenu] setTitle: @"Thematic"];
@@ -116,6 +108,7 @@ static AppController	*shared = nil;
 - (BOOL) application: (NSApplication *)application
             openFile: (NSString *)fileName
 {
+  AUTORELEASE([[ThemeDocument alloc] initWithPath: fileName]);
   return YES;
 }
 
@@ -130,7 +123,14 @@ static AppController	*shared = nil;
 
 - (void) newDocument: (id)sender
 {
-  [ThemeDocument new];
+  ThemeDocument	*doc = [ThemeDocument new];
+
+  if (doc != nil)
+    {
+      [documents addObject: doc];
+      RELEASE(doc);
+      [self selectDocument: doc];
+    }
 }
 
 - (void) openDocument: (id)sender
@@ -170,7 +170,14 @@ static AppController	*shared = nil;
 
       NS_DURING
 	{
-	  [[ThemeDocument alloc] initWithPath: path];
+	  ThemeDocument	*doc = [[ThemeDocument alloc] initWithPath: path];
+
+	  if (doc != nil)
+	    {
+	      [documents addObject: doc];
+	      RELEASE(doc);
+	      [self selectDocument: doc];
+	    }
 	}
       NS_HANDLER
 	{
@@ -191,6 +198,10 @@ static AppController	*shared = nil;
 - (void) removeDocument: (ThemeDocument*)sender
 {
   [documents removeObjectIdenticalTo: sender];
+  if (currentDocument == sender)
+    {
+      [self selectDocument: [documents lastObject]];
+    }
 }
 
 - (void) saveAllDocuments: (id)sender
@@ -213,7 +224,7 @@ static AppController	*shared = nil;
 {
   if (currentDocument != sender)
     {
-      ASSIGN(currentDocument, sender);
+      currentDocument = sender;
       [currentDocument activate];
     }
 }

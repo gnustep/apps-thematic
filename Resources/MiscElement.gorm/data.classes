@@ -3,19 +3,20 @@
     FirstResponder = {
 	Actions = (
 	    "takeAuthor:",
+	    "takeDetails:",
 	    "takeIcon:"
 	);
 	Super = NSObject;
     };
     MiscElement = {
 	Actions = (
-	    "takeAuthor:",
 	    "takeIcon:"
 	);
 	Outlets = (
 	    iconView,
-	    iconName,
-	    author
+	    authors,
+	    details,
+	    themeName
 	);
 	Super = ThemeElement;
     };

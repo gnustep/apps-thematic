@@ -214,7 +214,6 @@ static NSMutableSet	*untitledName = nil;
 
   if (aView == nil)
     {
-      NSLog(@"Deselect");
       [_selected deselect];
       _selected = nil;
     }
@@ -237,16 +236,13 @@ static NSMutableSet	*untitledName = nil;
 {
   /* Remove our information from the inspector
    */
-  if (_selected != nil)
-    {
-      [_selected deselect];
-      _selected = nil;
-    }
+  [_selected deselect];
+  _selected = nil;
 
   /* Stop our theme being the active theme.
    */
   [GSTheme setTheme: nil];
-  RELEASE(_theme);
+  DESTROY(_theme);
 
   /* Remove our temporary work area.
    */
@@ -255,6 +251,7 @@ static NSMutableSet	*untitledName = nil;
       NSFileManager	*mgr = [NSFileManager defaultManager];
 
       [mgr removeFileAtPath: _work handler: nil];
+      DESTROY(_work);
     }
 
   /* Remove self from app controller ... this should deallocate us.
@@ -365,6 +362,7 @@ static NSMutableSet	*untitledName = nil;
 
 - (id) initWithPath: (NSString*)path
 {
+  CREATE_AUTORELEASE_POOL(pool);
   NSFileManager		*mgr = [NSFileManager defaultManager];
   static int		sequence = 0;
   NSRect		frame;
@@ -549,7 +547,13 @@ static NSMutableSet	*untitledName = nil;
 
   [self activate];
   [window orderFront: self];
+  RELEASE(pool);
   return self;
+}
+
+- (NSString*) name
+{
+  return _name;
 }
 
 - (void) notified: (NSNotification*)n
@@ -634,7 +638,7 @@ static NSMutableSet	*untitledName = nil;
   sp = [NSSavePanel savePanel];
   [sp setRequiredFileType: @"theme"];
   [sp setTitle: _(@"Save theme as...")];
-  result = [sp runModalForDirectory: [self saveDirectory] file: _name];
+  result = [sp runModalForDirectory: [self saveDirectory] file: [self name]];
   if (result == NSOKButton)
     {
       [self setPath: [sp filename]];
@@ -651,7 +655,7 @@ static NSMutableSet	*untitledName = nil;
   sp = [NSSavePanel savePanel];
   [sp setRequiredFileType: @"theme"];
   [sp setTitle: _(@"Save theme to...")];
-  result = [sp runModalForDirectory: [self saveDirectory] file: _name];
+  result = [sp runModalForDirectory: [self saveDirectory] file: [self name]];
   if (result == NSOKButton)
     {
       NSString *path = [sp filename];
@@ -792,7 +796,7 @@ static NSMutableSet	*untitledName = nil;
     }
 }
 
-- (void) setInfo: (NSString*)value forKey: (NSString*)key
+- (void) setInfo: (id)value forKey: (NSString*)key
 {
   if (value == nil)
     {
@@ -823,12 +827,18 @@ static NSMutableSet	*untitledName = nil;
     {
       int ret;
 
-      [window makeKeyAndOrderFront:self];
+      /* Deselect so that inspector window is cleareed and any editing in it
+       * is completed.
+       */
+      [_selected deselect];
+      _selected = nil;
+
+      [window makeKeyAndOrderFront: self];
 
       ret = NSRunAlertPanel(_(@"Close Theme"),
 	_(@"Theme %@ has been modified"),
 	_(@"Save and Close"), _(@"Don't save"), _(@"Cancel"), 
-	[_path lastPathComponent]);
+	[self name]);
 
       if (ret == 1)
 	{
@@ -837,7 +847,7 @@ static NSMutableSet	*untitledName = nil;
 	    {
 	      NSRunAlertPanel(_(@"Alert"),
 		_(@"Error when saving theme '%@'!"),
-		_(@"OK"), nil, nil, [_path lastPathComponent]);
+		_(@"OK"), nil, nil, [self name]);
 	      return NO;
 	    }
 	  else
@@ -877,7 +887,7 @@ static NSMutableSet	*untitledName = nil;
       [untitledName addObject: trial];
       ASSIGN(_name, trial);
     }
-  [window setTitle: _name];
+  [window setTitle: [self name]];
 }
 
 - (void) setResource: (NSString*)path forKey: (NSString*)key
@@ -913,7 +923,7 @@ static NSMutableSet	*untitledName = nil;
         {
 	  NSRunAlertPanel(_(@"Alert"),
 	    _(@"Error copying '%@' into work area!"),
-	    _(@"OK"), nil, nil, [_path lastPathComponent]);
+	    _(@"OK"), nil, nil, [self name]);
 	}
       else
         {

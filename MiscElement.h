@@ -29,10 +29,11 @@
 @interface MiscElement : ThemeElement
 {
   id	iconView;
-  id	iconName;
-  id	author;
+  id	authors;
+  id    details;
+  id    themeName;
 }
-- (void) takeAuthor: (id)sender;
 - (void) takeIcon: (id)sender;
+- (void) textDidEndEditing: (NSNotification*)aNotification;
 @end
 

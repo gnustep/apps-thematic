@@ -45,7 +45,7 @@
 	MiscElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2006-10-04 10:13:42 +0100";
+    LAST_EDITING = "2006-10-12 15:59:04 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -65,7 +65,7 @@
 	ColorElement.m
     );
     PC_WINDOWS = {
-	ProjectBuild = "7 71 482 356 0 0  1280 1024 ";
+	ProjectBuild = "-1 291 482 356 0 0  1280 1024 ";
 	ProjectWindow = "525 97 562 482 0 0  1280 1024 ";
 	ShowToolbar = YES;
     };
