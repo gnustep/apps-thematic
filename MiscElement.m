@@ -52,16 +52,18 @@
   ThemeDocument *doc = [[AppController sharedController] selectedDocument];
   NSDictionary	*info = [doc infoDictionary];
   NSArray	*arr;
+  NSString	*str;
 
   arr = [info objectForKey: @"GSThemeAuthors"];
   if ([arr count] > 0)
     {
-      [authors setStringValue: [arr objectAtIndex: 0]];
+      str = [arr componentsJoinedByString: @"\n"];
+      [authors setString: str];
     }
-  arr = [info objectForKey: @"GSThemeDetails"];
-  if ([arr count] > 0)
+  str = [info objectForKey: @"GSThemeDetails"];
+  if ([str length] > 0)
     {
-      [details setStringValue: [arr objectAtIndex: 0]];
+      [details setString: str];
     }
   [iconView setImage: [[GSTheme theme] icon]];
   [themeName setFont: [NSFont boldSystemFontOfSize: 32]];
