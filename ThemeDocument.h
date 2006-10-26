@@ -152,6 +152,23 @@
  */
 - (void) setResource: (NSString*)path forKey: (NSString*)key;
 
+/**
+ * Set the tiling image (from the image in the file at path) and
+ * division points for the named tiles.
+ */
+- (void) setTiles: (NSString*)name
+	 withPath: (NSString*)path
+	hDivision: (int)h
+	vDivision: (int)v;
+
+/**
+ * Return the tiling image (if known) and the division points for the
+ * named tiles.
+ */
+- (NSImage*) tiles: (NSString*)name
+	 hDivision: (int*)h
+	 vDivision: (int*)v;
+
 @end
 
 

@@ -10,7 +10,8 @@
 	ImageElement.m,
 	MenusElement.m,
 	WindowsElement.m,
-	MiscElement.m
+	MiscElement.m,
+	TiledElement.m
     );
     COMPILEROPTIONS = "";
     CPPOPTIONS = "";
@@ -27,7 +28,8 @@
 	ImageElement.h,
 	MenusElement.h,
 	WindowsElement.h,
-	MiscElement.h
+	MiscElement.h,
+	TiledElement.h
     );
     HELP_FILE = ThematicHelp.rtfd;
     IMAGES = (
@@ -42,10 +44,11 @@
 	ImageElement.gorm,
 	WindowsElement.gorm,
 	MenusElement.gorm,
-	MiscElement.gorm
+	MiscElement.gorm,
+	TiledElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2006-10-12 16:01:04 +0000";
+    LAST_EDITING = "2006-10-17 09:31:29 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -65,7 +68,9 @@
 	ColorElement.m
     );
     PC_WINDOWS = {
+	LoadedFiles = "-1 291 222 356 0 0  1280 1024 ";
 	ProjectBuild = "-1 291 482 356 0 0  1280 1024 ";
+	ProjectLaunch = "-1 291 482 356 0 0  1280 1024 ";
 	ProjectWindow = "525 97 562 482 0 0  1280 1024 ";
 	ShowToolbar = YES;
     };

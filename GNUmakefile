@@ -25,7 +25,8 @@ Resources/ThemeDocument.gorm \
 Resources/ImageElement.gorm \
 Resources/WindowsElement.gorm \
 Resources/MenusElement.gorm \
-Resources/MiscElement.gorm\
+Resources/MiscElement.gorm \
+Resources/TiledElement.gorm\
 Resources/Thematic.png\
 Resources/Info-gnustep.plist \
 Resources/ThematicHelp.rtfd
@@ -41,7 +42,8 @@ ColorElement.h \
 ImageElement.h \
 MenusElement.h \
 WindowsElement.h \
-MiscElement.h
+MiscElement.h \
+TiledElement.h
 
 #
 # Class files
@@ -53,7 +55,8 @@ ThemeElement.m \
 ImageElement.m \
 MenusElement.m \
 WindowsElement.m \
-MiscElement.m
+MiscElement.m \
+TiledElement.m
 
 #
 # C files

@@ -46,18 +46,18 @@
   [[window contentView] setNeedsDisplay: YES];
 }
 
+- (NSString*) gormName
+{
+  return NSStringFromClass(isa);
+}
+
 - (id) initWithView: (NSView*)aView
 	      owner: (ThemeDocument*)aDocument
 {
   view = aView;
   owner = aDocument;
-  [NSBundle loadNibNamed: [self name] owner: self];
+  [NSBundle loadNibNamed: [self gormName] owner: self];
   return self;
-}
-
-- (NSString*) name
-{
-  return NSStringFromClass(isa);
 }
 
 - (void) selectAt: (NSPoint)mouse

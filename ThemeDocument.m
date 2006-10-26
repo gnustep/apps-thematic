@@ -28,6 +28,7 @@
 #import	<AppController.h>
 #import	<ThemeDocument.h>
 #import	<ThemeElement.h>
+#import	<TiledElement.h>
 
 @class	ColorElement;
 @class	ImageElement;
@@ -354,6 +355,28 @@ static NSMutableSet	*untitledName = nil;
     }
   else
     {
+      if ([aView isKindOfClass: [NSButton class]])
+        {
+	  NSDictionary	*d;
+
+	  /* We could have a subclass of TiledElement to handle button
+	   * specific details, but as a button is a simple gui element
+	   * we can get away with using the TiledElement class directly
+	   * and just configuring it to manage the images needed for
+	   * normal, highlighted, and pushed button cells.
+	   */
+	  d = [NSDictionary dictionaryWithObjectsAndKeys:
+	    @"NSButtonNormal", @"normal button mage",
+	    @"NSButtonHighlighted", @"highlighted button image",
+	    @"NSButtonPushed", @"pushed button image",
+	    nil];
+	  e = [[TiledElement alloc] initWithView: aView
+					   owner: self
+					  images: d];
+	  [_elements addObject: e];
+	  RELEASE(e);
+	  return e;
+	}
       NSLog(@"Not handled");
     }
   return nil;
@@ -436,6 +459,19 @@ static NSMutableSet	*untitledName = nil;
 	{
 	  NSRunAlertPanel(_(@"Alert"),
 	    _(@"Unable to create working images subdirectory for theme"),
+	    _(@"OK"), nil, nil);
+	  DESTROY(self);
+	  return nil;
+	}
+    }
+
+  s = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
+  if ([mgr fileExistsAtPath: s isDirectory: &isDir] == NO || isDir == NO)
+    {
+      if ([mgr createDirectoryAtPath: s attributes: nil] == NO)
+	{
+	  NSRunAlertPanel(_(@"Alert"),
+	    _(@"Unable to create working tiles subdirectory for theme"),
 	    _(@"OK"), nil, nil);
 	  DESTROY(self);
 	  return nil;
@@ -950,4 +986,124 @@ static NSMutableSet	*untitledName = nil;
   [self activate];			// Preview
 }
 
+- (void) setTiles: (NSString*)name
+	 withPath: (NSString*)path
+	hDivision: (int)h
+	vDivision: (int)v
+{
+  NSFileManager	*mgr = [NSFileManager defaultManager];
+  id		allTiles = [_info objectForKey: @"GSThemeTiles"];
+  NSDictionary	*d;
+  NSString	*fileName;
+
+  if (allTiles == nil)
+    {
+      allTiles = [NSMutableDictionary new];
+      [_info setObject: allTiles forKey: @"GSThemeTiles"];
+      RELEASE(allTiles);
+    }
+  else if ([allTiles isKindOfClass: [NSMutableDictionary class]] == NO)
+    {
+      allTiles = [allTiles mutableCopy];
+      [_info setObject: allTiles forKey: @"GSThemeTiles"];
+      RELEASE(allTiles);
+    }
+  d = [allTiles objectForKey: name];
+  if ([path length] > 0)
+    {
+      NSString	*oldFileName = [d objectForKey: @"FileName"];
+      NSString	*ext;
+      NSString	*nPath;
+
+      ext = [path pathExtension];
+      fileName = [name stringByAppendingPathExtension: ext];
+      nPath = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
+      nPath = [nPath stringByAppendingPathComponent: fileName];
+
+      if ([oldFileName length] > 0)
+        {
+	  NSString	*oPath;
+
+	  oPath = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
+	  oPath = [oPath stringByAppendingPathComponent: oldFileName];
+          [mgr removeFileAtPath: oPath handler: nil];
+	}
+
+      if ([mgr copyPath: path toPath: nPath handler: nil] == NO)
+	{
+	  NSRunAlertPanel(_(@"Alert"),
+	    _(@"Unable to load tile image into work area from %@"),
+	    nil, nil, nil, path);
+	}
+    }
+  else
+    {
+      fileName = [d objectForKey: @"FileName"];
+    }
+
+  if (fileName != nil)
+    {
+      NSString	*hDiv = [d objectForKey: @"HorizontalDivision"];
+      NSString	*vDiv = [d objectForKey: @"VerticalDivision"];
+
+      if (h > 0)
+        {
+	  hDiv = [NSString stringWithFormat: @"%d", h];
+	}
+      if (v > 0)
+        {
+	  vDiv = [NSString stringWithFormat: @"%d", v];
+	}
+      d = [NSDictionary dictionaryWithObjectsAndKeys:
+        fileName, @"FileName",
+	hDiv, @"HorizontalDivision",
+	vDiv, @"VerticalDivision",
+        nil];
+      [allTiles setObject: d forKey: name];
+    }
+  if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
+    @"Info-gnustep.plist"] atomically: NO] == NO)
+    {
+      NSRunAlertPanel(_(@"Problem changing setting"),
+	_(@"Could not save Info-gnustep.plist into theme"),
+	nil, nil, nil);
+    }
+  [window setDocumentEdited: YES];
+  // Refresh cache for this tile array
+  [[GSTheme theme] tilesNamed: name cache: NO];
+  [self activate];			// Preview
+}
+
+/**
+ * Return the tiling image (if known) and the division points for the
+ * named tiles.
+ */
+- (NSImage*) tiles: (NSString*)name
+	 hDivision: (int*)h
+	 vDivision: (int*)v
+{
+  NSDictionary	*td = [_info objectForKey: @"GSThemeTiles"];
+  NSString	*fileName;
+  NSImage	*image = nil;
+
+  td = [td objectForKey: name];
+  fileName = [td objectForKey: @"FileName"];
+  if (fileName != nil)
+    {
+      NSString	*path;
+
+      path = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
+      path = [path stringByAppendingPathComponent: fileName];
+      image = AUTORELEASE([[NSImage alloc] initWithContentsOfFile: path]);
+    }
+  if (h != 0)
+    {
+      *h = [[td objectForKey: @"HorizontalDivision"] intValue];
+    }
+  if (v != 0)
+    {
+      *v = [[td objectForKey: @"VerticalDivision"] intValue];
+    }
+  return image;
+}
 @end

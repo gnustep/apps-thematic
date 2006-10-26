@@ -1,4 +1,4 @@
-/* ThemeElement.h
+/* TiledElement.h
  *
  * Copyright (C) 2006 Free Software Foundation, Inc.
  *
@@ -24,34 +24,34 @@
 
 #import <Foundation/NSGeometry.h>
 #import <Foundation/NSObject.h>
+#import "ThemeElement.h"
 
-@class	NSMutableArray;
-@class	NSView;
-@class	ThemeDocument;
+@class	NSDictionary;
+@class	TilesBox;
 
-@interface ThemeElement : NSObject
+@interface TiledElement : ThemeElement
 {
-  id		window;
-  NSView	*view;	// Not retained
-  ThemeDocument	*owner;	// Not retained
+  NSDictionary	*images;
+  TilesBox	*tiles;
+  id		popup;
+  id		imageBox;
+  id    	hSlider;
+  id    	vSlider;
+  id		style;
 }
-/** Deselect the current element
+- (NSString*) imageName;
+/**
+ * Set the image names (and short descriptive strings as keys) for the
+ * images used to tile this element in different states.  The popup will
+ * be set to use the descriptive strings as lables.
  */
-- (void) deselect;
-
-/** Return name for the Gorm file for this element
- */
-- (NSString*) gormName;
-
 - (id) initWithView: (NSView*)aView
-	      owner: (ThemeDocument*)aDocument;
-
-/** Handle mouse click to select inspector for the view.
- */
-- (void) selectAt: (NSPoint)mouse;
-
-/** Return the view this element is handling
- */
-- (NSView*) view;
+              owner: (ThemeDocument*)aDocument
+	     images: (NSDictionary*)imageInfo;
+- (int) style;
+- (void) takeImage: (id)sender;
+- (void) takePosition: (id)sender;
+- (void) takeSelection: (id)sender;
+- (void) takeStyle: (id)sender;
 @end
 
