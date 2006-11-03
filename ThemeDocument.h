@@ -76,6 +76,7 @@
   id			extraView;	// Not retained
   id			_inspector;	// Not retained
   ThemeElement		*_selected;	// Not retained
+  NSPoint		_selectionPoint;
   NSMutableDictionary	*_info;
   NSMutableDictionary	*_defs;		// Not retained
   NSMutableArray	*_elements;
@@ -102,6 +103,15 @@
 - (id) initWithPath: (NSString*)path;
 - (NSString*) name;
 - (void) notified: (NSNotification*)n;
+
+/**
+ * Return the path from which this theme was loaded or saved.
+ */
+- (NSString*) path;
+
+/**
+ * Save to specified path.
+ */
 - (BOOL) saveToPath: (NSString*)path;
 
 - (void) saveDocument: (id)sender;

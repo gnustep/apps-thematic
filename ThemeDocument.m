@@ -208,7 +208,10 @@ static NSMutableSet	*untitledName = nil;
     {
       [_theme deactivate];
     }
+  [GSTheme setTheme: _theme];
   [_theme activate];
+
+  [_selected selectAt: _selectionPoint];
 }
 
 - (void) changeSelection: (NSView*)aView at: (NSPoint)mousePoint
@@ -226,6 +229,7 @@ static NSMutableSet	*untitledName = nil;
     {
       [_selected deselect];
       _selected = nil;
+      _selectionPoint = NSZeroPoint;
     }
   else
     {
@@ -236,7 +240,8 @@ static NSMutableSet	*untitledName = nil;
         {
 	  [_selected deselect];
 	  _selected = e;
-          [e selectAt: mousePoint];
+	  _selectionPoint = mousePoint;
+          [e selectAt: _selectionPoint];
 	}
       [[c inspector] orderFront: self];
     }
@@ -248,6 +253,7 @@ static NSMutableSet	*untitledName = nil;
    */
   [_selected deselect];
   _selected = nil;
+  _selectionPoint = NSZeroPoint;
 
   /* Stop our theme being the active theme.
    */
@@ -617,6 +623,11 @@ static NSMutableSet	*untitledName = nil;
   // NSLog(@"Received %@ from %@", name, [n object]);
 }
 
+- (NSString*) path
+{
+  return _path;
+}
+
 - (void) saveDocument: (id)sender
 {
   if ([window isDocumentEdited] == YES)
@@ -877,6 +888,7 @@ static NSMutableSet	*untitledName = nil;
        */
       [_selected deselect];
       _selected = nil;
+      _selectionPoint = NSZeroPoint;
 
       [window makeKeyAndOrderFront: self];
 

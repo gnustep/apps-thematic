@@ -32,6 +32,7 @@
 @interface ThemeElement : NSObject
 {
   id		window;
+  NSView	*inspector;
   NSView	*view;	// Not retained
   ThemeDocument	*owner;	// Not retained
 }

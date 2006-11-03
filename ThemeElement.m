@@ -31,6 +31,7 @@
 
 - (void) dealloc
 {
+  RELEASE(inspector);
   [super dealloc];
 }
 
@@ -39,11 +40,12 @@
   NSView	*v;
 
   v = [[[AppController sharedController] inspector] contentView];
-  RETAIN(v);
-  [[[AppController sharedController] inspector] setContentView: nil];
-  [window setContentView: v];
-  RELEASE(v);
-  [[window contentView] setNeedsDisplay: YES];
+  if (v == inspector)
+    {
+      [[[AppController sharedController] inspector] setContentView: nil];
+      [window setContentView: v];
+      [[window contentView] setNeedsDisplay: YES];
+    }
 }
 
 - (NSString*) gormName
@@ -57,18 +59,14 @@
   view = aView;
   owner = aDocument;
   [NSBundle loadNibNamed: [self gormName] owner: self];
+  inspector = RETAIN([window contentView]);
   return self;
 }
 
 - (void) selectAt: (NSPoint)mouse
 {
-  NSView	*v;
-
-  v = [window contentView];
-  RETAIN(v);
   [window setContentView: nil];
-  [[[AppController sharedController] inspector] setContentView: v];
-  RELEASE(v);
+  [[[AppController sharedController] inspector] setContentView: inspector];
   [[window contentView] setNeedsDisplay: YES];
   [[[AppController sharedController] inspector] orderFront: self];
 }

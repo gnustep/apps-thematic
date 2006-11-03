@@ -108,7 +108,32 @@ static AppController	*shared = nil;
 - (BOOL) application: (NSApplication *)application
             openFile: (NSString *)fileName
 {
-  AUTORELEASE([[ThemeDocument alloc] initWithPath: fileName]);
+  ThemeDocument	*doc;
+  unsigned	i = [documents count];
+
+  /* Check to see if we already have it open.
+   */
+  while (i-- > 0)
+    {
+      doc = [documents objectAtIndex: i];
+      if ([[doc path] isEqual: fileName] == YES)
+        {
+	  /* Already open ... select it
+	   */
+	  [self selectDocument: doc];
+	  return YES;
+	}
+    }
+
+  /* Not open ... open it
+   */
+  doc = [[ThemeDocument alloc] initWithPath: fileName];
+  if (doc != nil)
+    {
+      [documents addObject: doc];
+      RELEASE(doc);
+      [self selectDocument: doc];
+    }
   return YES;
 }
 
@@ -170,14 +195,7 @@ static AppController	*shared = nil;
 
       NS_DURING
 	{
-	  ThemeDocument	*doc = [[ThemeDocument alloc] initWithPath: path];
-
-	  if (doc != nil)
-	    {
-	      [documents addObject: doc];
-	      RELEASE(doc);
-	      [self selectDocument: doc];
-	    }
+	  [self application: NSApp openFile: path];
 	}
       NS_HANDLER
 	{
