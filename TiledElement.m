@@ -119,6 +119,7 @@
 
       /* Create view in which to draw image
        */
+      NSAssert(imageBox != nil, NSInternalInconsistencyException);
       tiles = [[TilesBox alloc] initWithFrame: [[imageBox contentView] frame]];
       [tiles setOwner: self];
       [imageBox setContentView: tiles]; 
