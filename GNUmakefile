@@ -11,7 +11,6 @@ VERSION = 0.1
 PACKAGE_NAME = Thematic
 APP_NAME = Thematic
 Thematic_APPLICATION_ICON = Thematic.png
-GNUSTEP_INSTALLATION_DIR = $(HOME)/GNUstep
 
 
 #
