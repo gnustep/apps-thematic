@@ -11,6 +11,7 @@
 	    "takeMenuStyleFrom:"
 	);
 	Outlets = (
+	    popup
 	);
 	Super = ThemeElement;
     };

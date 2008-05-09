@@ -298,6 +298,11 @@ static NSMutableSet	*untitledName = nil;
   [super dealloc];
 }
 
+- (NSString*) defaultForKey: (NSString*)key
+{
+  return [_defs objectForKey: key];
+}
+
 - (ThemeElement*) elementForView: (NSView*)aView
 {
   ThemeElement	*e;

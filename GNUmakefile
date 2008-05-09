@@ -25,10 +25,11 @@ Resources/ImageElement.gorm \
 Resources/WindowsElement.gorm \
 Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
-Resources/TiledElement.gorm\
-Resources/Thematic.png\
+Resources/TiledElement.gorm \
+Resources/Thematic.png \
 Resources/Info-gnustep.plist \
-Resources/ThematicHelp.rtfd
+Resources/ThematicHelp.rtfd 
+
 
 #
 # Header files
@@ -58,10 +59,8 @@ MiscElement.m \
 TiledElement.m
 
 #
-# C files
+# Other sources
 #
-Thematic_C_FILES = 
-
 Thematic_OBJC_FILES += \
 main.m \
 ColorElement.m 

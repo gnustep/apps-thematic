@@ -95,6 +95,11 @@
 - (NSColor*) colorNamed: (NSString*)aName;
 - (ThemeElement*) elementForView: (NSView*)aView;
 
+/** Returns the specified default string if one has been set for this
+ * theme, nil otherwise.
+ */
+- (NSString*) defaultForKey: (NSString*)key;
+
 /**
  * Returns the current info dictionary for the document.
  */

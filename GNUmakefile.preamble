@@ -20,3 +20,6 @@ ADDITIONAL_INCLUDE_DIRS +=
 # Additional library directories the linker should search
 ADDITIONAL_LIB_DIRS += 
 
+# Additional GUI libraries to link
+ADDITIONAL_GUI_LIBS += 
+

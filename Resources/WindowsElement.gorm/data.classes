@@ -19,6 +19,7 @@
 	    "takeWindowStyleFrom:"
 	);
 	Outlets = (
+	    popup
 	);
 	Super = ThemeElement;
     };

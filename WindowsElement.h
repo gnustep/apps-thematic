@@ -28,6 +28,7 @@
 
 @interface WindowsElement : ThemeElement
 {
+  id    popup;
 }
 - (void) takeWindowStyleFrom: (id)sender;
 @end

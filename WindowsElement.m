@@ -29,6 +29,24 @@
 #import	"WindowsElement.h"
 
 @implementation WindowsElement
+- (void) selectAt: (NSPoint)mouse
+{
+  ThemeDocument	*doc;
+  NSString      *val;
+
+  doc = [[AppController sharedController] selectedDocument];
+  val = [doc defaultForKey: @"GSBackHandlesWindowDecorations"];
+  if ([val boolValue] == NO)
+    {
+      [popup selectItemAtIndex: [popup indexOfItemWithTag: 0]];
+    }
+  else
+    {
+      [popup selectItemAtIndex: [popup indexOfItemWithTag: 1]];
+    }
+  [super selectAt: mouse];
+}
+
 - (void) takeWindowStyleFrom: (id)sender
 {
   ThemeDocument *doc = [[AppController sharedController] selectedDocument];

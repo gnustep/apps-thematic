@@ -29,6 +29,25 @@
 #import	"MenusElement.h"
 
 @implementation MenusElement
+
+- (void) selectAt: (NSPoint)mouse
+{
+  ThemeDocument	*doc;
+  NSString      *val;
+
+  doc = [[AppController sharedController] selectedDocument];
+  val = [doc defaultForKey: @"NSMenuInterfaceStyle"];
+  if ([val isEqualToString: @"NSMacintoshInterfaceStyle"] == YES)
+    {
+      [popup selectItemAtIndex: [popup indexOfItemWithTag: 1]];
+    }
+  else
+    {
+      [popup selectItemAtIndex: [popup indexOfItemWithTag: 0]];
+    }
+  [super selectAt: mouse];
+}
+
 - (void) takeMenuStyleFrom: (id)sender
 {
   ThemeDocument	*doc = [[AppController sharedController] selectedDocument];
@@ -40,6 +59,7 @@
         [doc setDefault: @"NSMacintoshInterfaceStyle"
 		 forKey: @"NSMenuInterfaceStyle"];
 	break;
+
       default:
         [doc setDefault: @"NSNextStepInterfaceStyle"
 		 forKey: @"NSMenuInterfaceStyle"];

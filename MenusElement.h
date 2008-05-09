@@ -28,6 +28,7 @@
 
 @interface MenusElement : ThemeElement
 {
+  id    popup;
 }
 - (void) takeMenuStyleFrom: (id)sender;
 @end
