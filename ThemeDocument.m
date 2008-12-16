@@ -731,7 +731,9 @@ static NSMutableSet	*untitledName = nil;
   NSString	*backup;
   BOOL		isDirectory;
 
-  backup = [path stringByAppendingPathExtension: @"backup"];
+  backup = [path stringByDeletingPathExtension];
+  backup = [backup stringByAppendingPathExtension: @"backup"];
+  backup = [backup stringByAppendingPathExtension: @"theme"];
   if ([mgr fileExistsAtPath: path isDirectory: &isDirectory] == YES)
     {
       if (isDirectory == NO)

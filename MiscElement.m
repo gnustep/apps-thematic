@@ -32,21 +32,6 @@
 
 @implementation MiscElement
 
-- (void) deselect
-{
-  NSNotification	*n;
-
-  n = [NSNotification notificationWithName: @"dummy"
-				    object: authors
-				  userInfo: nil];
-  [self textDidEndEditing: n];
-  n = [NSNotification notificationWithName: @"dummy"
-				    object: details
-				  userInfo: nil];
-  [self textDidEndEditing: n];
-  [super deselect];
-}
-
 - (void) selectAt: (NSPoint)mouse
 {
   ThemeDocument *doc = [[AppController sharedController] selectedDocument];

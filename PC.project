@@ -49,7 +49,7 @@
 	TiledElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-05-09 09:51:54 +0000";
+    LAST_EDITING = "2008-12-16 19:46:44 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -69,11 +69,11 @@
 	ColorElement.m
     );
     PC_WINDOWS = {
-	LoadedFiles = "94 119 222 386 0 0  1280 1024 ";
-	ProjectBrowser = "{x = 0; y = 0; width = 544; height = 0}";
-	ProjectBuild = "0 0 0 0 0 0  0 0 ";
-	ProjectLaunch = "-1 264 482 386 0 0  1280 1024 ";
-	ProjectWindow = "525 97 562 500 0 0  1280 1024 ";
+	LoadedFiles = "0 295 230 351 0 0  936 703 ";
+	ProjectBrowser = "{x = 0; y = 0; width = 536; height = 0}";
+	ProjectBuild = "0 0 0 0 0 0 -1 0 ";
+	ProjectLaunch = "0 295 490 351 0 0  936 703 ";
+	ProjectWindow = "321 82 562 500 0 0  936 703 ";
 	ShowToolbar = YES;
     };
     PRINCIPAL_CLASS = NSApplication;
@@ -114,6 +114,7 @@
 	ThematicInfo.plist
     );
     USER_LANGUAGES = (
+	AmericanEnglish,
 	English
     );
 }
