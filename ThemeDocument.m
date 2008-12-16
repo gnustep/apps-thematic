@@ -859,26 +859,40 @@ static NSMutableSet	*untitledName = nil;
 
 - (void) setInfo: (id)value forKey: (NSString*)key
 {
+  id	old = [_info objectForKey: key];
+  BOOL	changed = NO;
+
   if (value == nil)
     {
-      [_info removeObjectForKey: key];
+      if (old != nil)
+	{
+          [_info removeObjectForKey: key];
+	  changed = YES;
+	}
     }
   else
     {
-      [_info setObject: value forKey: key];
+      if ([old isEqual: value] == NO)
+	{
+          [_info setObject: value forKey: key];
+	  changed = YES;
+	}
     }
 
-  if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
-    @"Info-gnustep.plist"] atomically: NO] == NO)
+  if (changed == YES)
     {
-      NSRunAlertPanel(_(@"Problem changing setting"),
-	_(@"Could not save Info-gnustep.plist into theme"),
-	nil, nil, nil);
-    }
-  else
-    {
-      [window setDocumentEdited: YES];
-      [self activate];			// Preview
+      if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
+	@"Info-gnustep.plist"] atomically: NO] == NO)
+	{
+	  NSRunAlertPanel(_(@"Problem changing setting"),
+	    _(@"Could not save Info-gnustep.plist into theme"),
+	    nil, nil, nil);
+	}
+      else
+	{
+	  [window setDocumentEdited: YES];
+	  [self activate];			// Preview
+	}
     }
 }
 

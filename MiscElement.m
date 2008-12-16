@@ -112,9 +112,8 @@
 - (void) textDidEndEditing: (NSNotification*)aNotification
 {
   ThemeDocument *doc = [[AppController sharedController] selectedDocument];
-  NSTextView *sender = [aNotification object];
+  NSTextView	*sender = [aNotification object];
   NSString	*s = [sender string];
-
 
 //NSLog(@"End editing %@", aNotification);
   if (sender == details)
