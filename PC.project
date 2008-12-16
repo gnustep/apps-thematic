@@ -49,7 +49,7 @@
 	TiledElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-12-16 19:46:44 +0000";
+    LAST_EDITING = "2008-12-16 20:37:11 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -90,7 +90,7 @@
 	    NSHumanReadableName = "";
 	    NSIcon = Thematic.png;
 	    NSName = "";
-	    NSRole = "";
+	    NSRole = Viewer;
 	    NSUnixExtensions = (
 		theme
 	    );
