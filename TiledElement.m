@@ -197,8 +197,6 @@
 	  [self takeSelection: popup];
 	}
     }
-  else
-    NSLog(@"Not OK: %d", result);
 }
 
 - (void) takePosition: (id)sender

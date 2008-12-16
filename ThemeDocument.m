@@ -1101,7 +1101,7 @@ static NSMutableSet	*untitledName = nil;
     }
   [window setDocumentEdited: YES];
   // Refresh cache for this tile array
-  [[GSTheme theme] tilesNamed: name cache: NO];
+  [_theme tilesNamed: name cache: NO];
   [self activate];			// Preview
 }
 
