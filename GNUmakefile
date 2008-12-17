@@ -27,7 +27,6 @@ Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
 Resources/TiledElement.gorm \
 Resources/Thematic.png \
-Resources/Info-gnustep.plist \
 Resources/ThematicHelp.rtfd 
 
 

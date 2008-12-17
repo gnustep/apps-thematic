@@ -2,6 +2,9 @@
     APPLICATIONICON = Thematic.png;
     APP_DOCUMENT_BASED = NO;
     APP_TYPE = GORM;
+    BUILDER_ARGS = (
+    );
+    BUILDER_VERBOSE = YES;
     BuildTarget = Debug;
     BuildTargetArgs = "";
     CLASS_FILES = (
@@ -18,6 +21,7 @@
     CPPOPTIONS = "";
     CREATION_DATE = "2006-09-18 14:00:14 +0100";
     DOCU_FILES = (
+	ThematicHelp.rtfd
     );
     FRAMEWORKS = (
     );
@@ -49,7 +53,7 @@
 	TiledElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-12-16 20:37:11 +0000";
+    LAST_EDITING = "2008-12-17 07:10:23 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -61,36 +65,30 @@
     MAKEFILEDIR = "$(GNUSTEP_MAKEFILES)";
     OBJC_COMPILEROPTIONS = "";
     OTHER_RESOURCES = (
-	"Info-gnustep.plist",
-	ThematicHelp.rtfd
     );
     OTHER_SOURCES = (
 	main.m,
 	ColorElement.m
     );
     PC_WINDOWS = {
-	LoadedFiles = "0 295 230 351 0 0  936 703 ";
+	LoadedFiles = "143 43 230 351 0 0  936 703 ";
 	ProjectBrowser = "{x = 0; y = 0; width = 536; height = 0}";
 	ProjectBuild = "0 0 0 0 0 0 -1 0 ";
-	ProjectLaunch = "0 295 490 351 0 0  936 703 ";
-	ProjectWindow = "321 82 562 500 0 0  936 703 ";
+	ProjectLaunch = "67 228 490 351 0 0  936 703 ";
+	ProjectWindow = "321 79 562 500 0 0  936 703 ";
 	ShowToolbar = YES;
     };
     PRINCIPAL_CLASS = NSApplication;
     PROJECT_AUTHORS = (
 	"Richard Frith-Macdonald"
     );
-    PROJECT_COPYRIGHT = "Copyright (C) 2006";
+    PROJECT_COPYRIGHT = "Copyright (C) 2006-2008";
     PROJECT_COPYRIGHT_DESC = "Released under ... the GPL2";
     PROJECT_CREATOR = "richard,,,";
     PROJECT_DESCRIPTION = "The Theme editor for GNUstep";
     PROJECT_DOCUMENTTYPES = (
 	{
-	    NSDocumentClass = NSDocumentClass;
-	    NSHumanReadableName = "";
 	    NSIcon = Thematic.png;
-	    NSName = "";
-	    NSRole = Viewer;
 	    NSUnixExtensions = (
 		theme
 	    );
@@ -110,7 +108,6 @@
     SUBPROJECTS = (
     );
     SUPPORTING_FILES = (
-	ThematicHelp.rtfd,
 	ThematicInfo.plist
     );
     USER_LANGUAGES = (
