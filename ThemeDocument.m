@@ -729,8 +729,20 @@ static NSMutableSet	*untitledName = nil;
 {
   NSFileManager	*mgr = [NSFileManager defaultManager];
   NSString	*backup;
+  NSString	*version = [_info objectForKey: @"GSThemeVersion"];
   BOOL		isDirectory;
 
+  /* Increment the version number when we save.
+   */
+  version = [NSString stringWithFormat: @"%d", [version intValue] + 1];
+  [_info setObject: version forKey: @"GSThemeVersion"];
+  if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
+    @"Info-gnustep.plist"] atomically: NO] == NO)
+    {
+      NSRunAlertPanel(_(@"Problem updating version"),
+	_(@"Could not save Info-gnustep.plist into theme"),
+	nil, nil, nil);
+    }
   backup = [path stringByDeletingPathExtension];
   backup = [backup stringByAppendingPathExtension: @"backup"];
   backup = [backup stringByAppendingPathExtension: @"theme"];
@@ -947,7 +959,11 @@ static NSMutableSet	*untitledName = nil;
 
 - (void) setPath: (NSString*)path
 {
-  if ([path length] > 0 && [path isEqual: _path] == NO)
+  if ([path isEqual: _path] == YES)
+    {
+      return;
+    }
+  if ([path length] > 0)
     {
       ASSIGN(_path, path);
       ASSIGN(_name, [path lastPathComponent]);
@@ -966,6 +982,9 @@ static NSMutableSet	*untitledName = nil;
       ASSIGN(_name, trial);
     }
   [window setTitle: [self name]];
+  /* New document ... start with no version number.
+   */
+  [_info removeObjectForKey: @"GSThemeVersion"];
 }
 
 - (void) setResource: (NSString*)path forKey: (NSString*)key
