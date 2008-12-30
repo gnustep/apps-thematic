@@ -9,6 +9,7 @@
 {
   NSDictionary	*images;
   TilesBox	*tiles;
+  NSString	*className;
   id codeDescription;
   id colorsMenu;
   id colorsWell;

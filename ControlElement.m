@@ -33,6 +33,7 @@
 
 - (void) dealloc
 {
+  [className release];
   [images release];
   [super dealloc];
 }
@@ -51,10 +52,12 @@
     {
       AppController	*sharedController = [AppController sharedController];
       NSDictionary	*codeInfo = [sharedController codeInfo];
-      NSString		*className = NSStringFromClass([aView class]);
       NSArray		*titles;
       unsigned		count;
       unsigned		i;
+
+      className = [NSStringFromClass([aView class]) retain];
+      codeInfo = [codeInfo objectForKey: className];
 
       /* Create view in which to draw image
        */
@@ -87,13 +90,13 @@
       [self takeTileSelection: tilesMenu];
 
       [codeMenu removeAllItems];
-      codeInfo = [codeInfo objectForKey: className];
       if (codeInfo != nil)
 	{
 	  NSArray	*methods = [codeInfo allKeys];
 
 	  methods = [methods sortedArrayUsingSelector: @selector(compare:)];
 	  [codeMenu addItemsWithTitles: methods];
+	  [self takeCodeMethod: codeMenu];
 	}
     }
   return self;
@@ -111,19 +114,66 @@
 
 - (void) takeCodeDelete: (id)sender
 {
-  /* insert your code here */
+  NSString	*method = [[codeMenu selectedItem] title];
+
+  // FIXME ... need undo manager!
+  [owner setCode: nil forKey: method];
 }
 
 
 - (void) takeCodeEdit: (id)sender
 {
-  /* insert your code here */
+  NSFileManager	*mgr = [NSFileManager defaultManager];
+  NSString	*method = [[codeMenu selectedItem] title];
+  NSString	*code = [owner codeForKey: method];
+  NSString	*pid;
+  NSString	*file;
+  NSString	*temp;
+  NSString	*newCode;
+
+  file = [method stringByReplacingString: @":" withString: @"_"];
+  if (code == nil)
+    {
+      NSString	*path;
+
+      path = [[NSBundle mainBundle] pathForResource: file ofType: @"txt"];
+      if (path == nil)
+	{
+	  NSRunAlertPanel(_(@"Problem editing method"),
+	    _(@"No template found for method %@"),
+	    nil, nil, nil, method);
+	  return;
+	}
+      code = [NSString stringWithContentsOfFile: path];
+    }
+  temp = [NSTemporaryDirectory() stringByAppendingPathComponent: file];
+  pid = [NSString stringWithFormat: @"%d",
+    [[NSProcessInfo processInfo] processIdentifier]];
+  temp = [temp stringByAppendingPathExtension: pid];
+  [code writeToFile: temp atomically: NO];
+  // FIXME Edit
+  newCode = [NSString stringWithContentsOfFile: temp];
+  if ([mgr removeFileAtPath: temp handler: nil] == NO)
+    {
+    }
+  if ([code isEqual: newCode] == NO)
+    {
+      [owner setCode: newCode forKey: method];
+    }
 }
 
 
 - (void) takeCodeMethod: (id)sender
 {
-  /* insert your code here */
+  AppController	*sharedController = [AppController sharedController];
+  NSDictionary	*codeInfo = [sharedController codeInfo];
+  NSString	*method = [[sender selectedItem] title];
+  NSString	*helpText;
+
+  codeInfo = [codeInfo objectForKey: className];
+  helpText = [codeInfo objectForKey: method];
+  if (helpText == nil) helpText = @"";
+  [codeDescription setStringValue: helpText];
 }
 
 
