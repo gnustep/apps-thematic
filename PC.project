@@ -15,7 +15,8 @@
 	MenusElement.m,
 	WindowsElement.m,
 	MiscElement.m,
-	TiledElement.m
+	ControlElement.m,
+	ColorElement.m
     );
     COMPILEROPTIONS = "";
     CPPOPTIONS = "";
@@ -34,7 +35,7 @@
 	MenusElement.h,
 	WindowsElement.h,
 	MiscElement.h,
-	TiledElement.h
+	ControlElement.h
     );
     HELP_FILE = ThematicHelp.rtfd;
     IMAGES = (
@@ -50,10 +51,10 @@
 	WindowsElement.gorm,
 	MenusElement.gorm,
 	MiscElement.gorm,
-	TiledElement.gorm
+	ControlElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-12-30 11:09:41 +0000";
+    LAST_EDITING = "2008-12-30 14:23:04 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -67,8 +68,7 @@
     OTHER_RESOURCES = (
     );
     OTHER_SOURCES = (
-	main.m,
-	ColorElement.m
+	main.m
     );
     PC_WINDOWS = {
 	LoadedFiles = "15 124 230 351 0 0  1057 798 ";

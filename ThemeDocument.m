@@ -28,7 +28,7 @@
 #import	<AppController.h>
 #import	<ThemeDocument.h>
 #import	<ThemeElement.h>
-#import	<TiledElement.h>
+#import	<ControlElement.h>
 
 @class	ColorElement;
 @class	ImageElement;
@@ -370,9 +370,9 @@ static NSMutableSet	*untitledName = nil;
         {
 	  NSDictionary	*d;
 
-	  /* We could have a subclass of TiledElement to handle button
+	  /* We could have a subclass of ControlElement to handle button
 	   * specific details, but as a button is a simple gui element
-	   * we can get away with using the TiledElement class directly
+	   * we can get away with using the ControlElement class directly
 	   * and just configuring it to manage the images needed for
 	   * normal, highlighted, and pushed button cells.
 	   */
@@ -381,9 +381,9 @@ static NSMutableSet	*untitledName = nil;
 	    @"NSButtonHighlighted", @"highlighted button image",
 	    @"NSButtonPushed", @"pushed button image",
 	    nil];
-	  e = [[TiledElement alloc] initWithView: aView
-					   owner: self
-					  images: d];
+	  e = [[ControlElement alloc] initWithView: aView
+					     owner: self
+					    images: d];
 	  [_elements addObject: e];
 	  RELEASE(e);
 	  return e;

@@ -25,7 +25,7 @@ Resources/ImageElement.gorm \
 Resources/WindowsElement.gorm \
 Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
-Resources/TiledElement.gorm \
+Resources/ControlElement.gorm \
 Resources/Thematic.png \
 Resources/ThematicHelp.rtfd 
 
@@ -42,7 +42,7 @@ ImageElement.h \
 MenusElement.h \
 WindowsElement.h \
 MiscElement.h \
-TiledElement.h
+ControlElement.h
 
 #
 # Class files
@@ -55,14 +55,14 @@ ImageElement.m \
 MenusElement.m \
 WindowsElement.m \
 MiscElement.m \
-TiledElement.m
+ControlElement.m \
+ColorElement.m
 
 #
 # Other sources
 #
 Thematic_OBJC_FILES += \
-main.m \
-ColorElement.m 
+main.m 
 
 #
 # Makefiles

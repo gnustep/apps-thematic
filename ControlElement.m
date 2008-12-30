@@ -1,9 +1,9 @@
-/* TiledElement.m
+/* ControlElement.m
  *
- * Copyright (C) 2006 Free Software Foundation, Inc.
+ * Copyright (C) 2006-2008 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
- * Date:	2006
+ * Date:	2006,2008
  * 
  * This file is part of GNUstep.
  * 
@@ -22,18 +22,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111 USA.
  */
 
-#import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
 #import <GNUstepGUI/GSTheme.h>
 #import	"AppController.h"
 #import	"ThemeDocument.h"
-#import	"TiledElement.h"
+#import "ControlElement.h"
 
 @interface	TilesBox : NSView
 {
-  TiledElement	*owner;
+  ControlElement	*owner;
 }
-- (void) setOwner: (TiledElement*)o;
+- (void) setOwner: (id)o;
 @end
 @interface	FlippedTilesBox : TilesBox
 @end
@@ -77,10 +76,10 @@
 
 - (void) mouseDown: (NSEvent*)anEvent
 {
-  [owner takeImage: self];
+  [owner takeTileImage: self];
 }
 
-- (void) setOwner: (TiledElement*)o
+- (void) setOwner: (id)o
 {
   owner = o;
 }
@@ -93,17 +92,17 @@
 }
 @end
 
-@implementation TiledElement
+@implementation ControlElement
 
 - (void) dealloc
 {
-  RELEASE(images);
-  return [super dealloc];
+  [images release];
+  [super dealloc];
 }
 
 - (NSString*) imageName
 {
-  return [images objectForKey: [[popup selectedItem] title]];
+  return [images objectForKey: [[tilesMenu selectedItem] title]];
 }
 
 - (id) initWithView: (NSView*)aView
@@ -119,10 +118,11 @@
 
       /* Create view in which to draw image
        */
-      NSAssert(imageBox != nil, NSInternalInconsistencyException);
-      tiles = [[TilesBox alloc] initWithFrame: [[imageBox contentView] frame]];
+      NSAssert(tilesImages != nil, NSInternalInconsistencyException);
+      tiles = [[TilesBox alloc]
+	initWithFrame: [[tilesImages contentView] frame]];
       [tiles setOwner: self];
-      [imageBox setContentView: tiles]; 
+      [tilesImages setContentView: tiles]; 
       RELEASE(tiles);
 
       /* Set the images in the popup
@@ -132,29 +132,59 @@
       count = [titles count];
       for (i = 0; i < count; i++)
         {
-	  [popup insertItemWithTitle: [titles objectAtIndex: i] atIndex: i];
+	  [tilesMenu insertItemWithTitle: [titles objectAtIndex: i] atIndex: i];
 	}
-      count = [[popup itemArray] count];
+      count = [[tilesMenu itemArray] count];
       while (count > i)
         {
-	  [popup removeItemAtIndex: --count];
+	  [tilesMenu removeItemAtIndex: --count];
 	}
 
       /* Select the first image and make it active.
        */
-      [popup selectItemAtIndex: 0];
-      [self takeStyle: style];
-      [self takeSelection: popup];
+      [tilesMenu selectItemAtIndex: 0];
+      [self takeTileStyle: tilesStyle];
+      [self takeTileSelection: tilesMenu];
     }
   return self;
 }
 
 - (int) style
 {
-  return [[style selectedItem] tag];
+  return [[tilesStyle selectedItem] tag];
 }
 
-- (void) takeImage: (id)sender
+- (void) takeCodeDelete: (id)sender
+{
+  /* insert your code here */
+}
+
+
+- (void) takeCodeEdit: (id)sender
+{
+  /* insert your code here */
+}
+
+
+- (void) takeCodeMethod: (id)sender
+{
+  /* insert your code here */
+}
+
+
+- (void) takeColorName: (id)sender
+{
+  /* insert your code here */
+}
+
+
+- (void) takeColorValue: (id)sender
+{
+  /* insert your code here */
+}
+
+
+- (void) takeTileImage: (id)sender
 {
   NSArray	*fileTypes = [NSImage imageFileTypes];
   NSOpenPanel	*oPanel = [NSOpenPanel openPanel];
@@ -194,14 +224,15 @@
 	  	 withPath: path
 		hDivision: (h / 3)
 		vDivision: (v / 3)];
-	  [self takeSelection: popup];
+	  [self takeTileSelection: tilesMenu];
 	}
     }
 }
 
-- (void) takePosition: (id)sender
+
+- (void) takeTilePosition: (id)sender
 {
-  if (sender == hSlider)
+  if (sender == tilesHorizontal)
     {
       [owner setTiles: [self imageName]
 	     withPath: nil
@@ -209,7 +240,7 @@
 	    vDivision: 0];
       [tiles setNeedsDisplay: YES];
     }
-  if (sender == vSlider)
+  if (sender == tilesVertical)
     {
       [owner setTiles: [self imageName]
 	     withPath: nil
@@ -219,7 +250,8 @@
     }
 }
 
-- (void) takeSelection: (id)sender
+
+- (void) takeTileSelection: (id)sender
 {
   NSImage	*image;
   int		h;
@@ -232,21 +264,22 @@
       int	mh = (int)(s.width / 2);
       int	mv = (int)(s.width / 2);
 
-      [hSlider setMinValue: 1.0];
-      [vSlider setMinValue: 1.0];
-      [hSlider setMaxValue: (double)mh];
-      [vSlider setMaxValue: (double)mv];
-      [hSlider setIntValue: h];
-      [vSlider setIntValue: v];
-      [hSlider setNumberOfTickMarks: mh];
-      [vSlider setNumberOfTickMarks: mv];
-      [hSlider setAllowsTickMarkValuesOnly: YES];
-      [vSlider setAllowsTickMarkValuesOnly: YES];
+      [tilesHorizontal setMinValue: 1.0];
+      [tilesVertical setMinValue: 1.0];
+      [tilesHorizontal setMaxValue: (double)mh];
+      [tilesVertical setMaxValue: (double)mv];
+      [tilesHorizontal setIntValue: h];
+      [tilesVertical setIntValue: v];
+      [tilesHorizontal setNumberOfTickMarks: mh];
+      [tilesVertical setNumberOfTickMarks: mv];
+      [tilesHorizontal setAllowsTickMarkValuesOnly: YES];
+      [tilesVertical setAllowsTickMarkValuesOnly: YES];
     }
   [tiles setNeedsDisplay: YES];
 }
 
-- (void) takeStyle: (id)sender
+
+- (void) takeTileStyle: (id)sender
 {
   /* Change tiles box to be flipped or non-flipped as necessary,
    * then get it to redraw in the new style.
@@ -260,7 +293,7 @@
         {
 	  tiles = [[FlippedTilesBox alloc] initWithFrame: [tiles frame]];
 	  [tiles setOwner: self];
-	  [imageBox setContentView: tiles]; 
+	  [tilesImages setContentView: tiles]; 
 	  RELEASE(tiles);
 	}
     }
@@ -270,11 +303,11 @@
         {
 	  tiles = [[TilesBox alloc] initWithFrame: [tiles frame]];
 	  [tiles setOwner: self];
-	  [imageBox setContentView: tiles]; 
+	  [tilesImages setContentView: tiles]; 
 	  RELEASE(tiles);
 	}
     }
   [tiles setNeedsDisplay: YES];
 }
-@end
 
+@end

@@ -23,7 +23,7 @@
    Boston, MA  02110-1301, USA
 */
 
-#include <AppKit/AppKit.h>
+#import <AppKit/AppKit.h>
 
 int 
 main(int argc, const char *argv[])

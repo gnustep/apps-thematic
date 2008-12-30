@@ -1,0 +1,50 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    ControlElement = {
+	Actions = (
+	    "takeCodeDelete:",
+	    "takeCodeEdit:",
+	    "takeCodeMethod:",
+	    "takeColorName:",
+	    "takeColorValue:",
+	    "takeTileImage:",
+	    "takeTilePosition:",
+	    "takeTileSelection:",
+	    "takeTileStyle:"
+	);
+	Outlets = (
+	    codeDescription,
+	    colorsMenu,
+	    colorsWell,
+	    codeMenu,
+	    tilesHorizontal,
+	    tilesImages,
+	    tilesMenu,
+	    tilesStyle,
+	    tilesVertical
+	);
+	Super = ThemeElement;
+    };
+    FirstResponder = {
+	Actions = (
+	    "takeCodeDelete:",
+	    "takeCodeEdit:",
+	    "takeCodeMethod:",
+	    "takeColorName:",
+	    "takeColorValue:",
+	    "takeTileImage:",
+	    "takeTilePosition:",
+	    "takeTileSelection:",
+	    "takeTileStyle:"
+	);
+	Super = NSObject;
+    };
+    ThemeElement = {
+	Actions = (
+	);
+	Outlets = (
+	    window
+	);
+	Super = NSObject;
+    };
+}
