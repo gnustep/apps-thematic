@@ -27,70 +27,7 @@
 #import	"AppController.h"
 #import	"ThemeDocument.h"
 #import "ControlElement.h"
-
-@interface	TilesBox : NSView
-{
-  ControlElement	*owner;
-}
-- (void) setOwner: (id)o;
-@end
-@interface	FlippedTilesBox : TilesBox
-@end
-
-
-@implementation	TilesBox
-
-- (void) drawRect: (NSRect)rect
-{
-  GSDrawTiles	*t;
-  NSColor	*b = [NSColor controlBackgroundColor];
-
-  t = [[GSTheme theme] tilesNamed: [owner imageName] cache: YES];
-  if (t == nil)
-    {
-      NSRectFill([self bounds]);
-    }
-  else
-    {
-      GSThemeFillStyle	s = 0;
-
-      switch ([owner style])
-        {
-	  case 5:
-	  case 0:	s = GSThemeFillStyleMatrix; break;
-	  case 6:
-	  case 1:	s = GSThemeFillStyleRepeat; break;
-	  case 7:
-	  case 2:	s = GSThemeFillStyleCenter; break;
-	  case 8:
-	  case 3:	s = GSThemeFillStyleScale; break;
-	  case 9:
-	  case 4:	s = GSThemeFillStyleNone; break;
-        }
-      [[GSTheme theme] fillRect: [self bounds]
-		      withTiles: t
-		     background: b
-		      fillStyle: s];
-    }
-}
-
-- (void) mouseDown: (NSEvent*)anEvent
-{
-  [owner takeTileImage: self];
-}
-
-- (void) setOwner: (id)o
-{
-  owner = o;
-}
-@end
-
-@implementation	FlippedTilesBox
-- (BOOL) isFlipped
-{
-  return YES;
-}
-@end
+#import "TilesBox.h"
 
 @implementation ControlElement
 

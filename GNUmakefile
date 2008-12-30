@@ -42,7 +42,8 @@ ImageElement.h \
 MenusElement.h \
 WindowsElement.h \
 MiscElement.h \
-ControlElement.h
+ControlElement.h \
+TilesBox.h
 
 #
 # Class files
@@ -56,7 +57,8 @@ MenusElement.m \
 WindowsElement.m \
 MiscElement.m \
 ControlElement.m \
-ColorElement.m
+ColorElement.m \
+TilesBox.m
 
 #
 # Other sources

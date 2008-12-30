@@ -16,7 +16,8 @@
 	WindowsElement.m,
 	MiscElement.m,
 	ControlElement.m,
-	ColorElement.m
+	ColorElement.m,
+	TilesBox.m
     );
     COMPILEROPTIONS = "";
     CPPOPTIONS = "";
@@ -35,7 +36,8 @@
 	MenusElement.h,
 	WindowsElement.h,
 	MiscElement.h,
-	ControlElement.h
+	ControlElement.h,
+	TilesBox.h
     );
     HELP_FILE = ThematicHelp.rtfd;
     IMAGES = (
@@ -54,7 +56,7 @@
 	ControlElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-12-30 14:23:45 +0000";
+    LAST_EDITING = "2008-12-30 14:58:46 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
