@@ -54,7 +54,7 @@
 	ControlElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-12-30 14:23:04 +0000";
+    LAST_EDITING = "2008-12-30 14:23:45 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
