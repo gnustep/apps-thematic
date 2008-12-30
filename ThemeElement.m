@@ -71,11 +71,6 @@
   [[[AppController sharedController] inspector] orderFront: self];
 }
 
-- (void) takeColorFrom: (id)sender
-{
-  NSLog(@"Got color from %@", sender);
-}
-
 - (NSView*) view
 {
   return view;

@@ -27,7 +27,8 @@ Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
 Resources/ControlElement.gorm \
 Resources/Thematic.png \
-Resources/ThematicHelp.rtfd 
+Resources/ThematicHelp.rtfd \
+Resources/CodeInfo.plist 
 
 
 #

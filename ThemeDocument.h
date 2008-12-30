@@ -92,6 +92,12 @@
  */
 - (void) activate;
 - (void) changeSelection: (NSView*)aView at: (NSPoint)mousePoint;
+
+/** Returns the code fragment for the specified key, or nil if none is
+ * available.
+ */
+- (NSString*) codeForKey: (NSString*)key;
+
 - (NSColor*) colorNamed: (NSString*)aName;
 - (ThemeElement*) elementForView: (NSView*)aView;
 
@@ -127,6 +133,14 @@
  * Returns the current selection in the main theme window.
  */
 - (ThemeElement*) selected;
+
+/**
+ * Informs the document that a change has been made to a
+ * code fragment whose name is key.<br />
+ * If the path is nil, this means that the code fragment
+ * needs to be removed.
+ */
+- (void) setCode: (NSString*)path forKey: (NSString*)key;
 
 /**
  * Informs the document that a change has been made to a

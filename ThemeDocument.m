@@ -275,6 +275,21 @@ static NSMutableSet	*untitledName = nil;
   [[AppController sharedController] removeDocument: self];
 }
 
+- (NSString*) codeForKey: (NSString*)key
+{
+  NSFileManager	*mgr = [NSFileManager defaultManager];
+  NSString	*code = nil;
+  NSString	*file;
+
+  file = [_rsrc stringByAppendingPathComponent: @"ThemeCode"];
+  file = [file stringByAppendingPathComponent: key];
+  if ([mgr isReadableFileAtPath: file] == YES)
+    {
+      code = [NSString stringWithContentsOfFile: file];
+    }
+  return code;
+}
+
 - (NSColor*) colorNamed: (NSString*)aName
 {
   return [_colors colorWithKey: aName];
@@ -470,6 +485,19 @@ static NSMutableSet	*untitledName = nil;
 	{
 	  NSRunAlertPanel(_(@"Alert"),
 	    _(@"Unable to create working images subdirectory for theme"),
+	    _(@"OK"), nil, nil);
+	  DESTROY(self);
+	  return nil;
+	}
+    }
+
+  s = [_rsrc stringByAppendingPathComponent: @"ThemeCode"];
+  if ([mgr fileExistsAtPath: s isDirectory: &isDir] == NO || isDir == NO)
+    {
+      if ([mgr createDirectoryAtPath: s attributes: nil] == NO)
+	{
+	  NSRunAlertPanel(_(@"Alert"),
+	    _(@"Unable to create source code subdirectory for theme"),
 	    _(@"OK"), nil, nil);
 	  DESTROY(self);
 	  return nil;
@@ -788,6 +816,32 @@ static NSMutableSet	*untitledName = nil;
 - (ThemeElement*) selected
 {
   return _selected;
+}
+
+- (void) setCode: (NSString*)path forKey: (NSString*)key
+{
+  NSFileManager	*mgr = [NSFileManager defaultManager];
+  NSString	*file;
+
+  file = [_rsrc stringByAppendingPathComponent: @"ThemeCode"];
+  file = [file stringByAppendingPathComponent: key];
+
+  /*
+   * Remove any old file of the same name.
+   */
+  [mgr removeFileAtPath: file handler: nil];
+
+  if (path != nil && [mgr copyPath: path toPath: file handler: nil] == NO)
+    {
+      NSRunAlertPanel(_(@"Problem saving code"),
+	_(@"Could not copy file into theme"),
+	nil, nil, nil);
+    }
+  else
+    {
+      [window setDocumentEdited: YES];
+      [self activate];			// FIXME ... compile-load-preview
+    }
 }
 
 - (void) setColor: (NSColor*)color forKey: (NSString*)key

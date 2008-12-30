@@ -34,6 +34,7 @@
   id			inspector;
   NSMutableArray	*documents;
   ThemeDocument		*currentDocument;	// Not retained
+  NSDictionary		*codeInfo;
 }
 
 + (void) initialize;
@@ -43,6 +44,7 @@
 - (void) dealloc;
 
 - (void) awakeFromNib;
+- (NSDictionary*) codeInfo;
 
 - (void) applicationDidFinishLaunching: (NSNotification *)aNotif;
 - (BOOL) applicationShouldTerminate: (id)sender;

@@ -1,0 +1,13 @@
+/* This property list must be a dictionary defining the API for drawing
+ * GUI controls.
+ * At the top level it is keyed on control name ... which is the name of
+ * the class of the control.
+ * Each control is defined by a dictionary listing the method names of
+ * the theme api for that control and the help text used to let people
+ * know what the drawing method is for.
+ */
+{
+  NSButton = {
+    "drawthis:" = "some help text";
+  };
+}

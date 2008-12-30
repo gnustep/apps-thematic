@@ -65,6 +65,14 @@ static AppController	*shared = nil;
 	{
 	  shared = self;
 	  documents = [NSMutableArray new];
+	  /* Load the property list which defines the API for the code
+	   * fragments for each control.  For each control name, this
+	   * dictionary should contain another dictionary mapping method
+	   * names to their help text.
+	   */
+	  codeInfo = [[NSDictionary alloc] initWithContentsOfFile:
+	    [[NSBundle mainBundle] pathForResource: @"CodeInfo"
+					    ofType: @"plist"]];
 	}
     }
   else
@@ -83,6 +91,7 @@ static AppController	*shared = nil;
     }
   RELEASE(currentDocument);
   RELEASE(documents);
+  RELEASE(codeInfo);
   [super dealloc];
 }
 
@@ -135,6 +144,11 @@ static AppController	*shared = nil;
       [self selectDocument: doc];
     }
   return YES;
+}
+
+- (NSDictionary*) codeInfo
+{
+  return codeInfo;
 }
 
 - (NSWindow*) inspector

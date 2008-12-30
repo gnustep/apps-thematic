@@ -56,7 +56,7 @@
 	ControlElement.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-12-30 14:58:46 +0000";
+    LAST_EDITING = "2008-12-30 17:00:00 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -68,6 +68,7 @@
     MAKEFILEDIR = "$(GNUSTEP_MAKEFILES)";
     OBJC_COMPILEROPTIONS = "";
     OTHER_RESOURCES = (
+	CodeInfo.plist
     );
     OTHER_SOURCES = (
 	main.m
@@ -77,7 +78,7 @@
 	ProjectBrowser = "{x = 0; y = 0; width = 536; height = 148}";
 	ProjectBuild = "0 0 0 0 0 0 -1 0 ";
 	ProjectLaunch = "75 260 490 351 0 0  1057 798 ";
-	ProjectWindow = "332 190 562 500 0 0  1057 798 ";
+	ProjectWindow = "225 187 562 500 0 0  1057 798 ";
 	ShowToolbar = YES;
     };
     PRINCIPAL_CLASS = NSApplication;

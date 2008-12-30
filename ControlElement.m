@@ -49,6 +49,9 @@
   self = [super initWithView: aView owner: aDocument];
   if (self != nil)
     {
+      AppController	*sharedController = [AppController sharedController];
+      NSDictionary	*codeInfo = [sharedController codeInfo];
+      NSString		*className = NSStringFromClass([aView class]);
       NSArray		*titles;
       unsigned		count;
       unsigned		i;
@@ -82,8 +85,23 @@
       [tilesMenu selectItemAtIndex: 0];
       [self takeTileStyle: tilesStyle];
       [self takeTileSelection: tilesMenu];
+
+      [codeMenu removeAllItems];
+      codeInfo = [codeInfo objectForKey: className];
+      if (codeInfo != nil)
+	{
+	  NSArray	*methods = [codeInfo allKeys];
+
+	  methods = [methods sortedArrayUsingSelector: @selector(compare:)];
+	  [codeMenu addItemsWithTitles: methods];
+	}
     }
   return self;
+}
+
+- (void) selectAt: (NSPoint)mouse
+{
+  [super selectAt: mouse];
 }
 
 - (int) style
