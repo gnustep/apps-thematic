@@ -758,9 +758,20 @@ static NSMutableSet	*untitledName = nil;
 {
   NSFileManager	*mgr = [NSFileManager defaultManager];
   NSString	*backup;
+  const char	*name;
   NSString	*version = [_info objectForKey: @"GSThemeVersion"];
   BOOL		isDirectory;
 
+  name = [[[path lastPathComponent] stringByDeletingPathExtension] UTF8String];
+  while (name && *name)
+    {
+      if (!isalnum(*name))
+	{
+          NSRunAlertPanel(_(@"Problem saving document"),
+	    _(@"Only alphanumeric characters are permitted in the name"),
+	    nil, nil, nil);
+	}
+    }
   /* Increment the version number when we save.
    */
   version = [NSString stringWithFormat: @"%d", [version intValue] + 1];

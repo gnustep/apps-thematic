@@ -50,6 +50,7 @@
       if ([t isEqual: code] == NO)
 	{
 	  [owner setCode: t forKey: m];
+	  [[n object] codeBuildFor: owner method: m];
 	}
     }
 }
