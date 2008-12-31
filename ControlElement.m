@@ -186,7 +186,8 @@
   codeInfo = [codeInfo objectForKey: className];
   helpText = [codeInfo objectForKey: method];
   if (helpText == nil) helpText = @"";
-  [codeDescription setStringValue: helpText];
+  [codeDescription setText: helpText];
+  [codeDescription setEditable: NO];
 }
 
 
