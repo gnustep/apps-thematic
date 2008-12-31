@@ -26,9 +26,11 @@ Resources/WindowsElement.gorm \
 Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
 Resources/ControlElement.gorm \
+Resources/CodeEditor.gorm \
 Resources/Thematic.png \
 Resources/ThematicHelp.rtfd \
-Resources/CodeInfo.plist 
+Resources/CodeInfo.plist \
+Resources/drawButton_in_view_style_state_.txt 
 
 
 #
@@ -44,7 +46,8 @@ MenusElement.h \
 WindowsElement.h \
 MiscElement.h \
 ControlElement.h \
-TilesBox.h
+TilesBox.h \
+CodeEditor.h
 
 #
 # Class files
@@ -59,7 +62,8 @@ WindowsElement.m \
 MiscElement.m \
 ControlElement.m \
 ColorElement.m \
-TilesBox.m
+TilesBox.m \
+CodeEditor.m
 
 #
 # Other sources

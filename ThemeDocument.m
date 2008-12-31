@@ -281,6 +281,7 @@ static NSMutableSet	*untitledName = nil;
   NSString	*code = nil;
   NSString	*file;
 
+  key = [key stringByReplacingString: @":" withString: @"_"];
   file = [_rsrc stringByAppendingPathComponent: @"ThemeCode"];
   file = [file stringByAppendingPathComponent: key];
   if ([mgr isReadableFileAtPath: file] == YES)
@@ -818,11 +819,12 @@ static NSMutableSet	*untitledName = nil;
   return _selected;
 }
 
-- (void) setCode: (NSString*)path forKey: (NSString*)key
+- (void) setCode: (NSString*)code forKey: (NSString*)key
 {
   NSFileManager	*mgr = [NSFileManager defaultManager];
   NSString	*file;
 
+  key = [key stringByReplacingString: @":" withString: @"_"];
   file = [_rsrc stringByAppendingPathComponent: @"ThemeCode"];
   file = [file stringByAppendingPathComponent: key];
 
@@ -831,10 +833,10 @@ static NSMutableSet	*untitledName = nil;
    */
   [mgr removeFileAtPath: file handler: nil];
 
-  if (path != nil && [mgr copyPath: path toPath: file handler: nil] == NO)
+  if (code != nil && [code writeToFile: file atomically: NO] == NO)
     {
       NSRunAlertPanel(_(@"Problem saving code"),
-	_(@"Could not copy file into theme"),
+	_(@"Could not write file into theme"),
 	nil, nil, nil);
     }
   else
@@ -846,7 +848,6 @@ static NSMutableSet	*untitledName = nil;
 
 - (void) setColor: (NSColor*)color forKey: (NSString*)key
 {
-  NSLog(@"Set %@ for %@", color, key);
   [_colors setColor: color forKey: key];
   if ([_colors writeToFile:
     [_rsrc stringByAppendingPathComponent: @"ThemeColors.clr"]] == NO)

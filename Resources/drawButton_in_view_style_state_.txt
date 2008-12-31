@@ -1,0 +1,12 @@
+- (void) drawButton: (NSRect)frame
+	         in: (NSCell*)cell
+	       view: (NSView*)view
+	      style: (int)style
+	      state: (GSThemeControlState)state
+{
+  [super drawButton: frame
+	         in: cell
+	       view: view
+	      style: style
+	      state: state];
+}

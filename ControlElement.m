@@ -27,12 +27,36 @@
 #import	"AppController.h"
 #import	"ThemeDocument.h"
 #import "ControlElement.h"
+#import "CodeEditor.h"
 #import "TilesBox.h"
 
 @implementation ControlElement
 
+- (void) _endCodeEdit: (NSNotification*)n
+{
+  NSDictionary	*u = [n userInfo];
+  NSString	*c = [u objectForKey: @"Control"];
+
+  /* Check to see if the notification is for us.
+   */
+  if ([c isEqualToString: className] == YES)
+    {
+      NSString	*m = [u objectForKey: @"Method"];
+      NSString	*t = [u objectForKey: @"Text"];
+      NSString	*code = [owner codeForKey: m];
+
+      /* If the code has been changed, update the documnent.
+       */
+      if ([t isEqual: code] == NO)
+	{
+	  [owner setCode: t forKey: m];
+	}
+    }
+}
+
 - (void) dealloc
 {
+  [[NSNotificationCenter defaultCenter] removeObserver: self];
   [className release];
   [images release];
   [super dealloc];
@@ -98,6 +122,13 @@
 	  [codeMenu addItemsWithTitles: methods];
 	  [self takeCodeMethod: codeMenu];
 	}
+      /* Take note of ending of editing.
+       */
+      [[NSNotificationCenter defaultCenter]
+	addObserver: self
+	selector: @selector(_endCodeEdit:)
+	name: @"CodeEditDone"
+	object: [CodeEditor codeEditor]];
     }
   return self;
 }
@@ -123,20 +154,15 @@
 
 - (void) takeCodeEdit: (id)sender
 {
-  NSFileManager	*mgr = [NSFileManager defaultManager];
   NSString	*method = [[codeMenu selectedItem] title];
   NSString	*code = [owner codeForKey: method];
-  NSString	*pid;
-  NSString	*file;
-  NSString	*temp;
-  NSString	*newCode;
 
-  file = [method stringByReplacingString: @":" withString: @"_"];
   if (code == nil)
     {
       NSString	*path;
 
-      path = [[NSBundle mainBundle] pathForResource: file ofType: @"txt"];
+      path = [method stringByReplacingString: @":" withString: @"_"];
+      path = [[NSBundle mainBundle] pathForResource: path ofType: @"txt"];
       if (path == nil)
 	{
 	  NSRunAlertPanel(_(@"Problem editing method"),
@@ -146,20 +172,7 @@
 	}
       code = [NSString stringWithContentsOfFile: path];
     }
-  temp = [NSTemporaryDirectory() stringByAppendingPathComponent: file];
-  pid = [NSString stringWithFormat: @"%d",
-    [[NSProcessInfo processInfo] processIdentifier]];
-  temp = [temp stringByAppendingPathExtension: pid];
-  [code writeToFile: temp atomically: NO];
-  // FIXME Edit
-  newCode = [NSString stringWithContentsOfFile: temp];
-  if ([mgr removeFileAtPath: temp handler: nil] == NO)
-    {
-    }
-  if ([code isEqual: newCode] == NO)
-    {
-      [owner setCode: newCode forKey: method];
-    }
+  [[CodeEditor codeEditor] editText: code control: className method: method];
 }
 
 

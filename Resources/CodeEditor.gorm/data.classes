@@ -1,0 +1,23 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    CodeEditor = {
+	Actions = (
+	    "codeDone:",
+	    "codeRevert:",
+	    "codeCancel:"
+	);
+	Outlets = (
+	    textView,
+	    panel
+	);
+	Super = NSObject;
+    };
+    FirstResponder = {
+	Actions = (
+	    "codeDone:",
+	    "codeRevert:",
+	    "codeCancel:"
+	);
+	Super = NSObject;
+    };
+}
