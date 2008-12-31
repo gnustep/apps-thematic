@@ -6,7 +6,11 @@ being added to the editor as they are added to the gui library.
 
 The editor is already capable of building simple themes!
 
-Look for more information on the application in Resources/Thematic.rtfd
+Look for more information on using the application in the online help.
+
+To work on Thematic, you also need Gorm.app and ProjectCenter.app,
+and a copy of an rtfd editor such as Ink.app if you wish to improve the
+online help (Resources/Thematic.rtfd).
 
 Building/using the current editor requires the *latest* version of
 the GUI from SVN.  The major task in theming is now changing all the
@@ -14,7 +18,19 @@ control drawing code to be themable ... identifying a minimal set of
 drawing methods for each control and defining the number of tile
 images needed for each, and updating the code in the GUI library.
 
-To work on Thematic, you also need Gorm.app and ProjectCenter.app,
-and a copy of an rtfd editor such as Ink.app if you wish to improve the
-online help (Resources/Thematic.rtfd).
+To help with developing Thematic itsself, we need to add code to deal
+with assigning tiles for particular controls and overriding theme drawing
+methods for particular controls.
+
+For most controls, this means:
+1. Editing ThemeDocument.gorm to add the control to the main document window.
+2. Implement a subclass of ThemeElement to handle the control by defining
+tiling images and colors for the control (modifying how method overriding is
+done is probably not required here).
+3. Edit [ThemeDocument-elementForView:] to return the correct object.
+4. Define methods that can be overridden to draw the control differently ...
+4a. Add the methods and a description of each to Resources/CodeInfo.plist
+4b. Add template implementations for each method as a file whose name is
+Resources/xxx.txt where xxx is the method name with any colons replaced by
+underscores.
 

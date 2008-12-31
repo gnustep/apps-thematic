@@ -771,6 +771,7 @@ static NSMutableSet	*untitledName = nil;
 	    _(@"Only alphanumeric characters are permitted in the name"),
 	    nil, nil, nil);
 	}
+      name++;
     }
   /* Increment the version number when we save.
    */
@@ -828,6 +829,57 @@ static NSMutableSet	*untitledName = nil;
 - (ThemeElement*) selected
 {
   return _selected;
+}
+
+- (void) setBinaryBundle: (NSString*)path
+{
+  NSFileManager	*mgr = [NSFileManager defaultManager];
+  NSString	*file;
+  BOOL		existed;
+
+  file = [_work stringByAppendingPathComponent: @"Theme.bundle"];
+  existed = [mgr fileExistsAtPath: file];
+  /*
+   * Remove any old file of the same name.
+   */
+  [mgr removeFileAtPath: file handler: nil];
+
+  if (path != nil)
+    {
+      if ([mgr copyPath: path toPath: file handler: nil] == NO)
+	{
+	  [_info removeObjectForKey: @"NSExecutable"];
+	  [_info removeObjectForKey: @"NSPrincipalClass"];
+	  NSRunAlertPanel(_(@"Problem copying binary"),
+	    _(@"Could not copy file into theme"),
+	    nil, nil, nil);
+	}
+      else
+	{
+	  NSBundle	*b = [NSBundle bundleWithPath: path];
+	  NSDictionary	*i = [b infoDictionary];
+	  NSString	*e = [i objectForKey: @"NSExecutable"];
+	  NSString	*p = [i objectForKey: @"NSPrincipalClass"];
+
+	  /* Adjust our info dictionary to contain the location of the
+	   * executable and the name of the principal class in the
+	   * binary bundle.
+	   */
+	  e = [@"Theme.bundle" stringByAppendingPathComponent: e];
+	  [_info setObject: e forKey: @"NSExecutable"];
+	  [_info setObject: p forKey: @"NSPrincipalClass"];
+	  [window setDocumentEdited: YES];
+	  [self activate];
+	}
+    }
+  else if (existed == YES)
+    {
+      [_info removeObjectForKey: @"NSExecutable"];
+      [_info removeObjectForKey: @"NSPrincipalClass"];
+    }
+  [window setDocumentEdited: YES];
+// FIXME ... ensure that the correct theme code is in use before activating.
+  [self activate];
 }
 
 - (void) setCode: (NSString*)code forKey: (NSString*)key

@@ -41,7 +41,7 @@ static CodeEditor *instance = nil;
 }
 
 
-- (BOOL) codeBuildFor: (ThemeDocument*)document method: (NSString*)singleMethod
+- (void) codeBuildFor: (ThemeDocument*)document method: (NSString*)singleMethod
 {
   NSFileManager		*mgr = [NSFileManager defaultManager];
   AppController		*app = [AppController sharedController];
@@ -57,6 +57,8 @@ static CodeEditor *instance = nil;
   NSMutableString	*makeText;
   NSString		*launchPath;
   NSTask		*task;
+  NSString		*logFile;
+  NSFileHandle		*logHandle;
   int			status;
 
   version = [[document infoDictionary] objectForKey: @"GSThemeVersion"];
@@ -113,17 +115,23 @@ static CodeEditor *instance = nil;
   path = [NSTemporaryDirectory() stringByAppendingPathComponent:
     [NSString stringWithFormat: @"Thematic%d",
     [[NSProcessInfo processInfo] processIdentifier]]];
-
   [mgr createDirectoryAtPath: path attributes: nil];
+
   [makeText writeToFile: [path stringByAppendingPathComponent: @"GNUmakefile"]
 	     atomically: NO];
   [codeText writeToFile: [path stringByAppendingPathComponent: @"Theme.m"]
 	     atomically: NO];
+  logFile = [path stringByAppendingPathComponent: @"make.log"];
+  [mgr createFileAtPath: logFile contents: nil attributes: nil];
+  logHandle = [NSFileHandle fileHandleForWritingAtPath: logFile];
 
+  [mgr createDirectoryAtPath: path attributes: nil];
   launchPath = [NSTask launchPathForTool: @"make"];
   task = [NSTask new];
   [task setLaunchPath: launchPath];
   [task setCurrentDirectoryPath: path];
+  [task setStandardError: logHandle];
+  [task setStandardOutput: logHandle];
   [task launch];
   while ([task isRunning])
     {
@@ -134,8 +142,21 @@ static CodeEditor *instance = nil;
     }
   status = [task terminationStatus];
   [task release];  
-  // [mgr removeFileAtPath: path handler: nil];
-  return YES;
+  if (status == 0)
+    {
+      [document setBinaryBundle:
+	[path stringByAppendingPathComponent: @"Theme.bundle"]];
+    }
+  else
+    {
+      NSString	*output = [NSString stringWithContentsOfFile: logFile]; 
+
+      NSRunAlertPanel(_(@"Problem building theme"),
+	_(@"Build operation failed: %@"),
+		nil, nil, nil, output);
+      [document setBinaryBundle: nil];
+    }
+  [mgr removeFileAtPath: path handler: nil];
 }
 
 - (void) codeDone: (id)sender

@@ -34,7 +34,7 @@
   NSString	*method;
 }
 + (CodeEditor*) codeEditor;
-- (BOOL) codeBuildFor: (ThemeDocument*)document method: (NSString*)method;
+- (void) codeBuildFor: (ThemeDocument*)document method: (NSString*)method;
 - (void) codeDone: (id)sender;
 - (void) codeRevert: (id)sender;
 - (void) codeCancel: (id)sender;

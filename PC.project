@@ -59,7 +59,7 @@
 	CodeEditor.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-12-31 11:03:51 +0000";
+    LAST_EDITING = "2008-12-31 15:57:08 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"

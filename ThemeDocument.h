@@ -135,6 +135,12 @@
 - (ThemeElement*) selected;
 
 /**
+ * Copies the binary bundle into place after deleting any existing version.
+ * If path is nil, this just deletes the existing binary bundle.
+ */
+- (void) setBinaryBundle: (NSString*)path;
+
+/**
  * Informs the document that a change has been made to a
  * code fragment whose name is key.<br />
  * If the path is nil, this means that the code fragment
