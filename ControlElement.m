@@ -59,6 +59,7 @@
 {
   [[NSNotificationCenter defaultCenter] removeObserver: self];
   [className release];
+  [classInfo release];
   [images release];
   [super dealloc];
 }
@@ -82,7 +83,17 @@
       unsigned		i;
 
       className = [NSStringFromClass([aView class]) retain];
-      codeInfo = [codeInfo objectForKey: className];
+      if ([codeInfo count] > 0)
+	{
+	  NSMutableDictionary	*md;
+
+	  md = [NSMutableDictionary dictionary];
+	  [md addEntriesFromDictionary:
+	    [codeInfo objectForKey: className]];
+	  [md addEntriesFromDictionary:
+	    [codeInfo objectForKey: @"Generic"]];
+	  classInfo = [md copy];
+	}
 
       /* Create view in which to draw image
        */
@@ -115,9 +126,9 @@
       [self takeTileSelection: tilesMenu];
 
       [codeMenu removeAllItems];
-      if (codeInfo != nil)
+      if ([classInfo count] > 0)
 	{
-	  NSArray	*methods = [codeInfo allKeys];
+	  NSArray	*methods = [classInfo allKeys];
 
 	  methods = [methods sortedArrayUsingSelector: @selector(compare:)];
 	  [codeMenu addItemsWithTitles: methods];
@@ -179,13 +190,9 @@
 
 - (void) takeCodeMethod: (id)sender
 {
-  AppController	*sharedController = [AppController sharedController];
-  NSDictionary	*codeInfo = [sharedController codeInfo];
   NSString	*method = [[sender selectedItem] title];
-  NSString	*helpText;
+  NSString	*helpText = [classInfo objectForKey: method];
 
-  codeInfo = [codeInfo objectForKey: className];
-  helpText = [codeInfo objectForKey: method];
   if (helpText == nil) helpText = @"";
   [codeDescription setText: helpText];
   [codeDescription setEditable: NO];

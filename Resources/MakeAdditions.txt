@@ -1,0 +1,9 @@
+# eg -I/usr/include
+ADDITIONAL_INCLUDE_DIRS+=
+
+# eg -L/usr/lib
+ADDITIONAL_LIB_DIRS+=
+
+# eg. -lfoo
+Theme_BUNDLE_LIBS+=
+

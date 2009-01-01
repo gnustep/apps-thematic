@@ -49,27 +49,41 @@ static CodeEditor *instance = nil;
   NSMutableSet		*methods;
   NSString		*methodName;
   NSEnumerator		*enumerator;
-  NSDictionary		*controlInfo;
+  NSDictionary		*generic;
   NSString		*path;
-  NSString		*version;
   NSString		*fullName;
   NSMutableString	*codeText;
   NSMutableString	*makeText;
   NSString		*launchPath;
   NSTask		*task;
+  NSString		*string;
   NSString		*logFile;
   NSFileHandle		*logHandle;
   int			status;
 
-  version = [[document infoDictionary] objectForKey: @"GSThemeVersion"];
-  if (version == nil) version = @"0";
   fullName = [NSString stringWithFormat: @"%@_%@",
-    [[document name] stringByDeletingPathExtension], version];
+    [[document name] stringByDeletingPathExtension], [document newVersion]];
   
+  codeInfo = [app codeInfo];
+  /* The items in the generic dictionary are handled specially rather
+   * than being treated as methods.
+   */
+  generic = [codeInfo objectForKey: @"Generic"];
+  if (singleMethod != nil && [generic objectForKey: singleMethod] != nil)
+    {
+      singleMethod = nil;
+    }
+
   makeText = [NSMutableString string];
   [makeText appendString: @"include $(GNUSTEP_MAKEFILES)/common.make\n"];
   [makeText appendString: @"BUNDLE_NAME=Theme\n"];
-  //[makeText appendString: @"ADDITIONAL_LIB_DIRS=XXX\n"];
+  string = [document codeForKey: @"MakeAdditions"];
+  if ([string length] > 0)
+    {
+      [makeText appendString: @"\n"];
+      [makeText appendString: string];
+      [makeText appendString: @"\n"];
+    }
   [makeText appendString: @"Theme_OBJC_FILES=Theme.m\n"];
   [makeText appendFormat: @"Theme_PRINCIPAL_CLASS=%@\n", fullName];
   [makeText appendString: @"include $(GNUSTEP_MAKEFILES)/bundle.make\n"];
@@ -77,20 +91,45 @@ static CodeEditor *instance = nil;
   codeText = [NSMutableString string];
   [codeText appendString: @"#import <AppKit/AppKit.h>\n"];
   [codeText appendString: @"#import <GNUstepGUI/GSTheme.h>\n"];
+  string = [document codeForKey: @"IncludeHeaders"];
+  if ([string length] > 0)
+    {
+      [codeText appendString: @"\n"];
+      [codeText appendString: string];
+      [codeText appendString: @"\n"];
+    }
   [codeText appendFormat: @"@interface %@ : GSTheme\n", fullName];
+  string = [document codeForKey: @"VariableDeclarations"];
+  if ([string length] > 0)
+    {
+      [codeText appendString: @"\n"];
+      [codeText appendString: string];
+      [codeText appendString: @"\n"];
+    }
   [codeText appendString: @"@end\n"];
   [codeText appendFormat: @"@implementation %@\n", fullName];
+  string = [document codeForKey: @"CommonMethods"];
+  if ([string length] > 0)
+    {
+      [codeText appendString: @"\n"];
+      [codeText appendString: string];
+      [codeText appendString: @"\n"];
+    }
 
   methods = [[NSMutableSet alloc] autorelease];
-  codeInfo = [app codeInfo];
   if (singleMethod == nil)
     {
+      NSDictionary	*controlInfo;
+
       /* Build with all methods.
        */
       enumerator = [codeInfo objectEnumerator];
       while ((controlInfo = [enumerator nextObject]) != nil)
         {
-          [methods addObjectsFromArray: [controlInfo allKeys]];
+	  if (controlInfo != generic)
+	    {
+              [methods addObjectsFromArray: [controlInfo allKeys]];
+	    }
         }
     }
   else
@@ -115,6 +154,7 @@ static CodeEditor *instance = nil;
   path = [NSTemporaryDirectory() stringByAppendingPathComponent:
     [NSString stringWithFormat: @"Thematic%d",
     [[NSProcessInfo processInfo] processIdentifier]]];
+  [mgr removeFileAtPath: path handler: nil];
   [mgr createDirectoryAtPath: path attributes: nil];
 
   [makeText writeToFile: [path stringByAppendingPathComponent: @"GNUmakefile"]
@@ -146,6 +186,7 @@ static CodeEditor *instance = nil;
     {
       [document setBinaryBundle:
 	[path stringByAppendingPathComponent: @"Theme.bundle"]];
+      [mgr removeFileAtPath: path handler: nil];
     }
   else
     {
@@ -156,7 +197,6 @@ static CodeEditor *instance = nil;
 		nil, nil, nil, output);
       [document setBinaryBundle: nil];
     }
-  [mgr removeFileAtPath: path handler: nil];
 }
 
 - (void) codeDone: (id)sender

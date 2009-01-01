@@ -36,29 +36,29 @@
 @class	MiscElement;
 @class	WindowsElement;
 
-@interface	TestTheme : GSTheme
+@interface	GSTheme (TestTheme)
 @end
 
-@implementation	TestTheme
+@implementation	GSTheme (TestTheme)
 /*
  * Method to bypass NSBundle's caching of infoDictionary so that changes
  * to the theme will be reflected immediately.
  */
 - (NSDictionary*) infoDictionary
 {
-  NSString	*path;
+  ThemeDocument	*doc = [[AppController sharedController] selectedDocument];
 
-  path = [[self bundle] pathForResource: @"Info-gnustep" ofType: @"plist"];
-  return [NSDictionary dictionaryWithContentsOfFile: path];
-}
+  if ([doc testTheme] == self)
+    {
+      NSString	*path;
 
-/* Method to bypass normal name display so we don't see the temporary
- * work directory name.
- */
-- (NSString*) name
-{
-  return [[[[AppController sharedController] selectedDocument] name]
-    stringByDeletingPathExtension];
+      path = [[self bundle] pathForResource: @"Info-gnustep" ofType: @"plist"];
+      return [NSDictionary dictionaryWithContentsOfFile: path];
+    }
+  else
+    {
+      return [[self bundle] infoDictionary];
+    }
 }
 @end
 
@@ -588,7 +588,8 @@ static NSMutableSet	*untitledName = nil;
       [window setDocumentEdited: NO];
     }
 
-  _theme = [[TestTheme alloc] initWithBundle: [NSBundle bundleWithPath: _work]];
+  _theme = [[GSTheme alloc] initWithBundle: [NSBundle bundleWithPath: _work]];
+  [_theme setName: [[self name] stringByDeletingPathExtension]];
   [GSTheme setTheme: _theme];
 
   [NSBundle loadNibNamed: @"ThemeDocument" owner: self];
@@ -639,6 +640,15 @@ static NSMutableSet	*untitledName = nil;
 - (NSString*) name
 {
   return _name;
+}
+
+- (NSString*) newVersion
+{
+  NSString	*version = [_info objectForKey: @"GSThemeVersion"];
+
+  version = [NSString stringWithFormat: @"%d", [version intValue] + 1];
+  [_info setObject: version forKey: @"GSThemeVersion"];
+  return version;
 }
 
 - (void) notified: (NSNotification*)n
@@ -759,7 +769,6 @@ static NSMutableSet	*untitledName = nil;
   NSFileManager	*mgr = [NSFileManager defaultManager];
   NSString	*backup;
   const char	*name;
-  NSString	*version = [_info objectForKey: @"GSThemeVersion"];
   BOOL		isDirectory;
 
   name = [[[path lastPathComponent] stringByDeletingPathExtension] UTF8String];
@@ -773,10 +782,6 @@ static NSMutableSet	*untitledName = nil;
 	}
       name++;
     }
-  /* Increment the version number when we save.
-   */
-  version = [NSString stringWithFormat: @"%d", [version intValue] + 1];
-  [_info setObject: version forKey: @"GSThemeVersion"];
   if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
     @"Info-gnustep.plist"] atomically: NO] == NO)
     {
@@ -836,6 +841,7 @@ static NSMutableSet	*untitledName = nil;
   NSFileManager	*mgr = [NSFileManager defaultManager];
   NSString	*file;
   BOOL		existed;
+  Class		c = 0;
 
   file = [_work stringByAppendingPathComponent: @"Theme.bundle"];
   existed = [mgr fileExistsAtPath: file];
@@ -868,8 +874,10 @@ static NSMutableSet	*untitledName = nil;
 	  e = [@"Theme.bundle" stringByAppendingPathComponent: e];
 	  [_info setObject: e forKey: @"NSExecutable"];
 	  [_info setObject: p forKey: @"NSPrincipalClass"];
-	  [window setDocumentEdited: YES];
-	  [self activate];
+
+	  /* Get the theme class so we can use it.
+ 	   */
+	  c = [b principalClass];
 	}
     }
   else if (existed == YES)
@@ -878,7 +886,19 @@ static NSMutableSet	*untitledName = nil;
       [_info removeObjectForKey: @"NSPrincipalClass"];
     }
   [window setDocumentEdited: YES];
-// FIXME ... ensure that the correct theme code is in use before activating.
+  if (c == 0)
+    {
+      c = [GSTheme class];
+    }
+  // ensure that the correct theme code is in use before activating.
+  if ([_theme class] != c)
+    {
+      [GSTheme setTheme: nil];
+      [_theme release];
+      _theme = [[c alloc] initWithBundle: [NSBundle bundleWithPath: _work]];
+      [_theme setName: [[self name] stringByDeletingPathExtension]];
+      [GSTheme setTheme: _theme];
+    }
   [self activate];
 }
 
@@ -1100,6 +1120,7 @@ static NSMutableSet	*untitledName = nil;
       ASSIGN(_name, trial);
     }
   [window setTitle: [self name]];
+  [_theme setName: [[self name] stringByDeletingPathExtension]];
   /* New document ... start with no version number.
    */
   [_info removeObjectForKey: @"GSThemeVersion"];
@@ -1244,10 +1265,11 @@ static NSMutableSet	*untitledName = nil;
   [self activate];			// Preview
 }
 
-/**
- * Return the tiling image (if known) and the division points for the
- * named tiles.
- */
+- (GSTheme*) testTheme
+{
+  return _theme;
+}
+
 - (NSImage*) tiles: (NSString*)name
 	 hDivision: (int*)h
 	 vDivision: (int*)v

@@ -5,8 +5,21 @@
  * Each control is defined by a dictionary listing the method names of
  * the theme api for that control and the help text used to let people
  * know what the drawing method is for.
+ * An extra dictionary named 'Generic' contains extra theme information
+ * not specific to particular controls.  The code in CodeEditor.m must
+ * deal with them specially.
  */
 {
+  Generic = {
+    "CommonMethods" =
+"This code fragment is provided to allow you to override methods wich are common to all of your theme rather than specific to a particular control (eg initialisation and deallocation.";
+    "IncludeHeaders" =
+"This code fragment is provided to allow you to specify additional header files to be included at the stat of your theme code.";
+    "MakeAdditions" =
+"This allows you to provide a makefile fragment to tell gnustep-make to link your theme with extra libraries or compile it with extra flags.";
+    "VariableDeclarations" =
+"This code fragment allows you to declare extra instance variables for use by all your theme code.";
+  };
   NSButton = {
     "drawButton:in:view:style:state:" =
 "Draws a button frame and background (not its content) for the specified cell and view.";

@@ -113,6 +113,11 @@
 
 - (id) initWithPath: (NSString*)path;
 - (NSString*) name;
+
+/** Generates a new version number for the theme binary (and returns it).
+ */
+- (NSString*) newVersion;
+
 - (void) notified: (NSNotification*)n;
 
 /**
@@ -195,6 +200,10 @@
 	 withPath: (NSString*)path
 	hDivision: (int)h
 	vDivision: (int)v;
+
+/** Return the current testTheme being edited.
+ */
+- (GSTheme*) testTheme;
 
 /**
  * Return the tiling image (if known) and the division points for the

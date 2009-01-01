@@ -30,7 +30,11 @@ Resources/CodeEditor.gorm \
 Resources/Thematic.png \
 Resources/ThematicHelp.rtfd \
 Resources/CodeInfo.plist \
-Resources/drawButton_in_view_style_state_.txt 
+Resources/drawButton_in_view_style_state_.txt \
+Resources/CommonMethods.txt \
+Resources/IncludeHeaders.txt \
+Resources/MakeAdditions.txt \
+Resources/VariableDeclarations.txt 
 
 
 #

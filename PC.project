@@ -59,7 +59,7 @@
 	CodeEditor.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2008-12-31 15:57:08 +0000";
+    LAST_EDITING = "2009-01-01 07:16:15 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -72,7 +72,11 @@
     OBJC_COMPILEROPTIONS = "";
     OTHER_RESOURCES = (
 	CodeInfo.plist,
-	drawButton_in_view_style_state_.txt
+	drawButton_in_view_style_state_.txt,
+	CommonMethods.txt,
+	IncludeHeaders.txt,
+	MakeAdditions.txt,
+	VariableDeclarations.txt
     );
     OTHER_SOURCES = (
 	main.m

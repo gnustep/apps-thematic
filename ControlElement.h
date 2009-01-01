@@ -33,6 +33,7 @@
   NSDictionary	*images;
   TilesBox	*tiles;
   NSString	*className;
+  NSDictionary	*classInfo;
   id codeDescription;
   id colorsMenu;
   id colorsWell;

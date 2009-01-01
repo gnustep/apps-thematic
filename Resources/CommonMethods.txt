@@ -1,0 +1,14 @@
+/*
+- (void) dealloc
+{
+  [super dealloc];
+}
+ */
+
+/*
+- (id) initWithBundle: (NSBundle*)myBundle
+{
+  self = [super initWithBundle: myBundle];
+  return self;
+}
+ */

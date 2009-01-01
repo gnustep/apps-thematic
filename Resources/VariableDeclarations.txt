@@ -1,0 +1,3 @@
+{
+  /* Declare instance variables here */
+}
