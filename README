@@ -26,7 +26,9 @@ For most controls, this means:
 1. Editing ThemeDocument.gorm to add the control to the main document window.
 2. Implement a subclass of ThemeElement to handle the control by defining
 tiling images and colors for the control (modifying how method overriding is
-done is probably not required here).
+done is probably not required here).  This will probably also involve creating
+a new Gorm file for the inspector for the new control ...
+see ControlElement.gorm for an example.
 3. Edit [ThemeDocument-elementForView:] to return the correct object.
 4. Define methods that can be overridden to draw the control differently ...
 4a. Add the methods and a description of each to Resources/CodeInfo.plist

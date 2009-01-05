@@ -64,6 +64,36 @@
   [super dealloc];
 }
 
+- (NSString*) elementName
+{
+  NSString	*n = [self imageName];
+
+  if ([n hasSuffix: @"Highlighted"])
+    {
+      n = [n substringToIndex: [n length] - 11];
+    }
+  else if ([n hasSuffix: @"Selected"])
+    {
+      n = [n substringToIndex: [n length] - 8];
+    }
+  return n;
+}
+
+- (GSThemeControlState) elementState
+{
+  NSString	*n = [self imageName];
+
+  if ([n hasSuffix: @"Highlighted"])
+    {
+      return GSThemeHighlightedState;
+    }
+  else if ([n hasSuffix: @"Selected"])
+    {
+      return GSThemeSelectedState;
+    }
+  return GSThemeNormalState;
+}
+
 - (NSString*) imageName
 {
   return [images objectForKey: [[tilesMenu selectedItem] title]];

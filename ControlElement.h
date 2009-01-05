@@ -44,6 +44,8 @@
   id tilesStyle;
   id tilesVertical;
 }
+- (NSString*) elementName;
+- (GSThemeControlState) elementState;
 - (NSString*) imageName;
 - (id) initWithView: (NSView*)aView
               owner: (ThemeDocument*)aDocument

@@ -393,9 +393,9 @@ static NSMutableSet	*untitledName = nil;
 	   * normal, highlighted, and pushed button cells.
 	   */
 	  d = [NSDictionary dictionaryWithObjectsAndKeys:
-	    @"NSButtonNormal", @"normal button mage",
+	    @"NSButton", @"normal button mage",
 	    @"NSButtonHighlighted", @"highlighted button image",
-	    @"NSButtonPushed", @"pushed button image",
+	    @"NSButtonSelected", @"selected button image",
 	    nil];
 	  e = [[ControlElement alloc] initWithView: aView
 					     owner: self
@@ -1261,7 +1261,9 @@ static NSMutableSet	*untitledName = nil;
     }
   [window setDocumentEdited: YES];
   // Refresh cache for this tile array
-  [_theme tilesNamed: name cache: NO];
+  [_theme tilesNamed: name state: GSThemeNormalState cache: NO];
+  [_theme tilesNamed: name state: GSThemeHighlightedState cache: NO];
+  [_theme tilesNamed: name state: GSThemeSelectedState cache: NO];
   [self activate];			// Preview
 }
 
