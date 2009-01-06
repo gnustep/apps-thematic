@@ -390,7 +390,6 @@ static NSMutableSet	*untitledName = nil;
 	}
       else if ([aView isKindOfClass: [NSScroller class]])
         {
-	  // [aView setEnabled: YES];
 	}
       else
 	{
@@ -638,12 +637,15 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 
   [self activate];
   [window orderFront: self];
+
+  /* Here we can perform any extra setup needed for the different views
+   */
   enumerator = [[view subviews] objectEnumerator];
   while ((old = [enumerator nextObject]) != nil)
     {
       if ([old isKindOfClass: [NSScroller class]])
         {
-	  [old setEnabled: YES];
+	  [(NSScroller*)old setEnabled: YES];
 	}
     }
   RELEASE(pool);

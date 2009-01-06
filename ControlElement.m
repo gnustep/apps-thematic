@@ -288,14 +288,17 @@
 - (void) takeDefsName: (id)sender
 {
   NSString	*s;
+  NSString	*n;
   NSDictionary	*d;
   NSArray	*a;
   unsigned	c;
   unsigned	i;
+  unsigned	p;
 
   s = [sender stringValue];			// get default title
   d = [classInfo objectForKey: @"Defaults"];	// get config for class
   d = [d objectForKey: s];			// get config for default
+  n = [d objectForKey: @"Name"];
   s = [d objectForKey: @"Description"];
   if ([s length] > 0)
     {
@@ -309,17 +312,39 @@
   a = [[d allKeys] sortedArrayUsingSelector: @selector(compare:)];
   [defsOption removeAllItems];
   c = [a count];
-  for (i = 0; i < c; i++)
+  i = p = 0;
+  s = [owner defaultForKey: n];	// Get current value fo default.
+  [defsOption insertItemWithTitle: @"Default" atIndex: 0];
+  while (i < c)
     {
-      NSString	*title = [a objectAtIndex: i];
+      NSString	*title = [a objectAtIndex: i++];
 
       [defsOption insertItemWithTitle: title atIndex: i];
+      if (s != nil && [[d objectForKey: title] isEqual: s] == YES)
+	{
+	  /* If this item is the same as the current value of the default,
+	   * we should make it the selected item.
+	   */
+	  p = i;
+	}
     }
-  [defsOption selectItemAtIndex: 0];
+  [defsOption selectItemAtIndex: p];
 }
 
 - (void) takeDefsValue: (id)sender
 {
+  NSDictionary	*d;
+  NSString	*n;
+  NSString	*s;
+
+  s = [defsMenu stringValue];			// get default title
+  d = [classInfo objectForKey: @"Defaults"];	// get config for class
+  d = [d objectForKey: s];			// get config for default
+  n = [d objectForKey: @"Name"];		// get default name
+  d = [d objectForKey: @"Options"];		// get options config
+  s = [sender stringValue];			// get option title
+  s = [d objectForKey: s];			// get option value
+  [owner setDefault: s forKey: n];		// set new value
 }
 
 - (void) takeTileImage: (id)sender
