@@ -60,6 +60,7 @@
   [[NSNotificationCenter defaultCenter] removeObserver: self];
   [className release];
   [classInfo release];
+  [fragments release];
   [images release];
   [super dealloc];
 }
@@ -101,29 +102,31 @@
 
 - (id) initWithView: (NSView*)aView
               owner: (ThemeDocument*)aDocument
-	     images: (NSDictionary*)imageInfo
 {
   self = [super initWithView: aView owner: aDocument];
   if (self != nil)
     {
-      AppController	*sharedController = [AppController sharedController];
-      NSDictionary	*codeInfo = [sharedController codeInfo];
-      NSArray		*titles;
-      unsigned		count;
-      unsigned		i;
+      AppController		*sharedController;
+      NSDictionary		*codeInfo;
+      NSMutableDictionary	*md;
+      NSDictionary		*d;
+      NSArray			*titles;
+      unsigned			count;
+      unsigned			i;
 
+      sharedController = [AppController sharedController];
+      codeInfo = [sharedController codeInfo];
       className = [NSStringFromClass([aView class]) retain];
-      if ([codeInfo count] > 0)
-	{
-	  NSMutableDictionary	*md;
 
-	  md = [NSMutableDictionary dictionary];
-	  [md addEntriesFromDictionary:
-	    [codeInfo objectForKey: className]];
-	  [md addEntriesFromDictionary:
-	    [codeInfo objectForKey: @"Generic"]];
-	  classInfo = [md copy];
-	}
+      md = [NSMutableDictionary dictionary];
+      d = [codeInfo objectForKey: className];
+      classInfo = [d copy];
+      d = [d objectForKey: @"Fragments"];
+      [md addEntriesFromDictionary: d];
+      d = [codeInfo objectForKey: @"Generic"];
+      d = [d objectForKey: @"Fragments"];
+      [md addEntriesFromDictionary: d];
+      fragments = [md copy];
 
       /* Create view in which to draw image
        */
@@ -134,15 +137,32 @@
       [tilesImages setContentView: tiles]; 
       RELEASE(tiles);
 
-      /* Set the images in the popup
+      /* Set the images in the popup and make a list mapping the titles
+       * to the image names we will be using.
        */
-      images = [imageInfo copy];
-      titles = [[images allKeys] sortedArrayUsingSelector: @selector(compare:)];
+      titles = [classInfo objectForKey: @"States"];
+      if ([titles count] == 0)
+	{
+	  titles = [NSArray arrayWithObject: @"Normal"];
+	}
       count = [titles count];
+      md = [NSMutableDictionary dictionaryWithCapacity: count];
       for (i = 0; i < count; i++)
         {
-	  [tilesMenu insertItemWithTitle: [titles objectAtIndex: i] atIndex: i];
+	  NSString	*title = [titles objectAtIndex: i];
+
+	  [tilesMenu insertItemWithTitle: title atIndex: i];
+	  if ([title isEqualToString: @"Normal"] == YES)
+	    {
+	      [md setObject: className forKey: title];
+	    }
+	  else
+	    {
+	      [md setObject: [className stringByAppendingString: title]
+		     forKey: title];
+	    }
 	}
+      images = [md copy];
       count = [[tilesMenu itemArray] count];
       while (count > i)
         {
@@ -156,12 +176,12 @@
       [self takeTileSelection: tilesMenu];
 
       [codeMenu removeAllItems];
-      if ([classInfo count] > 0)
+      if ([fragments count] > 0)
 	{
-	  NSArray	*methods = [classInfo allKeys];
+	  NSArray	*names = [fragments allKeys];
 
-	  methods = [methods sortedArrayUsingSelector: @selector(compare:)];
-	  [codeMenu addItemsWithTitles: methods];
+	  names = [names sortedArrayUsingSelector: @selector(compare:)];
+	  [codeMenu addItemsWithTitles: names];
 	  [self takeCodeMethod: codeMenu];
 	}
       /* Take note of ending of editing.
@@ -221,7 +241,7 @@
 - (void) takeCodeMethod: (id)sender
 {
   NSString	*method = [[sender selectedItem] title];
-  NSString	*helpText = [classInfo objectForKey: method];
+  NSString	*helpText = [fragments objectForKey: method];
 
   if (helpText == nil) helpText = @"";
   [codeDescription setText: helpText];

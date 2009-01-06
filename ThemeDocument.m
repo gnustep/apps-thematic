@@ -384,22 +384,12 @@ static NSMutableSet	*untitledName = nil;
     {
       if ([aView isKindOfClass: [NSButton class]])
         {
-	  NSDictionary	*d;
-
 	  /* We could have a subclass of ControlElement to handle button
 	   * specific details, but as a button is a simple gui element
 	   * we can get away with using the ControlElement class directly
-	   * and just configuring it to manage the images needed for
-	   * normal, highlighted, and pushed button cells.
 	   */
-	  d = [NSDictionary dictionaryWithObjectsAndKeys:
-	    @"NSButton", @"normal button mage",
-	    @"NSButtonHighlighted", @"highlighted button image",
-	    @"NSButtonSelected", @"selected button image",
-	    nil];
 	  e = [[ControlElement alloc] initWithView: aView
-					     owner: self
-					    images: d];
+					     owner: self];
 	  [_elements addObject: e];
 	  RELEASE(e);
 	  return e;

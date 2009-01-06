@@ -59,7 +59,7 @@
 	CodeEditor.gorm
     );
     LANGUAGE = English;
-    LAST_EDITING = "2009-01-01 08:39:32 +0000";
+    LAST_EDITING = "2009-01-06 11:01:54 +0000";
     LIBRARIES = (
 	"gnustep-base",
 	"gnustep-gui"
@@ -82,11 +82,11 @@
 	main.m
     );
     PC_WINDOWS = {
-	LoadedFiles = "14 119 230 351 0 0  1039 760 ";
+	LoadedFiles = "14 130 230 351 0 0  1099 825 ";
 	ProjectBrowser = "{x = 0; y = 0; width = 594; height = 148}";
 	ProjectBuild = "0 0 0 0 0 0 -1 0 ";
-	ProjectLaunch = "73 248 490 351 0 0  1039 760 ";
-	ProjectWindow = "248 175 620 556 0 0  1039 760 ";
+	ProjectLaunch = "77 270 490 351 0 0  1099 825 ";
+	ProjectWindow = "262 190 620 556 0 0  1099 825 ";
 	ShowToolbar = YES;
     };
     PRINCIPAL_CLASS = NSApplication;

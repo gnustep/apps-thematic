@@ -1,27 +1,88 @@
 /* This property list must be a dictionary defining the API for drawing
  * GUI controls.
  * At the top level it is keyed on control name ... which is the name of
- * the class of the control.
- * Each control is defined by a dictionary listing the method names of
- * the theme api for that control and the help text used to let people
- * know what the drawing method is for.
+ * the class of the control (or other GUI element).
+ * Each control is defined by a dictionary containing various items.
  * An extra dictionary named 'Generic' contains extra theme information
  * not specific to particular controls.  The code in CodeEditor.m must
  * deal with them specially.
+ *
+ * The keys are:
+ *
+ * Defaults ... a dictionary containing information about user defaults
+ *   settings which can be used for the control.  Each item in the dictionary
+ *   identifies a particular setting.
+ *
+ * Fragments ... a dictionary mapping method names or generic names of
+ *   fragments of source, header or make files to help text describing
+ *   their use.  For each of these listed fragments, a template file
+ *   must exist so that users have a starting poiint for editing the
+ *   fragment. 
+ *
+ * States ... an array listing the states that the control may be in 
+ *  ('Normal', 'Highlighted' or 'Selected').  If this is omitted the
+ *  value is assumed to be an array containing 'Normal'.
+ *
+ * SubElements ... a dictionary listing the names of subsidiary GUI
+ *  elements drawn inside this control, with values being text describing
+ *  each subsidiary element.
+ *
  */
 {
   Generic = {
-    "CommonMethods" =
+    Fragments = {
+      CommonMethods =
 "This code fragment is provided to allow you to override methods wich are common to all of your theme rather than specific to a particular control (eg initialisation and deallocation.";
-    "IncludeHeaders" =
+      IncludeHeaders =
 "This code fragment is provided to allow you to specify additional header files to be included at the stat of your theme code.";
-    "MakeAdditions" =
+      MakeAdditions =
 "This allows you to provide a makefile fragment to tell gnustep-make to link your theme with extra libraries or compile it with extra flags.";
-    "VariableDeclarations" =
+      VariableDeclarations =
 "This code fragment allows you to declare extra instance variables for use by all your theme code.";
+    };
   };
   NSButton = {
-    "drawButton:in:view:style:state:" =
+    Fragments = {
+      "drawButton:in:view:style:state:" =
 "Draws a button frame and background (not its content) for the specified cell and view.";
+    };
+    States = (
+      Normal,
+      Highlighted,
+      Selected
+    );
+  };
+  NSScroller = {
+    Defaults = {
+      NSScrollerInterfaceStyle = {
+	Title = "Arrows behavior";
+        Description = "This controls the positioning of the arrow buttons within the scroller and also the behavior when you click on the scroller outside the arrows.";
+	DefaultOption = NSNextStepInterfaceStyle;
+	Options = {
+	  NSWindows95InterfaceStyle = "Arrows at opposite ends of scroller.";
+	  NSNextStepInterfaceStyle = "Arrows at the same end of the scroller.";
+	};
+      };
+    };
+    Fragments = {
+      "cellForScrollerArrow:horizontal:" =
+"Returns the button cell used to draw a scroller arrow.";
+      "cellForScrollerKnob:" =
+"Returns the button cell used to draw a scroller knob.";
+      "cellForScrollerKnobSlot:" =
+"Returns the button cell used to draw a scroller knob slot.";
+      "defaultScrollerWidth" =
+"Returns the scroller width to be used.";
+    };
+    SubElements = {
+      GSScrollerLeftArrow = GSScrollerLeftArrow;
+      GSScrollerRightArrow = GSScrollerRightArrow;
+      GSScrollerUpArrow = GSScrollerUpArrow;
+      GSScrollerDownArrow = GSScrollerDownArrow;
+      GSScrollerHorizontalKnob = GSScrollerHorizontalKnob;
+      GSScrollerVerticalKnob = GSScrollerVerticalKnob;
+      GSScrollerHorizontalSlot = GSScrollerHorizontalSlot;
+      GSScrollerVerticalSlot = GSScrollerVerticalSlot;
+    };
   };
 }

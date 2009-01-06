@@ -34,10 +34,14 @@
   TilesBox	*tiles;
   NSString	*className;
   NSDictionary	*classInfo;
+  NSDictionary	*fragments;
   id codeDescription;
+  id codeMenu;
   id colorsMenu;
   id colorsWell;
-  id codeMenu;
+  id defsDescription;
+  id defsMenu;
+  id defsOption;
   id tilesHorizontal;
   id tilesImages;
   id tilesMenu;
@@ -47,9 +51,6 @@
 - (NSString*) elementName;
 - (GSThemeControlState) elementState;
 - (NSString*) imageName;
-- (id) initWithView: (NSView*)aView
-              owner: (ThemeDocument*)aDocument
-	     images: (NSDictionary*)imageInfo;
 - (int) style;
 - (void) takeCodeDelete: (id)sender;
 - (void) takeCodeEdit: (id)sender;
