@@ -46,6 +46,7 @@
   id tilesImages;
   id tilesMenu;
   id tilesStyle;
+  id tilesType;
   id tilesVertical;
 }
 - (NSString*) elementName;
@@ -57,8 +58,11 @@
 - (void) takeCodeMethod: (id)sender;
 - (void) takeColorName: (id)sender;
 - (void) takeColorValue: (id)sender;
+- (void) takeDefsName: (id)sender;
+- (void) takeDefsValue: (id)sender;
 - (void) takeTileImage: (id)sender;
 - (void) takeTilePosition: (id)sender;
 - (void) takeTileSelection: (id)sender;
 - (void) takeTileStyle: (id)sender;
+- (void) takeTileType: (id)sender;
 @end

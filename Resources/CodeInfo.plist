@@ -54,13 +54,15 @@
   };
   NSScroller = {
     Defaults = {
-      NSScrollerInterfaceStyle = {
-	Title = "Arrows behavior";
+      "Arrows behavior" = {
+        Name = NSScrollerInterfaceStyle;
         Description = "This controls the positioning of the arrow buttons within the scroller and also the behavior when you click on the scroller outside the arrows.";
 	DefaultOption = NSNextStepInterfaceStyle;
 	Options = {
-	  NSWindows95InterfaceStyle = "Arrows at opposite ends of scroller.";
-	  NSNextStepInterfaceStyle = "Arrows at the same end of the scroller.";
+	  "Arrows at opposite ends of scroller"
+	    = NSWindows95InterfaceStyle;
+	  "Arrows at the same end of the scroller"
+	   = NSNextStepInterfaceStyle;
 	};
       };
     };

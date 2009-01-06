@@ -7,31 +7,41 @@
 	    "takeCodeMethod:",
 	    "takeColorName:",
 	    "takeColorValue:",
+	    "takeDefsName:",
+	    "takeDefsValue:",
 	    "takeTileImage:",
 	    "takeTilePosition:",
 	    "takeTileSelection:",
-	    "takeTileStyle:"
+	    "takeTileStyle:",
+	    "takeTileType:"
 	);
 	Outlets = (
 	    codeDescription,
+	    codeMenu,
 	    colorsMenu,
 	    colorsWell,
-	    codeMenu,
+	    defsDescription,
+	    defsMenu,
+	    defsOption,
 	    tilesHorizontal,
 	    tilesImages,
 	    tilesMenu,
 	    tilesStyle,
-	    tilesVertical
+	    tilesVertical,
+	    tilesType
 	);
 	Super = ThemeElement;
     };
     FirstResponder = {
 	Actions = (
+	    "takeTileType:",
 	    "takeCodeDelete:",
 	    "takeCodeEdit:",
 	    "takeCodeMethod:",
 	    "takeColorName:",
 	    "takeColorValue:",
+	    "takeDefsName:",
+	    "takeDefsValue:",
 	    "takeTileImage:",
 	    "takeTilePosition:",
 	    "takeTileSelection:",

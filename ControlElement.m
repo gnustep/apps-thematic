@@ -61,7 +61,6 @@
   [className release];
   [classInfo release];
   [fragments release];
-  [images release];
   [super dealloc];
 }
 
@@ -97,7 +96,14 @@
 
 - (NSString*) imageName
 {
-  return [images objectForKey: [[tilesMenu selectedItem] title]];
+  NSString	*s = [[tilesMenu selectedItem] title];
+  NSString	*t = [[tilesType selectedItem] title];
+ 
+  if ([s isEqualToString: @"Normal"] == YES)
+    {
+      return t;
+    }
+  return [t stringByAppendingString: s];
 }
 
 - (id) initWithView: (NSView*)aView
@@ -118,6 +124,8 @@
       codeInfo = [sharedController codeInfo];
       className = [NSStringFromClass([aView class]) retain];
 
+      /* Get information about code/makefile fragments.
+       */
       md = [NSMutableDictionary dictionary];
       d = [codeInfo objectForKey: className];
       classInfo = [d copy];
@@ -128,53 +136,8 @@
       [md addEntriesFromDictionary: d];
       fragments = [md copy];
 
-      /* Create view in which to draw image
+      /* Now set up a menu to edit those fragments.
        */
-      NSAssert(tilesImages != nil, NSInternalInconsistencyException);
-      tiles = [[TilesBox alloc]
-	initWithFrame: [[tilesImages contentView] frame]];
-      [tiles setOwner: self];
-      [tilesImages setContentView: tiles]; 
-      RELEASE(tiles);
-
-      /* Set the images in the popup and make a list mapping the titles
-       * to the image names we will be using.
-       */
-      titles = [classInfo objectForKey: @"States"];
-      if ([titles count] == 0)
-	{
-	  titles = [NSArray arrayWithObject: @"Normal"];
-	}
-      count = [titles count];
-      md = [NSMutableDictionary dictionaryWithCapacity: count];
-      for (i = 0; i < count; i++)
-        {
-	  NSString	*title = [titles objectAtIndex: i];
-
-	  [tilesMenu insertItemWithTitle: title atIndex: i];
-	  if ([title isEqualToString: @"Normal"] == YES)
-	    {
-	      [md setObject: className forKey: title];
-	    }
-	  else
-	    {
-	      [md setObject: [className stringByAppendingString: title]
-		     forKey: title];
-	    }
-	}
-      images = [md copy];
-      count = [[tilesMenu itemArray] count];
-      while (count > i)
-        {
-	  [tilesMenu removeItemAtIndex: --count];
-	}
-
-      /* Select the first image and make it active.
-       */
-      [tilesMenu selectItemAtIndex: 0];
-      [self takeTileStyle: tilesStyle];
-      [self takeTileSelection: tilesMenu];
-
       [codeMenu removeAllItems];
       if ([fragments count] > 0)
 	{
@@ -184,6 +147,7 @@
 	  [codeMenu addItemsWithTitles: names];
 	  [self takeCodeMethod: codeMenu];
 	}
+
       /* Take note of ending of editing.
        */
       [[NSNotificationCenter defaultCenter]
@@ -191,6 +155,66 @@
 	selector: @selector(_endCodeEdit:)
 	name: @"CodeEditDone"
 	object: [CodeEditor codeEditor]];
+
+      /* Create view in which to draw image
+       */
+      NSAssert(tilesImages != nil, NSInternalInconsistencyException);
+      tiles = [[TilesBox alloc]
+	initWithFrame: [[tilesImages contentView] frame]];
+      [tiles setOwner: self];
+      [tilesImages setContentView: tiles]; 
+      RELEASE(tiles);
+
+      titles = [[[classInfo objectForKey: @"SubElements"] allKeys]
+	sortedArrayUsingSelector: @selector(compare:)];
+      if (titles == nil)
+	{
+	  titles = [NSArray arrayWithObject: className];
+	}
+      [tilesType removeAllItems];
+      count = [titles count];
+      for (i = 0; i < count; i++)
+        {
+	  NSString	*title = [titles objectAtIndex: i];
+
+	  [tilesType insertItemWithTitle: title atIndex: i];
+	}
+      [tilesType selectItemAtIndex: 0];
+
+      titles = [classInfo objectForKey: @"States"];
+      if ([titles count] == 0)
+	{
+	  titles = [NSArray arrayWithObject: @"Normal"];
+	}
+      [tilesMenu removeAllItems];
+      count = [titles count];
+      for (i = 0; i < count; i++)
+        {
+	  NSString	*title = [titles objectAtIndex: i];
+
+	  [tilesMenu insertItemWithTitle: title atIndex: i];
+	}
+
+      /* Select the first image and make it active.
+       */
+      [tilesMenu selectItemAtIndex: 0];
+      [self takeTileStyle: tilesStyle];
+      [self takeTileSelection: tilesMenu];
+
+      /* Set up the defaults menu.
+       */
+      d = [classInfo objectForKey: @"Defaults"];
+      titles = [[d allKeys] sortedArrayUsingSelector: @selector(compare:)];
+      [defsMenu removeAllItems];
+      count = [titles count];
+      for (i = 0; i < count; i++)
+        {
+	  NSString	*title = [titles objectAtIndex: i];
+
+	  [defsMenu insertItemWithTitle: title atIndex: i];
+	}
+      [defsMenu selectItemAtIndex: 0];
+      [self takeDefsName: defsMenu];
     }
   return self;
 }
@@ -260,6 +284,43 @@
   /* insert your code here */
 }
 
+
+- (void) takeDefsName: (id)sender
+{
+  NSString	*s;
+  NSDictionary	*d;
+  NSArray	*a;
+  unsigned	c;
+  unsigned	i;
+
+  s = [sender stringValue];			// get default title
+  d = [classInfo objectForKey: @"Defaults"];	// get config for class
+  d = [d objectForKey: s];			// get config for default
+  s = [d objectForKey: @"Description"];
+  if ([s length] > 0)
+    {
+      [defsDescription setText: s];
+    }
+  else
+    {
+      [defsDescription setText: @"No options available for this control"];
+    }
+  d = [d objectForKey: @"Options"];
+  a = [[d allKeys] sortedArrayUsingSelector: @selector(compare:)];
+  [defsOption removeAllItems];
+  c = [a count];
+  for (i = 0; i < c; i++)
+    {
+      NSString	*title = [a objectAtIndex: i];
+
+      [defsOption insertItemWithTitle: title atIndex: i];
+    }
+  [defsOption selectItemAtIndex: 0];
+}
+
+- (void) takeDefsValue: (id)sender
+{
+}
 
 - (void) takeTileImage: (id)sender
 {
@@ -385,6 +446,10 @@
 	}
     }
   [tiles setNeedsDisplay: YES];
+}
+
+- (void) takeTileType: (id)sender
+{
 }
 
 @end

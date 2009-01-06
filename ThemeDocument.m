@@ -382,19 +382,34 @@ static NSMutableSet	*untitledName = nil;
     }
   else
     {
+      e = nil;
+
       if ([aView isKindOfClass: [NSButton class]])
         {
+	  // Nothing special needed.
+	}
+      else if ([aView isKindOfClass: [NSScroller class]])
+        {
+	  // [aView setEnabled: YES];
+	}
+      else
+	{
 	  /* We could have a subclass of ControlElement to handle button
 	   * specific details, but as a button is a simple gui element
 	   * we can get away with using the ControlElement class directly
 	   */
+NSLog(@"Unexpected view of class %@ with frame %@",
+  NSStringFromClass([aView class]), NSStringFromRect([aView frame]));
+	}
+
+      if (e == nil)
+	{
 	  e = [[ControlElement alloc] initWithView: aView
 					     owner: self];
 	  [_elements addObject: e];
 	  RELEASE(e);
-	  return e;
 	}
-      NSLog(@"Not handled");
+      return e;
     }
   return nil;
 }
@@ -623,6 +638,14 @@ static NSMutableSet	*untitledName = nil;
 
   [self activate];
   [window orderFront: self];
+  enumerator = [[view subviews] objectEnumerator];
+  while ((old = [enumerator nextObject]) != nil)
+    {
+      if ([old isKindOfClass: [NSScroller class]])
+        {
+	  [old setEnabled: YES];
+	}
+    }
   RELEASE(pool);
   return self;
 }
