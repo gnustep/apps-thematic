@@ -475,6 +475,7 @@
 
 - (void) takeTileType: (id)sender
 {
+  [self takeTileSelection: sender];
 }
 
 @end
