@@ -32,12 +32,61 @@
 
 @implementation MiscElement
 
+- (void) any: (NSNotification*)o
+{
+  NSLog(@"Notified: %@", o);
+}
+
+- (void) didEndEditing: (id)o
+{
+  NSNotification	*n;
+
+  /* We must record any editing changes because we have lost keyboard focus
+   * or somesuch.
+   */
+  n = [NSNotification notificationWithName: @"dummy"
+				    object: authors
+				  userInfo: nil];
+  [self textDidEndEditing: n];
+  n = [NSNotification notificationWithName: @"dummy"
+				    object: details
+				  userInfo: nil];
+  [self textDidEndEditing: n];
+}
+
+- (void) dealloc
+{
+  NSNotificationCenter	*nc = [NSNotificationCenter defaultCenter];
+
+  [nc removeObserver: self];
+  [super dealloc];
+}
+
+- (void) deselect
+{
+  NSNotificationCenter	*nc = [NSNotificationCenter defaultCenter];
+  AppController 	*ctl = [AppController sharedController];
+
+  [nc removeObserver: self
+	        name: NSWindowDidResignKeyNotification
+	      object: [ctl inspector]];
+  [self didEndEditing: nil];
+  [super deselect];
+}
+
 - (void) selectAt: (NSPoint)mouse
 {
-  ThemeDocument *doc = [[AppController sharedController] selectedDocument];
+  NSNotificationCenter	*nc = [NSNotificationCenter defaultCenter];
+  AppController *ctl = [AppController sharedController];
+  ThemeDocument *doc = [ctl selectedDocument];
   NSDictionary	*info = [doc infoDictionary];
   NSArray	*arr;
   NSString	*str;
+
+  [nc addObserver: self
+	 selector: @selector(didEndEditing:)
+	     name: NSWindowDidResignKeyNotification
+	   object: [ctl inspector]];
 
   arr = [info objectForKey: @"GSThemeAuthors"];
   if ([arr count] > 0)
@@ -100,7 +149,7 @@
   NSTextView	*sender = [aNotification object];
   NSString	*s = [sender string];
 
-//NSLog(@"End editing %@", aNotification);
+// NSLog(@"End editing %@", aNotification);
   if (sender == details)
     {
       [doc setInfo: s forKey: @"GSThemeDetails"];
@@ -126,5 +175,6 @@
       RELEASE(a);
     }
 }
+
 @end
 

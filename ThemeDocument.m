@@ -674,6 +674,11 @@ static NSMutableSet	*untitledName = nil;
 
 - (void) saveDocument: (id)sender
 {
+  /* Make the document window the key windoe so that any unsaved changes in
+   * the inspector are saved too.
+   */
+  [window makeKeyWindow];
+
   if ([window isDocumentEdited] == YES)
     {
       if (_path == nil)
