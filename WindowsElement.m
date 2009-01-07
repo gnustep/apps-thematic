@@ -54,7 +54,7 @@
 
   switch (style)
     {
-      case 1:
+      case 0:
         [doc setDefault: @"NO"
 		 forKey: @"GSBackHandlesWindowDecorations"];
 	break;
