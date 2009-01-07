@@ -45,6 +45,7 @@ static CodeEditor *instance = nil;
 {
   NSFileManager		*mgr = [NSFileManager defaultManager];
   AppController		*app = [AppController sharedController];
+  NSProcessInfo		*pi = [NSProcessInfo processInfo];
   NSDictionary		*codeInfo;
   NSMutableSet		*methods;
   NSString		*methodName;
@@ -60,6 +61,16 @@ static CodeEditor *instance = nil;
   NSString		*logFile;
   NSFileHandle		*logHandle;
   int			status;
+  BOOL			flag;
+
+  string = [[pi environment] objectForKey: @"GNUSTEP_MAKEFILES"];
+  if (string == nil && [NSTask launchPathForTool: @"gnustep-install"] == nil)
+    {
+      NSRunAlertPanel(_(@"Problem building theme"),
+	_(@"Can't locate gnustep-make (no GNUSTEP_MAKEFILES in environment)"),
+		nil, nil, nil, nil);
+      [document setBinaryBundle: nil];
+    }
 
   fullName = [NSString stringWithFormat: @"%@_%@",
     [[document name] stringByDeletingPathExtension], [document newVersion]];
@@ -75,6 +86,10 @@ static CodeEditor *instance = nil;
     }
 
   makeText = [NSMutableString string];
+  [makeText appendString: @"ifeq ($(GNUSTEP_MAKEFILES),)\n"];
+  [makeText appendString: @"  GNUSTEP_MAKEFILES := $(shell gnustep-config "];
+  [makeText appendString: @" --variable=GNUSTEP_MAKEFILES 2>/dev/null)\n"];
+  [makeText appendString: @"endif\n"];
   [makeText appendString: @"include $(GNUSTEP_MAKEFILES)/common.make\n"];
   [makeText appendString: @"BUNDLE_NAME=Theme\n"];
   string = [document codeForKey: @"MakeAdditions"];
@@ -166,7 +181,19 @@ static CodeEditor *instance = nil;
   logHandle = [NSFileHandle fileHandleForWritingAtPath: logFile];
 
   [mgr createDirectoryAtPath: path attributes: nil];
-  launchPath = [NSTask launchPathForTool: @"make"];
+  launchPath = [NSTask launchPathForTool: @"gmake"];
+  if (launchPath == nil)
+    {
+      launchPath = [NSTask launchPathForTool: @"gmake"];
+      if (launchPath == nil)
+	{
+          [mgr removeFileAtPath: path handler: nil];
+	  NSRunAlertPanel(_(@"Problem building theme"),
+	    _(@"Unable to locate 'make' program"),
+		    nil, nil, nil, nil);
+	  [document setBinaryBundle: nil];
+	}
+    }
   task = [NSTask new];
   [task setLaunchPath: launchPath];
   [task setCurrentDirectoryPath: path];
