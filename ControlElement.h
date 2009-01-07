@@ -33,11 +33,14 @@
   NSDictionary	*images;
   TilesBox	*tiles;
   NSString	*className;
+  NSString	*colorName;
+  NSString	*tileName;
   NSDictionary	*classInfo;
   NSDictionary	*fragments;
   id codeDescription;
   id codeMenu;
   id colorsMenu;
+  id colorsType;
   id colorsWell;
   id defsDescription;
   id defsMenu;
@@ -49,6 +52,7 @@
   id tilesType;
   id tilesVertical;
 }
+- (NSString*) colorName;
 - (NSString*) elementName;
 - (GSThemeControlState) elementState;
 - (NSString*) imageName;
@@ -56,13 +60,15 @@
 - (void) takeCodeDelete: (id)sender;
 - (void) takeCodeEdit: (id)sender;
 - (void) takeCodeMethod: (id)sender;
+- (void) takeColorDelete: (id)sender;
 - (void) takeColorName: (id)sender;
 - (void) takeColorValue: (id)sender;
+- (void) takeTileDelete: (id)sender;
 - (void) takeDefsName: (id)sender;
 - (void) takeDefsValue: (id)sender;
+- (void) takeTileDelete: (id)sender;
 - (void) takeTileImage: (id)sender;
+- (void) takeTileName: (id)sender;
 - (void) takeTilePosition: (id)sender;
-- (void) takeTileSelection: (id)sender;
 - (void) takeTileStyle: (id)sender;
-- (void) takeTileType: (id)sender;
 @end

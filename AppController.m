@@ -46,6 +46,10 @@ static AppController	*shared = nil;
   
   [[NSUserDefaults standardUserDefaults] registerDefaults: defaults];
   [[NSUserDefaults standardUserDefaults] synchronize];
+
+  /* Support clear button background.
+   */
+  [NSColor setIgnoresAlpha: NO];
 }
 
 + (AppController*) sharedController

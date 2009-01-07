@@ -65,6 +65,7 @@
 
 static GSTheme		*initialTheme = nil;
 static NSMutableSet	*untitledName = nil;
+static NSColorList	*systemColorList = nil;
 
 @interface	ThemeDocumentView : NSView
 {
@@ -196,6 +197,7 @@ static NSMutableSet	*untitledName = nil;
 {
   initialTheme = RETAIN([GSTheme theme]);
   untitledName = [NSMutableSet new];
+  systemColorList = RETAIN([NSColorList colorListNamed: @"System"]);
 }
 
 - (void) activate
@@ -291,7 +293,7 @@ static NSMutableSet	*untitledName = nil;
   return code;
 }
 
-- (NSColor*) colorNamed: (NSString*)aName
+- (NSColor*) colorForKey: (NSString*)aName
 {
   return [_colors colorWithKey: aName];
 }
@@ -302,6 +304,7 @@ static NSMutableSet	*untitledName = nil;
   [self close];
   RELEASE(_elements);
   RELEASE(_colors);
+  RELEASE(_extraColors);
   if (_name != nil)
     {
       [untitledName removeObject: _name];
@@ -413,6 +416,11 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   return nil;
 }
 
+- (NSColor*) extraColorForKey: (NSString*)aName
+{
+  return [_extraColors colorWithKey: aName];
+}
+
 - (NSDictionary*) infoDictionary
 {
   return AUTORELEASE([_info copy]);
@@ -432,7 +440,6 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   NSView		*old;
   NSEnumerator		*enumerator;
   ThemeDocumentView	*view;
-  NSColorList		*systemColorList;
   NSArray		*keys;
   NSString		*pi;
   NSString		*s;
@@ -527,31 +534,52 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   _elements = [NSMutableArray new];
   if (path != nil)
     {
-      NSString	*file;
+      NSFileManager	*mgr = [NSFileManager defaultManager];
+      NSString		*file;
 
       file = [path stringByAppendingPathComponent: @"Resources"];
       file = [file stringByAppendingPathComponent: @"ThemeColors.clr"];
-      _colors = [[NSColorList alloc] initWithName: @"System"
-					 fromFile: file];
+      if ([mgr isReadableFileAtPath: file] == YES)
+	{
+	  _colors = [[NSColorList alloc] initWithName: @"System"
+					     fromFile: file];
+	}
+
+      file = [path stringByAppendingPathComponent: @"Resources"];
+      file = [file stringByAppendingPathComponent: @"ThemeExtraColors.clr"];
+      if ([mgr isReadableFileAtPath: file] == YES)
+	{
+	  _extraColors = [[NSColorList alloc] initWithName: @"ThemeExtra"
+						  fromFile: file];
+	}
       
       file = [path stringByAppendingPathComponent: @"Resources"];
       file = [file stringByAppendingPathComponent: @"Info-gnustep.plist"];
-      _info = [[NSMutableDictionary alloc] initWithContentsOfFile: file];
+      if ([mgr isReadableFileAtPath: file] == YES)
+	{
+	  _info = [[NSMutableDictionary alloc] initWithContentsOfFile: file];
+	}
     }
-   else
+
+  if (_colors == nil)
     {
       _colors = [[NSColorList alloc] initWithName: @"System"
 					 fromFile: nil];
+    }
+  if (_extraColors == nil)
+    {
+      _extraColors = [[NSColorList alloc] initWithName: @"ThemeExtra"
+					 fromFile: nil];
+    }
+  if (_info == nil)
+    {
+      _info = [NSMutableDictionary new];
     }
 
   /*
    * Make sure the info plist contains a GSThemeDomain dictionary and
    * it is mutable so we can alter it.
    */
-  if (_info == nil)
-    {
-      _info = [NSMutableDictionary new];
-    }
   _defs = [_info objectForKey: @"GSThemeDomain"];
   if (_defs == nil)
     {
@@ -563,7 +591,6 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 
   /* Ensure that the loaded color list has the full set of system colors.
    */
-  systemColorList = [NSColorList colorListNamed: @"System"];
   keys = [systemColorList allKeys];
   for (i = 0; i < [keys count]; i++)
     {
@@ -578,6 +605,8 @@ NSLog(@"Unexpected view of class %@ with frame %@",
    */
   [_colors writeToFile:
     [_rsrc stringByAppendingPathComponent: @"ThemeColors.clr"]];
+  [_extraColors writeToFile:
+    [_rsrc stringByAppendingPathComponent: @"ThemeExtraColors.clr"]];
   [_info writeToFile: [_rsrc stringByAppendingPathComponent:
     @"Info-gnustep.plist"] atomically: NO];
 
@@ -951,6 +980,13 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 
 - (void) setColor: (NSColor*)color forKey: (NSString*)key
 {
+  if (color == nil)
+    {
+      /* Remove old color  and revert to the one from the original system list.
+       */
+      [_colors removeColorWithKey: key];
+      color = [systemColorList colorWithKey: key];
+    }
   [_colors setColor: color forKey: key];
   if ([_colors writeToFile:
     [_rsrc stringByAppendingPathComponent: @"ThemeColors.clr"]] == NO)
@@ -981,6 +1017,30 @@ NSLog(@"Unexpected view of class %@ with frame %@",
     {
       NSRunAlertPanel(_(@"Problem changing setting"),
 	_(@"Could not save Info-gnustep.plist into theme"),
+	nil, nil, nil);
+    }
+  else
+    {
+      [window setDocumentEdited: YES];
+      [self activate];			// Preview
+    }
+}
+
+- (void) setExtraColor: (NSColor*)color forKey: (NSString*)key
+{
+  if (color == nil)
+    {
+      [_extraColors removeColorWithKey: key];
+    }
+  else
+    {
+      [_extraColors setColor: color forKey: key];
+    }
+  if ([_extraColors writeToFile:
+    [_rsrc stringByAppendingPathComponent: @"ThemeExtraColors.clr"]] == NO)
+    {
+      NSRunAlertPanel(_(@"Problem changing extra color"),
+	_(@"Could not save extra colors into theme"),
 	nil, nil, nil);
     }
   else
@@ -1219,26 +1279,28 @@ NSLog(@"Unexpected view of class %@ with frame %@",
       [_info setObject: allTiles forKey: @"GSThemeTiles"];
       RELEASE(allTiles);
     }
+
   d = [allTiles objectForKey: name];
-  if ([path length] > 0)
+  fileName = [d objectForKey: @"FileName"];
+  if ([fileName length] > 0)
     {
-      NSString	*oldFileName = [d objectForKey: @"FileName"];
-      NSString	*ext;
+      NSString	*oPath;
+
+      oPath = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
+      oPath = [oPath stringByAppendingPathComponent: fileName];
+      [mgr removeFileAtPath: oPath handler: nil];
+    }
+
+  if (path != nil)
+    {
+      NSString	*hDiv = [d objectForKey: @"HorizontalDivision"];
+      NSString	*vDiv = [d objectForKey: @"VerticalDivision"];
+      NSString	*ext = [path pathExtension];
       NSString	*nPath;
 
-      ext = [path pathExtension];
       fileName = [name stringByAppendingPathExtension: ext];
       nPath = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
       nPath = [nPath stringByAppendingPathComponent: fileName];
-
-      if ([oldFileName length] > 0)
-        {
-	  NSString	*oPath;
-
-	  oPath = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
-	  oPath = [oPath stringByAppendingPathComponent: oldFileName];
-          [mgr removeFileAtPath: oPath handler: nil];
-	}
 
       if ([mgr copyPath: path toPath: nPath handler: nil] == NO)
 	{
@@ -1246,17 +1308,6 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 	    _(@"Unable to load tile image into work area from %@"),
 	    nil, nil, nil, path);
 	}
-    }
-  else
-    {
-      fileName = [d objectForKey: @"FileName"];
-    }
-
-  if (fileName != nil)
-    {
-      NSString	*hDiv = [d objectForKey: @"HorizontalDivision"];
-      NSString	*vDiv = [d objectForKey: @"VerticalDivision"];
-
       if (h > 0)
         {
 	  hDiv = [NSString stringWithFormat: @"%d", h];
@@ -1272,6 +1323,11 @@ NSLog(@"Unexpected view of class %@ with frame %@",
         nil];
       [allTiles setObject: d forKey: name];
     }
+  else
+    {
+      [allTiles removeObjectForKey: name];
+    }
+
   if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
     @"Info-gnustep.plist"] atomically: NO] == NO)
     {

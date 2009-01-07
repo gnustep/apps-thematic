@@ -49,7 +49,7 @@
 {
   int		tag = [[colorMenu selectedItem] tag];
   NSString	*name = [self tagToName: tag];
-  NSColor	*color = [owner colorNamed: name];
+  NSColor	*color = [owner colorForKey: name];
 
   [colorWell setColor: color];
 }

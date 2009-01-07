@@ -81,6 +81,7 @@
   NSMutableDictionary	*_defs;		// Not retained
   NSMutableArray	*_elements;
   NSColorList		*_colors;
+  NSColorList		*_extraColors;
   NSString		*_name;
   NSString		*_path;
   NSString		*_work;
@@ -91,6 +92,7 @@
 /** Try to make the theme we are editing active for preview purposes.
  */
 - (void) activate;
+
 - (void) changeSelection: (NSView*)aView at: (NSPoint)mousePoint;
 
 /** Returns the code fragment for the specified key, or nil if none is
@@ -98,20 +100,23 @@
  */
 - (NSString*) codeForKey: (NSString*)key;
 
-- (NSColor*) colorNamed: (NSString*)aName;
-- (ThemeElement*) elementForView: (NSView*)aView;
+- (NSColor*) colorForKey: (NSString*)aName;
 
 /** Returns the specified default string if one has been set for this
  * theme, nil otherwise.
  */
 - (NSString*) defaultForKey: (NSString*)key;
 
+- (ThemeElement*) elementForView: (NSView*)aView;
+
+- (NSColor*) extraColorForKey: (NSString*)aName;
 /**
  * Returns the current info dictionary for the document.
  */
 - (NSDictionary*) infoDictionary;
 
 - (id) initWithPath: (NSString*)path;
+
 - (NSString*) name;
 
 /** Generates a new version number for the theme binary (and returns it).
@@ -164,6 +169,12 @@
  * which should be associated with the theme.
  */
 - (void) setDefault: (NSString*)value forKey: (NSString*)key;
+
+/**
+ * Informs the document that a change has been made to a
+ * extra color whose name is key.
+ */
+- (void) setExtraColor: (NSColor*)color forKey: (NSString*)key;
 
 /**
  * Informs the document that a change has been made to the image

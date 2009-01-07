@@ -55,12 +55,26 @@
     }
 }
 
+- (NSString*) colorName
+{
+  NSString	*s = [[colorsMenu selectedItem] title];
+  NSString	*t = [[colorsType selectedItem] title];
+ 
+  if ([s isEqualToString: @"Normal"] == YES)
+    {
+      return t;
+    }
+  return [t stringByAppendingString: s];
+}
+
 - (void) dealloc
 {
   [[NSNotificationCenter defaultCenter] removeObserver: self];
   [className release];
   [classInfo release];
   [fragments release];
+  [colorName release];
+  [tileName release];
   [super dealloc];
 }
 
@@ -96,14 +110,7 @@
 
 - (NSString*) imageName
 {
-  NSString	*s = [[tilesMenu selectedItem] title];
-  NSString	*t = [[tilesType selectedItem] title];
- 
-  if ([s isEqualToString: @"Normal"] == YES)
-    {
-      return t;
-    }
-  return [t stringByAppendingString: s];
+  return tileName;
 }
 
 - (id) initWithView: (NSView*)aView
@@ -172,14 +179,17 @@
 	  titles = [NSArray arrayWithObject: className];
 	}
       [tilesType removeAllItems];
+      [colorsType removeAllItems];
       count = [titles count];
       for (i = 0; i < count; i++)
         {
 	  NSString	*title = [titles objectAtIndex: i];
 
 	  [tilesType insertItemWithTitle: title atIndex: i];
+	  [colorsType insertItemWithTitle: title atIndex: i];
 	}
       [tilesType selectItemAtIndex: 0];
+      [colorsType selectItemAtIndex: 0];
 
       titles = [classInfo objectForKey: @"States"];
       if ([titles count] == 0)
@@ -187,19 +197,29 @@
 	  titles = [NSArray arrayWithObject: @"Normal"];
 	}
       [tilesMenu removeAllItems];
+      [colorsMenu removeAllItems];
       count = [titles count];
+      [colorsMenu insertItemWithTitle: @"Default" atIndex: 0];
       for (i = 0; i < count; i++)
         {
 	  NSString	*title = [titles objectAtIndex: i];
 
 	  [tilesMenu insertItemWithTitle: title atIndex: i];
+	  [colorsMenu insertItemWithTitle: title atIndex: i+1];
 	}
 
       /* Select the first image and make it active.
        */
       [tilesMenu selectItemAtIndex: 0];
+      [tilesType selectItemAtIndex: 0];
       [self takeTileStyle: tilesStyle];
-      [self takeTileSelection: tilesMenu];
+      [self takeTileName: tilesMenu];
+
+      /* Select the color image and make it active.
+       */
+      [colorsMenu selectItemAtIndex: 0];
+      [colorsType selectItemAtIndex: 0];
+      [self takeColorName: colorsMenu];
 
       /* Set up the defaults menu.
        */
@@ -273,15 +293,37 @@
 }
 
 
+- (void) takeColorDelete: (id)sender
+{
+  [owner setExtraColor: nil forKey: colorName];
+}
+
+
 - (void) takeColorName: (id)sender
 {
-  /* insert your code here */
+  NSString	*s;
+  NSString	*t;
+  NSColor	*c;
+
+  s = [[colorsMenu selectedItem] title];
+  t = [[colorsType selectedItem] title];
+  if ([s isEqualToString: @"Normal"] == NO)
+    {
+      t = [t stringByAppendingString: s];
+    }
+  if ([colorName isEqualToString: t] == YES)
+    {
+      return;	// Unchanged.
+    }
+  ASSIGN(colorName, t);
+  c = [owner extraColorForKey: colorName];
+  [colorsWell setColor: c];
 }
 
 
 - (void) takeColorValue: (id)sender
 {
-  /* insert your code here */
+  [owner setExtraColor: [sender color] forKey: colorName];
 }
 
 
@@ -347,6 +389,19 @@
   [owner setDefault: s forKey: n];		// set new value
 }
 
+
+
+- (void) takeTileDelete: (id)sender
+{
+  [owner setTiles: [self imageName]
+	 withPath: nil
+	hDivision: 0
+	vDivision: 0];
+  DESTROY(tileName);
+  [self takeTileName: tilesMenu];
+}
+
+
 - (void) takeTileImage: (id)sender
 {
   NSArray	*fileTypes = [NSImage imageFileTypes];
@@ -387,9 +442,51 @@
 	  	 withPath: path
 		hDivision: (h / 3)
 		vDivision: (v / 3)];
-	  [self takeTileSelection: tilesMenu];
+          DESTROY(tileName);
+	  [self takeTileName: tilesMenu];
 	}
     }
+}
+
+
+- (void) takeTileName: (id)sender
+{
+  NSImage	*image;
+  NSString	*s;
+  NSString	*t;
+  int		h;
+  int		v;
+
+  s = [[tilesMenu selectedItem] title];
+  t = [[tilesType selectedItem] title];
+  if ([s isEqualToString: @"Normal"] == NO)
+    {
+      t = [t stringByAppendingString: s];
+    }
+  if ([tileName isEqualToString: t] == YES)
+    {
+      return;	// Unchanged.
+    }
+  ASSIGN(tileName, t);
+  image = [owner tiles: [self imageName] hDivision: &h vDivision: &v];
+  if (image != nil)
+    {
+      NSSize	s = [image size];
+      int	mh = (int)(s.width / 2);
+      int	mv = (int)(s.width / 2);
+
+      [tilesHorizontal setMinValue: 1.0];
+      [tilesVertical setMinValue: 1.0];
+      [tilesHorizontal setMaxValue: (double)mh];
+      [tilesVertical setMaxValue: (double)mv];
+      [tilesHorizontal setIntValue: h];
+      [tilesVertical setIntValue: v];
+      [tilesHorizontal setNumberOfTickMarks: mh];
+      [tilesVertical setNumberOfTickMarks: mv];
+      [tilesHorizontal setAllowsTickMarkValuesOnly: YES];
+      [tilesVertical setAllowsTickMarkValuesOnly: YES];
+    }
+  [tiles setNeedsDisplay: YES];
 }
 
 
@@ -411,34 +508,6 @@
 	    vDivision: [sender intValue]];
       [tiles setNeedsDisplay: YES];
     }
-}
-
-
-- (void) takeTileSelection: (id)sender
-{
-  NSImage	*image;
-  int		h;
-  int		v;
-
-  image = [owner tiles: [self imageName] hDivision: &h vDivision: &v];
-  if (image != nil)
-    {
-      NSSize	s = [image size];
-      int	mh = (int)(s.width / 2);
-      int	mv = (int)(s.width / 2);
-
-      [tilesHorizontal setMinValue: 1.0];
-      [tilesVertical setMinValue: 1.0];
-      [tilesHorizontal setMaxValue: (double)mh];
-      [tilesVertical setMaxValue: (double)mv];
-      [tilesHorizontal setIntValue: h];
-      [tilesVertical setIntValue: v];
-      [tilesHorizontal setNumberOfTickMarks: mh];
-      [tilesVertical setNumberOfTickMarks: mv];
-      [tilesHorizontal setAllowsTickMarkValuesOnly: YES];
-      [tilesVertical setAllowsTickMarkValuesOnly: YES];
-    }
-  [tiles setNeedsDisplay: YES];
 }
 
 
@@ -471,11 +540,6 @@
 	}
     }
   [tiles setNeedsDisplay: YES];
-}
-
-- (void) takeTileType: (id)sender
-{
-  [self takeTileSelection: sender];
 }
 
 @end

@@ -11,9 +11,10 @@
 	    "takeDefsValue:",
 	    "takeTileImage:",
 	    "takeTilePosition:",
-	    "takeTileSelection:",
 	    "takeTileStyle:",
-	    "takeTileType:"
+	    "takeTileDelete:",
+	    "takeColorDelete:",
+	    "takeTileName:"
 	);
 	Outlets = (
 	    codeDescription,
@@ -28,23 +29,25 @@
 	    tilesMenu,
 	    tilesStyle,
 	    tilesVertical,
-	    tilesType
+	    tilesType,
+	    colorsType
 	);
 	Super = ThemeElement;
     };
     FirstResponder = {
 	Actions = (
-	    "takeTileType:",
+	    "takeTileDelete:",
 	    "takeCodeDelete:",
 	    "takeCodeEdit:",
 	    "takeCodeMethod:",
+	    "takeColorDelete:",
 	    "takeColorName:",
 	    "takeColorValue:",
 	    "takeDefsName:",
 	    "takeDefsValue:",
 	    "takeTileImage:",
+	    "takeTileName:",
 	    "takeTilePosition:",
-	    "takeTileSelection:",
 	    "takeTileStyle:"
 	);
 	Super = NSObject;

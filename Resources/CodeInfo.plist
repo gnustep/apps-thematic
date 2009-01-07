@@ -77,14 +77,14 @@
 "Returns the scroller width to be used.";
     };
     SubElements = {
-      GSScrollerLeftArrow = GSScrollerLeftArrow;
-      GSScrollerRightArrow = GSScrollerRightArrow;
-      GSScrollerUpArrow = GSScrollerUpArrow;
-      GSScrollerDownArrow = GSScrollerDownArrow;
-      GSScrollerHorizontalKnob = GSScrollerHorizontalKnob;
-      GSScrollerVerticalKnob = GSScrollerVerticalKnob;
-      GSScrollerHorizontalSlot = GSScrollerHorizontalSlot;
-      GSScrollerVerticalSlot = GSScrollerVerticalSlot;
+      GSScrollerLeftArrow = {};
+      GSScrollerRightArrow = {};
+      GSScrollerUpArrow = {};
+      GSScrollerDownArrow = {};
+      GSScrollerHorizontalKnob = {};
+      GSScrollerVerticalKnob = {};
+      GSScrollerHorizontalSlot = {};
+      GSScrollerVerticalSlot = {};
     };
   };
 }
