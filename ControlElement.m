@@ -199,13 +199,12 @@
       [tilesMenu removeAllItems];
       [colorsMenu removeAllItems];
       count = [titles count];
-      [colorsMenu insertItemWithTitle: @"Default" atIndex: 0];
       for (i = 0; i < count; i++)
         {
 	  NSString	*title = [titles objectAtIndex: i];
 
 	  [tilesMenu insertItemWithTitle: title atIndex: i];
-	  [colorsMenu insertItemWithTitle: title atIndex: i+1];
+	  [colorsMenu insertItemWithTitle: title atIndex: i];
 	}
 
       /* Select the first image and make it active.
