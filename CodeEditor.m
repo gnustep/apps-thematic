@@ -61,7 +61,6 @@ static CodeEditor *instance = nil;
   NSString		*logFile;
   NSFileHandle		*logHandle;
   int			status;
-  BOOL			flag;
 
   string = [[pi environment] objectForKey: @"GNUSTEP_MAKEFILES"];
   if (string == nil && [NSTask launchPathForTool: @"gnustep-install"] == nil)
