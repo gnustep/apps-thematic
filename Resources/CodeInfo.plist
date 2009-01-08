@@ -9,6 +9,13 @@
  *
  * The keys are:
  *
+ * ColorElements ... a dictionary listing the names of GUI elements
+ *  drawn as part of this control which are able to have a color set.
+ *  Each element listed is defined by a dictionary which may contain
+ *  an array keyed on 'States' listing the states for which colors
+ *  may be specified (Normal,Highlighted,Selected).  If this dictionary
+ *  is missing, the 'Normal' state is assumed.
+ *
  * Defaults ... a dictionary containing information about user defaults
  *   settings which can be used for the control.  Each item in the dictionary
  *   identifies a particular setting.
@@ -19,13 +26,12 @@
  *   must exist so that users have a starting poiint for editing the
  *   fragment. 
  *
- * States ... an array listing the states that the control may be in 
- *  ('Normal', 'Highlighted' or 'Selected').  If this is omitted the
- *  value is assumed to be an array containing 'Normal'.
- *
- * SubElements ... a dictionary listing the names of subsidiary GUI
- *  elements drawn inside this control, with values being text describing
- *  each subsidiary element.
+ * TileElements ... a dictionary listing the names of GUI elements
+ *  drawn as part of this control and capable of being tiled.
+ *  Each element listed is defined by a dictionary which may contain
+ *  an array keyed on 'States' listing the states for which a tile image
+ *  may be specified (Normal,Highlighted,Selected).  If this dictionary
+ *  is missing, the 'Normal' state is assumed.
  *
  */
 {
@@ -42,17 +48,32 @@
     };
   };
   NSButton = {
+    ColorElements = {
+      NSButton = {
+	States = (Normal, Highlighted, Selected);
+      };
+    };
     Fragments = {
       "drawButton:in:view:style:state:" =
 "Draws a button frame and background (not its content) for the specified cell and view.";
     };
-    States = (
-      Normal,
-      Highlighted,
-      Selected
-    );
+    TileElements = {
+      NSButton = {
+	States = (Normal, Highlighted, Selected);
+      };
+    };
   };
   NSScroller = {
+    ColorElements = {
+      GSScrollerLeftArrow = {};
+      GSScrollerRightArrow = {};
+      GSScrollerUpArrow = {};
+      GSScrollerDownArrow = {};
+      GSScrollerHorizontalKnob = {};
+      GSScrollerVerticalKnob = {};
+      GSScrollerHorizontalSlot = {};
+      GSScrollerVerticalSlot = {};
+    };
     Defaults = {
       "Arrows behavior" = {
         Name = NSScrollerInterfaceStyle;
@@ -76,7 +97,7 @@
       "defaultScrollerWidth" =
 "Returns the scroller width to be used.";
     };
-    SubElements = {
+    TileElements = {
       GSScrollerLeftArrow = {};
       GSScrollerRightArrow = {};
       GSScrollerUpArrow = {};
@@ -85,6 +106,24 @@
       GSScrollerVerticalKnob = {};
       GSScrollerHorizontalSlot = {};
       GSScrollerVerticalSlot = {};
+    };
+  };
+  NSScrollView = {
+    ColorElements = {
+      NSScrollView = {};
+    };
+    Defaults = {
+      "Scroller position" = {
+        Name = NSScrollViewInterfaceStyle;
+        Description = "This controls the positioning of the vertical scroller within the scroll view.";
+	DefaultOption = NSNextStepInterfaceStyle;
+	Options = {
+	  "Scroller on right of view"
+	    = NSWindows95InterfaceStyle;
+	  "Scroller on left of view"
+	   = NSNextStepInterfaceStyle;
+	};
+      };
     };
   };
 }

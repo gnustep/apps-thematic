@@ -46,7 +46,7 @@
  */
 - (NSDictionary*) infoDictionary
 {
-  ThemeDocument	*doc = [[AppController sharedController] selectedDocument];
+  ThemeDocument	*doc = [thematicController selectedDocument];
 
   if ([doc testTheme] == self)
     {
@@ -171,14 +171,23 @@ static NSColorList	*systemColorList = nil;
       view = nil;
     }
   /* Make sure we've found the proper control and not a subview of a 
-   * control (like the contentView of an NSBox) */
+   * control (like the contentView of an NSBox)
+   * However, sometimes we want to make special cases like finding a
+   * scroller in a scrollview.
+   */
   while (view != nil && [view superview] != self)
     {
+      if ([view isKindOfClass: [NSScroller class]]
+	&& [[view superview] isKindOfClass: [NSScrollView class]])
+	{
+	  break;	// Handle scrollers separately from scrollview
+	}
       view = [view superview];
     }
 
   if (view != nil)
     {
+      mousePoint = [view convertPoint: mousePoint fromView: self];
       [owner changeSelection: view at: mousePoint];
     }
 }
@@ -390,6 +399,9 @@ static NSColorList	*systemColorList = nil;
       if ([aView isKindOfClass: [NSButton class]])
         {
 	  // Nothing special needed.
+	}
+      else if ([aView isKindOfClass: [NSScrollView class]])
+        {
 	}
       else if ([aView isKindOfClass: [NSScroller class]])
         {
@@ -672,7 +684,34 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   enumerator = [[view subviews] objectEnumerator];
   while ((old = [enumerator nextObject]) != nil)
     {
-      if ([old isKindOfClass: [NSScroller class]])
+      if ([old isKindOfClass: [NSScrollView class]])
+	{
+	  NSEnumerator	*e = [[old subviews] objectEnumerator];
+	  NSScrollView	*sv = (NSScrollView*)old;
+	  NSTextView	*tv = [sv documentView];
+	  NSSize	sz = [[sv contentView] bounds].size;
+
+	  /* This next horrible code is to ensure that the document inside
+	   * the scroll view is big enough so that the scrollers display.
+	   */
+	  sz.width *= 5;
+	  sz.height *= 5;
+	  [tv setHorizontallyResizable: NO];
+	  [tv setVerticallyResizable: NO];
+	  [tv setFrameSize: sz];
+	  [sv setAutohidesScrollers: NO];
+	  [sv setHasHorizontalScroller: YES];
+	  [sv setHasVerticalScroller: YES];
+	  
+	  while ((old = [e nextObject]) != nil)
+	    {
+              if ([old isKindOfClass: [NSScroller class]])
+		{
+	  	  [(NSScroller*)old setEnabled: YES];
+		}
+	    }
+	}
+      else if ([old isKindOfClass: [NSScroller class]])
         {
 	  [(NSScroller*)old setEnabled: YES];
 	}
@@ -1004,25 +1043,36 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 
 - (void) setDefault: (NSString*)value forKey: (NSString*)key
 {
+  NSString	*old = [_defs objectForKey: key];
+  BOOL		changed = NO;
+
   if (value == nil)
     {
-      [_defs removeObjectForKey: key];
+      if (old != nil)
+	{
+          [_defs removeObjectForKey: key];
+	  changed = YES;
+	}
     }
-  else
+  else if ([value isEqual: old] == NO)
     {
       [_defs setObject: value forKey: key];
+      changed = YES;
     }
-  if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
-    @"Info-gnustep.plist"] atomically: NO] == NO)
+  if (changed == YES)
     {
-      NSRunAlertPanel(_(@"Problem changing setting"),
-	_(@"Could not save Info-gnustep.plist into theme"),
-	nil, nil, nil);
-    }
-  else
-    {
-      [window setDocumentEdited: YES];
-      [self activate];			// Preview
+      if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
+	@"Info-gnustep.plist"] atomically: NO] == NO)
+	{
+	  NSRunAlertPanel(_(@"Problem changing setting"),
+	    _(@"Could not save Info-gnustep.plist into theme"),
+	    nil, nil, nil);
+	}
+      else
+	{
+	  [window setDocumentEdited: YES];
+	  [self activate];			// Preview
+	}
     }
 }
 

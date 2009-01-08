@@ -58,7 +58,7 @@
 - (NSString*) colorName
 {
   NSString	*s = [[colorsMenu selectedItem] title];
-  NSString	*t = [[colorsType selectedItem] title];
+  NSString	*t = [[colorsState selectedItem] title];
  
   if ([s isEqualToString: @"Normal"] == YES)
     {
@@ -137,23 +137,36 @@
       d = [codeInfo objectForKey: className];
       classInfo = [d copy];
       d = [d objectForKey: @"Fragments"];
-      [md addEntriesFromDictionary: d];
-      d = [codeInfo objectForKey: @"Generic"];
-      d = [d objectForKey: @"Fragments"];
-      [md addEntriesFromDictionary: d];
-      fragments = [md copy];
 
       /* Now set up a menu to edit those fragments.
        */
       [codeMenu removeAllItems];
-      if ([fragments count] > 0)
+      if ([d count] > 0)
 	{
-	  NSArray	*names = [fragments allKeys];
+	  NSArray	*names = [d allKeys];
 
+	  [md addEntriesFromDictionary: d];
 	  names = [names sortedArrayUsingSelector: @selector(compare:)];
 	  [codeMenu addItemsWithTitles: names];
-	  [self takeCodeMethod: codeMenu];
 	}
+
+      if ([md count] > 0)
+	{
+	  /* Only add generic items if we actually have some methods.
+	   */
+          d = [codeInfo objectForKey: @"Generic"];
+          d = [d objectForKey: @"Fragments"];
+	  if ([d count] > 0)
+	    {
+	      NSArray	*names = [d allKeys];
+
+              [md addEntriesFromDictionary: d];
+	      names = [names sortedArrayUsingSelector: @selector(compare:)];
+	      [codeMenu addItemsWithTitles: names];
+	    }
+	}
+      fragments = [md copy];
+      [self takeCodeMethod: codeMenu];
 
       /* Take note of ending of editing.
        */
@@ -172,52 +185,36 @@
       [tilesImages setContentView: tiles]; 
       RELEASE(tiles);
 
-      titles = [[[classInfo objectForKey: @"SubElements"] allKeys]
+      titles = [[[classInfo objectForKey: @"TileElements"] allKeys]
 	sortedArrayUsingSelector: @selector(compare:)];
-      if (titles == nil)
-	{
-	  titles = [NSArray arrayWithObject: className];
-	}
-      [tilesType removeAllItems];
-      [colorsType removeAllItems];
-      count = [titles count];
-      for (i = 0; i < count; i++)
-        {
-	  NSString	*title = [titles objectAtIndex: i];
-
-	  [tilesType insertItemWithTitle: title atIndex: i];
-	  [colorsType insertItemWithTitle: title atIndex: i];
-	}
-      [tilesType selectItemAtIndex: 0];
-      [colorsType selectItemAtIndex: 0];
-
-      titles = [classInfo objectForKey: @"States"];
-      if ([titles count] == 0)
-	{
-	  titles = [NSArray arrayWithObject: @"Normal"];
-	}
       [tilesMenu removeAllItems];
-      [colorsMenu removeAllItems];
       count = [titles count];
       for (i = 0; i < count; i++)
         {
 	  NSString	*title = [titles objectAtIndex: i];
 
 	  [tilesMenu insertItemWithTitle: title atIndex: i];
-	  [colorsMenu insertItemWithTitle: title atIndex: i];
 	}
-
       /* Select the first image and make it active.
        */
       [tilesMenu selectItemAtIndex: 0];
-      [tilesType selectItemAtIndex: 0];
       [self takeTileStyle: tilesStyle];
       [self takeTileName: tilesMenu];
 
+
+      titles = [[[classInfo objectForKey: @"ColorElements"] allKeys]
+	sortedArrayUsingSelector: @selector(compare:)];
+      [colorsMenu removeAllItems];
+      count = [titles count];
+      for (i = 0; i < count; i++)
+        {
+	  NSString	*title = [titles objectAtIndex: i];
+
+	  [colorsMenu insertItemWithTitle: title atIndex: i];
+	}
       /* Select the color image and make it active.
        */
       [colorsMenu selectItemAtIndex: 0];
-      [colorsType selectItemAtIndex: 0];
       [self takeColorName: colorsMenu];
 
       /* Set up the defaults menu.
@@ -286,7 +283,7 @@
   NSString	*method = [[sender selectedItem] title];
   NSString	*helpText = [fragments objectForKey: method];
 
-  if (helpText == nil) helpText = @"";
+  if (helpText == nil) helpText = @"No methods available for this control";
   [codeDescription setText: helpText];
   [codeDescription setEditable: NO];
 }
@@ -305,16 +302,39 @@
   NSColor	*c;
 
   s = [[colorsMenu selectedItem] title];
-  t = [[colorsType selectedItem] title];
-  if ([s isEqualToString: @"Normal"] == NO)
+  if (sender == colorsMenu)
     {
-      t = [t stringByAppendingString: s];
+      unsigned	count;
+      unsigned	i;
+      NSArray	*titles;
+
+      titles = [[[classInfo objectForKey: @"ColorElements"] objectForKey: s]
+	objectForKey: @"States"];
+      if (titles == nil && [s length] > 0)
+	{
+	  titles = [NSArray arrayWithObject: @"Normal"];
+	}
+      count = [titles count];
+      [colorsState removeAllItems];
+      for (i = 0; i < count; i++)
+	{
+	  NSString	*title = [titles objectAtIndex: i];
+
+	  [colorsState insertItemWithTitle: title atIndex: i];
+	}
+      [colorsState selectItemAtIndex: 0];
     }
-  if ([colorName isEqualToString: t] == YES)
+
+  t = [[colorsState selectedItem] title];
+  if ([t isEqualToString: @"Normal"] == NO)
+    {
+      s = [s stringByAppendingString: t];
+    }
+  if ([colorName isEqualToString: s] == YES)
     {
       return;	// Unchanged.
     }
-  ASSIGN(colorName, t);
+  ASSIGN(colorName, s);
   c = [owner extraColorForKey: colorName];
   [colorsWell setColor: c];
 }
@@ -354,19 +374,22 @@
   [defsOption removeAllItems];
   c = [a count];
   i = p = 0;
-  s = [owner defaultForKey: n];	// Get current value fo default.
-  [defsOption insertItemWithTitle: @"Default" atIndex: 0];
-  while (i < c)
+  if (c > 0)
     {
-      NSString	*title = [a objectAtIndex: i++];
-
-      [defsOption insertItemWithTitle: title atIndex: i];
-      if (s != nil && [[d objectForKey: title] isEqual: s] == YES)
+      s = [owner defaultForKey: n];	// Get current value fo default.
+      [defsOption insertItemWithTitle: @"Default" atIndex: 0];
+      while (i < c)
 	{
-	  /* If this item is the same as the current value of the default,
-	   * we should make it the selected item.
-	   */
-	  p = i;
+	  NSString	*title = [a objectAtIndex: i++];
+
+	  [defsOption insertItemWithTitle: title atIndex: i];
+	  if (s != nil && [[d objectForKey: title] isEqual: s] == YES)
+	    {
+	      /* If this item is the same as the current value of the default,
+	       * we should make it the selected item.
+	       */
+	      p = i;
+	    }
 	}
     }
   [defsOption selectItemAtIndex: p];
@@ -385,7 +408,10 @@
   d = [d objectForKey: @"Options"];		// get options config
   s = [sender stringValue];			// get option title
   s = [d objectForKey: s];			// get option value
-  [owner setDefault: s forKey: n];		// set new value
+  if (n != nil)
+    {
+      [owner setDefault: s forKey: n];		// set new value
+    }
 }
 
 
@@ -457,16 +483,39 @@
   int		v;
 
   s = [[tilesMenu selectedItem] title];
-  t = [[tilesType selectedItem] title];
-  if ([s isEqualToString: @"Normal"] == NO)
+  if (sender == tilesMenu)
     {
-      t = [t stringByAppendingString: s];
+      unsigned	count;
+      unsigned	i;
+      NSArray	*titles;
+
+      titles = [[[classInfo objectForKey: @"TileElements"] objectForKey: s]
+	objectForKey: @"States"];
+      if (titles == nil && [s length] > 0)
+	{
+	  titles = [NSArray arrayWithObject: @"Normal"];
+	}
+      count = [titles count];
+      [tilesState removeAllItems];
+      for (i = 0; i < count; i++)
+	{
+	  NSString	*title = [titles objectAtIndex: i];
+
+	  [tilesState insertItemWithTitle: title atIndex: i];
+	}
+      [tilesState selectItemAtIndex: 0];
     }
-  if ([tileName isEqualToString: t] == YES)
+
+  t = [[tilesState selectedItem] title];
+  if ([t isEqualToString: @"Normal"] == NO)
+    {
+      s = [s stringByAppendingString: t];
+    }
+  if ([tileName isEqualToString: s] == YES)
     {
       return;	// Unchanged.
     }
-  ASSIGN(tileName, t);
+  ASSIGN(tileName, s);
   image = [owner tiles: [self imageName] hDivision: &h vDivision: &v];
   if (image != nil)
     {

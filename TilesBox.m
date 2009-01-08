@@ -35,10 +35,18 @@
 {
   GSDrawTiles	*t;
   NSColor	*b = [NSColor controlBackgroundColor];
-
-  t = [[GSTheme theme] tilesNamed: [owner elementName]
-			    state: [owner elementState]
-			    cache: YES];
+  NSString	*n = [owner elementName];
+  
+  if (n == nil)
+    {
+      t = nil;
+    }
+  else
+    {
+      t = [[GSTheme theme] tilesNamed: [owner elementName]
+			        state: [owner elementState]
+			        cache: YES];
+    }
   if (t == nil)
     {
       NSRectFill([self bounds]);

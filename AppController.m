@@ -30,7 +30,7 @@
 
 @implementation AppController
 
-static AppController	*shared = nil;
+AppController	*thematicController = nil;
 
 + (void) initialize
 {
@@ -54,20 +54,20 @@ static AppController	*shared = nil;
 
 + (AppController*) sharedController
 {
-  if (shared == nil)
+  if (thematicController == nil)
     {
       [self new];
     }
-  return shared;
+  return thematicController;
 }
 
 - (id) init
 {
-  if (shared == nil)
+  if (thematicController == nil)
     {
       if ((self = [super init]))
 	{
-	  shared = self;
+	  thematicController = self;
 	  documents = [NSMutableArray new];
 	  /* Load the property list which defines the API for the code
 	   * fragments for each control.  For each control name, this
@@ -82,16 +82,16 @@ static AppController	*shared = nil;
   else
     {
       RELEASE(self);
-      shared = RETAIN(shared);
+      thematicController = RETAIN(thematicController);
     }
   return self;
 }
 
 - (void) dealloc
 {
-  if (shared == self)
+  if (thematicController == self)
     {
-      shared = nil;
+      thematicController = nil;
     }
   RELEASE(currentDocument);
   RELEASE(documents);

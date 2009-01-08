@@ -29,8 +29,8 @@
 	    tilesMenu,
 	    tilesStyle,
 	    tilesVertical,
-	    tilesType,
-	    colorsType
+	    colorsState,
+	    tilesState
 	);
 	Super = ThemeElement;
     };

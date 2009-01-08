@@ -24,15 +24,21 @@ methods for particular controls.
 
 For most controls, this means:
 1. Editing ThemeDocument.gorm to add the control to the main document window.
-2. Implement a subclass of ThemeElement to handle the control by defining
-tiling images and colors for the control (modifying how method overriding is
-done is probably not required here).  This will probably also involve creating
+2. Modify ControlElement.m or implement a subclass of ControlElement to
+handle any special featurs needed for your control.
+If you create a subclass, this will probably also involve creating
 a new Gorm file for the inspector for the new control ...
 see ControlElement.gorm for an example.
-3. Edit [ThemeDocument-elementForView:] to return the correct object.
-4. Define methods that can be overridden to draw the control differently ...
-4a. Add the methods and a description of each to Resources/CodeInfo.plist
-4b. Add template implementations for each method as a file whose name is
+3. Edit ThemeDocument.m to integrate the changes.
+4. Define any tile images to be used to draw the control by editing 
+Resources/CodeInfo.plist
+5. Define any special colors to be used to draw the control by editing 
+Resources/CodeInfo.plist
+5. Define any NASInterfaceStyle values or defaults settings which control
+behavior fo the control by editing Resources/CodeInfo.plist
+6. Define methods that can be overridden to draw the control differently ...
+6a. Add the methods and a description of each to Resources/CodeInfo.plist
+6b. Add template implementations for each method as a file whose name is
 Resources/xxx.txt where xxx is the method name with any colons replaced by
 underscores.
 

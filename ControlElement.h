@@ -40,7 +40,7 @@
   id codeDescription;
   id codeMenu;
   id colorsMenu;
-  id colorsType;
+  id colorsState;
   id colorsWell;
   id defsDescription;
   id defsMenu;
@@ -48,8 +48,8 @@
   id tilesHorizontal;
   id tilesImages;
   id tilesMenu;
+  id tilesState;
   id tilesStyle;
-  id tilesType;
   id tilesVertical;
 }
 - (NSString*) colorName;

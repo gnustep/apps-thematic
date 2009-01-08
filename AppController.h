@@ -27,6 +27,7 @@
 
 #import <AppKit/AppKit.h>
 
+
 @class	ThemeDocument;
 
 @interface AppController : NSObject
@@ -66,3 +67,5 @@
 - (void) showPrefPanel: (id)sender;
 
 @end
+
+extern AppController	*thematicController;
