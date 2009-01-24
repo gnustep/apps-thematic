@@ -37,7 +37,11 @@
 
   doc = [[AppController sharedController] selectedDocument];
   val = [doc defaultForKey: @"NSMenuInterfaceStyle"];
-  if ([val isEqualToString: @"NSMacintoshInterfaceStyle"] == YES)
+  if ([val isEqualToString: @"NSWindows95InterfaceStyle"] == YES)
+    {
+      [popup selectItemAtIndex: [popup indexOfItemWithTag: 2]];
+    }
+  else if ([val isEqualToString: @"NSMacintoshInterfaceStyle"] == YES)
     {
       [popup selectItemAtIndex: [popup indexOfItemWithTag: 1]];
     }
@@ -55,6 +59,11 @@
 
   switch (style)
     {
+      case 2:
+        [doc setDefault: @"NSWindows95InterfaceStyle"
+		 forKey: @"NSMenuInterfaceStyle"];
+	break;
+
       case 1:
         [doc setDefault: @"NSMacintoshInterfaceStyle"
 		 forKey: @"NSMenuInterfaceStyle"];
