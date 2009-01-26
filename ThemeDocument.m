@@ -1307,6 +1307,10 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   [self activate];			// Preview
 }
 
+/* NB.
+ * If path is nil, we set the positions but leave the file unchanged.
+ * If path is @"", we remove the file from the theme.
+ */
 - (void) setTiles: (NSString*)name
 	 withPath: (NSString*)path
 	hDivision: (int)h
@@ -1332,7 +1336,8 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 
   d = [allTiles objectForKey: name];
   fileName = [d objectForKey: @"FileName"];
-  if ([fileName length] > 0)
+
+  if (path != nil && [fileName length] > 0)
     {
       NSString	*oPath;
 
@@ -1341,23 +1346,32 @@ NSLog(@"Unexpected view of class %@ with frame %@",
       [mgr removeFileAtPath: oPath handler: nil];
     }
 
-  if (path != nil)
+  if ([path isEqual: @""])
+    {
+      [allTiles removeObjectForKey: name];
+    }
+  else
     {
       NSString	*hDiv = [d objectForKey: @"HorizontalDivision"];
       NSString	*vDiv = [d objectForKey: @"VerticalDivision"];
-      NSString	*ext = [path pathExtension];
-      NSString	*nPath;
 
-      fileName = [name stringByAppendingPathExtension: ext];
-      nPath = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
-      nPath = [nPath stringByAppendingPathComponent: fileName];
-
-      if ([mgr copyPath: path toPath: nPath handler: nil] == NO)
+      if (path != nil)
 	{
-	  NSRunAlertPanel(_(@"Alert"),
-	    _(@"Unable to load tile image into work area from %@"),
-	    nil, nil, nil, path);
+          NSString	*ext = [path pathExtension];
+          NSString	*nPath;
+
+	  fileName = [name stringByAppendingPathExtension: ext];
+	  nPath = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
+	  nPath = [nPath stringByAppendingPathComponent: fileName];
+
+	  if ([mgr copyPath: path toPath: nPath handler: nil] == NO)
+	    {
+	      NSRunAlertPanel(_(@"Alert"),
+		_(@"Unable to load tile image into work area from %@"),
+		nil, nil, nil, path);
+	    }
 	}
+
       if (h > 0)
         {
 	  hDiv = [NSString stringWithFormat: @"%d", h];
@@ -1372,10 +1386,6 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 	vDiv, @"VerticalDivision",
         nil];
       [allTiles setObject: d forKey: name];
-    }
-  else
-    {
-      [allTiles removeObjectForKey: name];
     }
 
   if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:

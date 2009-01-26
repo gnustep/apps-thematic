@@ -419,7 +419,7 @@
 - (void) takeTileDelete: (id)sender
 {
   [owner setTiles: [self imageName]
-	 withPath: nil
+	 withPath: @""
 	hDivision: 0
 	vDivision: 0];
   DESTROY(tileName);
