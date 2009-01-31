@@ -24,8 +24,8 @@
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSGeometry.h>
+#import <GNUstepGUI/GSTheme.h>
 
-@class	GSTheme;
 @class	NSColor;
 @class	NSColorList;
 @class	NSDictionary;
@@ -81,7 +81,7 @@
   NSMutableDictionary	*_defs;		// Not retained
   NSMutableArray	*_elements;
   NSColorList		*_colors;
-  NSColorList		*_extraColors;
+  NSColorList		*_extraColors[GSThemeSelectedState+1];
   NSString		*_name;
   NSString		*_path;
   NSString		*_work;

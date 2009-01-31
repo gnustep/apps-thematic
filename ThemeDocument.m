@@ -313,7 +313,9 @@ static NSColorList	*systemColorList = nil;
   [self close];
   RELEASE(_elements);
   RELEASE(_colors);
-  RELEASE(_extraColors);
+  RELEASE(_extraColors[GSThemeNormalState]);
+  RELEASE(_extraColors[GSThemeHighlightedState]);
+  RELEASE(_extraColors[GSThemeSelectedState]);
   if (_name != nil)
     {
       [untitledName removeObject: _name];
@@ -430,7 +432,19 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 
 - (NSColor*) extraColorForKey: (NSString*)aName
 {
-  return [_extraColors colorWithKey: aName];
+  GSThemeControlState	state = GSThemeNormalState;
+
+  if ([aName hasSuffix: @"Highlighted"] == YES)
+    {
+      state = GSThemeHighlightedState;
+      aName = [aName substringToIndex: [aName length] - 11];
+    }
+  else if ([aName hasSuffix: @"Selected"] == YES)
+    {
+      state = GSThemeSelectedState;
+      aName = [aName substringToIndex: [aName length] - 8];
+    }
+  return [_extraColors[state] colorWithKey: aName];
 }
 
 - (NSDictionary*) infoDictionary
@@ -561,8 +575,29 @@ NSLog(@"Unexpected view of class %@ with frame %@",
       file = [file stringByAppendingPathComponent: @"ThemeExtraColors.clr"];
       if ([mgr isReadableFileAtPath: file] == YES)
 	{
-	  _extraColors = [[NSColorList alloc] initWithName: @"ThemeExtra"
-						  fromFile: file];
+	  _extraColors[GSThemeNormalState]
+	    = [[NSColorList alloc] initWithName: @"ThemeExtra"
+				       fromFile: file];
+	}
+      
+      file = [path stringByAppendingPathComponent: @"Resources"];
+      file = [file stringByAppendingPathComponent:
+	@"ThemeExtraHighlightedColors.clr"];
+      if ([mgr isReadableFileAtPath: file] == YES)
+	{
+	  _extraColors[GSThemeHighlightedState]
+	    = [[NSColorList alloc] initWithName: @"ThemeExtraHighlighted"
+				       fromFile: file];
+	}
+      
+      file = [path stringByAppendingPathComponent: @"Resources"];
+      file = [file stringByAppendingPathComponent:
+	@"ThemeExtraSelectedColors.clr"];
+      if ([mgr isReadableFileAtPath: file] == YES)
+	{
+	  _extraColors[GSThemeSelectedState]
+	    = [[NSColorList alloc] initWithName: @"ThemeExtraSelected"
+				       fromFile: file];
 	}
       
       file = [path stringByAppendingPathComponent: @"Resources"];
@@ -578,10 +613,23 @@ NSLog(@"Unexpected view of class %@ with frame %@",
       _colors = [[NSColorList alloc] initWithName: @"System"
 					 fromFile: nil];
     }
-  if (_extraColors == nil)
+  if (_extraColors[GSThemeNormalState] == nil)
     {
-      _extraColors = [[NSColorList alloc] initWithName: @"ThemeExtra"
-					 fromFile: nil];
+      _extraColors[GSThemeNormalState]
+	= [[NSColorList alloc] initWithName: @"ThemeExtra"
+				   fromFile: nil];
+    }
+  if (_extraColors[GSThemeHighlightedState] == nil)
+    {
+      _extraColors[GSThemeHighlightedState]
+	= [[NSColorList alloc] initWithName: @"ThemeExtraHighlighted"
+				   fromFile: nil];
+    }
+  if (_extraColors[GSThemeSelectedState] == nil)
+    {
+      _extraColors[GSThemeSelectedState]
+	= [[NSColorList alloc] initWithName: @"ThemeExtraSelected"
+				   fromFile: nil];
     }
   if (_info == nil)
     {
@@ -617,8 +665,12 @@ NSLog(@"Unexpected view of class %@ with frame %@",
    */
   [_colors writeToFile:
     [_rsrc stringByAppendingPathComponent: @"ThemeColors.clr"]];
-  [_extraColors writeToFile:
+  [_extraColors[GSThemeNormalState] writeToFile:
     [_rsrc stringByAppendingPathComponent: @"ThemeExtraColors.clr"]];
+  [_extraColors[GSThemeHighlightedState] writeToFile:
+    [_rsrc stringByAppendingPathComponent: @"ThemeExtraHighlightedColors.clr"]];
+  [_extraColors[GSThemeSelectedState] writeToFile:
+    [_rsrc stringByAppendingPathComponent: @"ThemeExtraSelectedColors.clr"]];
   [_info writeToFile: [_rsrc stringByAppendingPathComponent:
     @"Info-gnustep.plist"] atomically: NO];
 
@@ -1078,16 +1130,34 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 
 - (void) setExtraColor: (NSColor*)color forKey: (NSString*)key
 {
+  GSThemeControlState	state = GSThemeNormalState;
+  NSString		*file = @"ThemeExtraColors.clr";
+  NSColorList		*list;
+
+  if ([key hasSuffix: @"Highlighted"] == YES)
+    {
+      state = GSThemeHighlightedState;
+      file = @"ThemeExtraHighlightedColors.clr";
+      key = [key substringToIndex: [key length] - 11];
+    }
+  else if ([key hasSuffix: @"Selected"] == YES)
+    {
+      state = GSThemeSelectedState;
+      file = @"ThemeExtraSelectedColors.clr";
+      key = [key substringToIndex: [key length] - 8];
+    }
+  list = _extraColors[state];
+
   if (color == nil)
     {
-      [_extraColors removeColorWithKey: key];
+      [list removeColorWithKey: key];
     }
   else
     {
-      [_extraColors setColor: color forKey: key];
+      [list setColor: color forKey: key];
     }
-  if ([_extraColors writeToFile:
-    [_rsrc stringByAppendingPathComponent: @"ThemeExtraColors.clr"]] == NO)
+  if ([_extraColors[state] writeToFile:
+    [_rsrc stringByAppendingPathComponent: file]] == NO)
     {
       NSRunAlertPanel(_(@"Problem changing extra color"),
 	_(@"Could not save extra colors into theme"),
@@ -1316,6 +1386,7 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 	hDivision: (int)h
 	vDivision: (int)v
 {
+  NSAutoreleasePool	*arp = [NSAutoreleasePool new];
   NSFileManager	*mgr = [NSFileManager defaultManager];
   id		allTiles = [_info objectForKey: @"GSThemeTiles"];
   NSDictionary	*d;
@@ -1401,6 +1472,7 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   [_theme tilesNamed: name state: GSThemeHighlightedState cache: NO];
   [_theme tilesNamed: name state: GSThemeSelectedState cache: NO];
   [self activate];			// Preview
+  [arp release];
 }
 
 - (GSTheme*) testTheme
