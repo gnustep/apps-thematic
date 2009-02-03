@@ -45,9 +45,11 @@
       NSString	*t = [u objectForKey: @"Text"];
       NSString	*code = [owner codeForKey: m];
 
-      /* If the code has been changed, update the documnent.
+      t = [t stringByTrimmingSpaces];
+      if ([t length] == 0) t = nil;
+      /* If the code has been changed, update the document.
        */
-      if ([t isEqual: code] == NO)
+      if (t != code && [t isEqual: code] == NO)
 	{
 	  [owner setCode: t forKey: m];
 	  [[n object] codeBuildFor: owner method: m];
@@ -248,9 +250,26 @@
 - (void) takeCodeDelete: (id)sender
 {
   NSString	*method = [[codeMenu selectedItem] title];
+  NSString	*code = [owner codeForKey: method];
 
-  // FIXME ... need undo manager!
-  [owner setCode: nil forKey: method];
+  if (code != nil)
+    {
+      NSNotification	*n;
+      NSDictionary	*userInfo;
+
+      /* Remove the code by faking an endo fo code editing which
+       * returns an empty document.
+       */
+      userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+	className, @"Control",
+	method, @"Method",
+	@"", @"Text",
+	nil];
+      n = [NSNotification notificationWithName: @"CodeEditDone"
+					object: [CodeEditor codeEditor]
+				      userInfo: userInfo];
+      [self _endCodeEdit: n];
+    }
 }
 
 

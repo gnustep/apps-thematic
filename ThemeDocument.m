@@ -475,7 +475,7 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   /*
    * Create a working directory for temporary storage.
    */
-  pi = [NSString stringWithFormat: @"%d_%d",
+  pi = [NSString stringWithFormat: @"%d_%d_0",
     [[NSProcessInfo processInfo] processIdentifier], ++sequence];
   pi = [pi stringByAppendingPathExtension: @"theme"];
 
@@ -783,6 +783,7 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 
   version = [NSString stringWithFormat: @"%d", [version intValue] + 1];
   [_info setObject: version forKey: @"GSThemeVersion"];
+
   return version;
 }
 
@@ -981,7 +982,7 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   NSFileManager	*mgr = [NSFileManager defaultManager];
   NSString	*file;
   BOOL		existed;
-  Class		c = 0;
+  NSString	*className = nil;
 
   file = [_work stringByAppendingPathComponent: @"Theme.bundle"];
   existed = [mgr fileExistsAtPath: file];
@@ -990,6 +991,10 @@ NSLog(@"Unexpected view of class %@ with frame %@",
    */
   [mgr removeFileAtPath: file handler: nil];
 
+  /* Now copy executable bundle into theme bundle if necessary,
+   * and update theme bundle Info-gnustep.plist to reflect the
+   * current theme executable.
+   */
   if (path != nil)
     {
       if ([mgr copyPath: path toPath: file handler: nil] == NO)
@@ -1005,7 +1010,6 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 	  NSBundle	*b = [NSBundle bundleWithPath: path];
 	  NSDictionary	*i = [b infoDictionary];
 	  NSString	*e = [i objectForKey: @"NSExecutable"];
-	  NSString	*p = [i objectForKey: @"NSPrincipalClass"];
 
 	  /* Adjust our info dictionary to contain the location of the
 	   * executable and the name of the principal class in the
@@ -1013,11 +1017,8 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 	   */
 	  e = [@"Theme.bundle" stringByAppendingPathComponent: e];
 	  [_info setObject: e forKey: @"NSExecutable"];
-	  [_info setObject: p forKey: @"NSPrincipalClass"];
-
-	  /* Get the theme class so we can use it.
- 	   */
-	  c = [b principalClass];
+	  className = [i objectForKey: @"NSPrincipalClass"];
+	  [_info setObject: className forKey: @"NSPrincipalClass"];
 	}
     }
   else if (existed == YES)
@@ -1025,19 +1026,63 @@ NSLog(@"Unexpected view of class %@ with frame %@",
       [_info removeObjectForKey: @"NSExecutable"];
       [_info removeObjectForKey: @"NSPrincipalClass"];
     }
-  [window setDocumentEdited: YES];
-  if (c == 0)
+  if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
+    @"Info-gnustep.plist"] atomically: NO] == NO)
     {
-      c = [GSTheme class];
+      NSRunAlertPanel(_(@"Problem changing executable and principal class"),
+	_(@"Could not save Info-gnustep.plist into theme"),
+	nil, nil, nil);
     }
-  // ensure that the correct theme code is in use before activating.
-  if ([_theme class] != c)
+
+  [window setDocumentEdited: YES];
+
+  /*
+   * Ensure that the correct theme code is in use before activating.
+   * That might mean we need to copy the working theme to another
+   * directory so that NSBundle will load it rather than returning
+   * a bundle already loaded.
+   */
+  if (className == nil)
     {
-      [GSTheme setTheme: nil];
-      [_theme release];
-      _theme = [[c alloc] initWithBundle: [NSBundle bundleWithPath: _work]];
-      [_theme setName: [[self name] stringByDeletingPathExtension]];
-      [GSTheme setTheme: _theme];
+      className = NSStringFromClass([GSTheme class]);
+    }
+  if ([NSStringFromClass([_theme class]) isEqual: className] == NO)
+    {
+      NSString	*version = [_info objectForKey: @"GSThemeVersion"];
+      NSString	*tmp;
+      NSRange	r;
+
+      tmp = _work;
+      r = [tmp rangeOfString: @"_" options: NSBackwardsSearch];
+      tmp = [tmp substringToIndex: NSMaxRange(r)];
+      tmp = [tmp stringByAppendingString: version];
+      tmp = [tmp stringByAppendingPathExtension: @"theme"];
+      if ([mgr movePath: _work toPath: tmp handler: nil] == YES)
+	{
+	  NSBundle	*bundle;
+	  Class		c;
+
+          ASSIGN(_work, tmp);
+          ASSIGN(_rsrc, [_work stringByAppendingPathComponent: @"Resources"]);
+
+          bundle = [NSBundle bundleWithPath: _work];
+	  c = [bundle principalClass];
+	  if (c == 0)
+	    {
+	      c = [GSTheme class];
+	    }
+          [GSTheme setTheme: nil];
+          [_theme release];
+          _theme = [[c alloc] initWithBundle: bundle];
+          [_theme setName: [[self name] stringByDeletingPathExtension]];
+          [GSTheme setTheme: _theme];
+	}
+      else
+	{
+	  NSRunAlertPanel(_(@"Problem updating theme binary"),
+	    _(@"Could not move theme file"),
+	    nil, nil, nil);
+	}
     }
   [self activate];
 }
