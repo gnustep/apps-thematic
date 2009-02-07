@@ -539,7 +539,7 @@
   if (image != nil)
     {
       NSSize	s = [image size];
-      int	mh = (int)(s.width / 2);
+      int	mh = (int)(s.height / 2);
       int	mv = (int)(s.width / 2);
 
       [tilesHorizontal setMinValue: 1.0];

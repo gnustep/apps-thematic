@@ -136,6 +136,20 @@
       NS_ENDHANDLER
       if (image != nil)
         {
+	  NSSize	s = [image size];
+	  float		scale = 1.0;
+
+	  if (s.height > 48.0)
+	    scale = 48.0 / s.height;
+	  if (48.0 / s.width < scale)
+	    scale = 48.0 / s.width;
+	  if (scale != 1.0)
+	    {
+	      [image setScalesWhenResized: YES];
+	      s.height *= scale;
+	      s.width *= scale;
+	      [image setSize: s];
+	    }
 	  [doc setResource: path forKey: @"GSThemeIcon"];
 	  [iconView setImage: image];
 	  RELEASE(image);
