@@ -7,7 +7,7 @@ include $(GNUSTEP_MAKEFILES)/common.make
 #
 # Application
 #
-VERSION = 0.1
+VERSION = 0.2
 PACKAGE_NAME = Thematic
 APP_NAME = Thematic
 Thematic_APPLICATION_ICON = Thematic.png

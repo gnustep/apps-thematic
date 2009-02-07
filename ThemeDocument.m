@@ -690,7 +690,8 @@ NSLog(@"Unexpected view of class %@ with frame %@",
   [GSTheme setTheme: _theme];
 
   [NSBundle loadNibNamed: @"ThemeDocument" owner: self];
-
+  [window setFrameUsingName: @"Document"];
+  [window setFrameAutosaveName: @"Document"];
   [[NSNotificationCenter defaultCenter] addObserver: self
 					   selector: @selector(notified:)
 					       name: nil

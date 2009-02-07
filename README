@@ -34,7 +34,7 @@ see ControlElement.gorm for an example.
 Resources/CodeInfo.plist
 5. Define any special colors to be used to draw the control by editing 
 Resources/CodeInfo.plist
-5. Define any NASInterfaceStyle values or defaults settings which control
+5. Define any NSInterfaceStyle values or defaults settings which control
 behavior fo the control by editing Resources/CodeInfo.plist
 6. Define methods that can be overridden to draw the control differently ...
 6a. Add the methods and a description of each to Resources/CodeInfo.plist

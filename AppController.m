@@ -160,6 +160,8 @@ AppController	*thematicController = nil;
   if (inspector == nil)
     {
       [NSBundle loadNibNamed: @"ThemeInspector" owner: self];
+      [inspector setFrameUsingName: @"Inspector"];
+      [inspector setFrameAutosaveName: @"Inspector"];
     }
   return (NSWindow*)inspector;
 }

@@ -2,13 +2,13 @@
     ApplicationDescription = "The Theme editor for GNUstep";
     ApplicationIcon = Thematic.png;
     ApplicationName = Thematic;
-    ApplicationRelease = 0.1;
+    ApplicationRelease = 0.2;
     Authors = (
 	"Richard Frith-Macdonald"
     );
-    Copyright = "Copyright (C) 2006-2008";
-    CopyrightDescription = "Released under ... the GPL2";
-    FullVersionID = 0.1;
+    Copyright = "Copyright (C) 2006-2009";
+    CopyrightDescription = "Released under ... the GPL3";
+    FullVersionID = 0.2;
     GSHelpContentsFile = ThematicHelp.rtfd;
     NSExecutable = Thematic;
     NSIcon = Thematic.png;
