@@ -429,7 +429,12 @@ I(@"outlineExpanded", @"Outline view marker for expanded outline");
 I(@"outlineUnexpandable", @"Outline view marker for unexpandable outline");
 I(@"ret", @"Return/Enter key");
 I(@"retH", @"Highlighted Return/Enter key");
-
+I(@"Folder", @"Folder");
+I(@"HomeDirectory", @"Home Directory Folder");
+I(@"UnknownApplication", @"Unknown Application");
+I(@"UnknownTool", @"Unknown Tool");
+I(@"RadioOn", @"Selected Radio Button");
+I(@"RadioOff", @"Unselected Radio Button");
     }
   return self;
 }
