@@ -1,0 +1,5 @@
+2009-08-22 17:44-EDT Gregory John Casamento <greg.casamento@gmail.com>
+
+	* Resources/ThemeDocument.gorm: Change the window so that it's
+	not resizable.   Also add some more widgets to the document.
+
