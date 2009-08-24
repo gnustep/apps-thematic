@@ -1,7 +1,25 @@
+/* Use this to override methods of the GSTheme class below.
+ * You may also add entirely new methods here.
+ */
+
+/*
+- (Class) colorClass
+{
+  [super colorClass];
+}
+ */
+
 /*
 - (void) dealloc
 {
   [super dealloc];
+}
+ */
+
+/*
+- (Class) imageClass
+{
+  [super imageClass];
 }
  */
 

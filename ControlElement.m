@@ -240,6 +240,64 @@
 - (void) selectAt: (NSPoint)mouse
 {
   [super selectAt: mouse];
+
+  /* FIXME ... should probably have a subclass to handle NSScroller
+   */
+  if ([view isKindOfClass: [NSScroller class]])
+    {
+      NSRect		frame;
+      NSScrollerPart	part;
+      NSString		*value;
+
+      part = [(NSScroller*)view testPart:
+	[view convertPoint: mouse toView: nil]];
+      frame = [view frame];
+      if (frame.size.width > frame.size.height)
+	{
+	  switch (part)
+	    {
+	      case NSScrollerKnob:
+		value = @"GSScrollerHorizontalKnob";
+		break;
+	      case NSScrollerKnobSlot:
+		value = @"GSScrollerHorizontalKnobSlot";
+		break;
+	      case NSScrollerDecrementLine:
+		value = @"GSScrollerLeftArrow";
+		break;
+	      case NSScrollerIncrementLine:
+		value = @"GSScrollerRightArrow";
+		break;
+	      default:
+		value = nil;
+	    }
+	}
+      else
+	{
+	  switch (part)
+	    {
+	      case NSScrollerKnob:
+		value = @"GSScrollerVerticalKnob";
+		break;
+	      case NSScrollerKnobSlot:
+		value = @"GSScrollerVerticalKnobSlot";
+		break;
+	      case NSScrollerDecrementLine:
+		value = @"GSScrollerUpArrow";
+		break;
+	      case NSScrollerIncrementLine:
+		value = @"GSScrollerDownArrow";
+		break;
+	      default:
+		value = nil;
+	    }
+	}
+      if (value != nil)
+	{
+	  [tilesMenu selectItem: [tilesMenu itemWithTitle: value]];
+	  [colorsMenu selectItem: [colorsMenu itemWithTitle: value]];
+	}
+    }
 }
 
 - (int) style
@@ -404,6 +462,7 @@
 	  [defsOption insertItemWithTitle: title atIndex: i];
 	  if (s != nil && [[d objectForKey: title] isEqual: s] == YES)
 	    {
+	
 	      /* If this item is the same as the current value of the default,
 	       * we should make it the selected item.
 	       */

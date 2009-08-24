@@ -1,2 +1,5 @@
-/* Add extra #include and #import lines.
+/* Add extra #include and #import lines for external headers used by your
+ * theme code.
+ * You may also place any code here which should be included in all your
+ * theme code ... global declarations and macro definitions for instance.
  */

@@ -1,3 +1,19 @@
+2009-08-24 14:55-BST Richard Frith-Macdonald <rfm@gnu.org>
+
+	* Resources/CommonMethods.txt:
+	* Resources/VariableDeclarations.txt:
+	* Resources/IncludeHeaders.txt:
+	* ControlElement.m:
+	* ThemeDocument.m:
+	* CodeEditor.m:
+	Document a little in comments in templates.
+	Change code editor to put methods in separate categories (at some
+	point we should use separate files for faster compilation when only
+	one method has changed).
+	Fix coordinate mapping to find views on main document windows.
+	Add code to detect which part of a scroller is hit, and alter the
+	inspector to select it.
+
 2009-08-22 17:44-EDT Gregory John Casamento <greg.casamento@gmail.com>
 
 	* Resources/ThemeDocument.gorm: Change the window so that it's

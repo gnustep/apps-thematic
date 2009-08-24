@@ -161,10 +161,6 @@ static NSColorList	*systemColorList = nil;
   NSPoint	mousePoint = [theEvent locationInWindow];
   NSView	*view;
 
-  if ([self superview] != nil)
-    {
-      mousePoint = [[self superview] convertPoint: mousePoint fromView: nil];
-    }
   view = [super hitTest: mousePoint];
   if (view == self)
     {
@@ -187,7 +183,7 @@ static NSColorList	*systemColorList = nil;
 
   if (view != nil)
     {
-      mousePoint = [view convertPoint: mousePoint fromView: self];
+      mousePoint = [view convertPoint: mousePoint fromView: nil];
       [owner changeSelection: view at: mousePoint];
     }
 }
@@ -244,16 +240,18 @@ static NSColorList	*systemColorList = nil;
     }
   else
     {
-      if (e == _selected)
+      if (e != _selected)
         {
-	}
-      else
-        {
+	  /* Change selected view.
+	   */
 	  [_selected deselect];
 	  _selected = e;
-	  _selectionPoint = mousePoint;
-          [e selectAt: _selectionPoint];
 	}
+      /* Change selection point in view.
+       */
+      _selectionPoint = mousePoint;
+      [e selectAt: _selectionPoint];
+
       [[c inspector] orderFront: self];
     }
 }
@@ -1452,6 +1450,10 @@ NSLog(@"Unexpected view of class %@ with frame %@",
     }
 
   d = [allTiles objectForKey: name];
+  if (d == nil && path == nil)
+    {
+      return;	// No existing information, so we need to copy a file
+    }
   fileName = [d objectForKey: @"FileName"];
 
   if (path != nil && [fileName length] > 0)
@@ -1486,6 +1488,7 @@ NSLog(@"Unexpected view of class %@ with frame %@",
 	      NSRunAlertPanel(_(@"Alert"),
 		_(@"Unable to load tile image into work area from %@"),
 		nil, nil, nil, path);
+	      return;
 	    }
 	}
 

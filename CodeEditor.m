@@ -112,6 +112,9 @@ static CodeEditor *instance = nil;
       [codeText appendString: string];
       [codeText appendString: @"\n"];
     }
+
+  /* Write out the main theme interface document.
+   */
   [codeText appendFormat: @"@interface %@ : GSTheme\n", fullName];
   string = [document codeForKey: @"VariableDeclarations"];
   if ([string length] > 0)
@@ -121,6 +124,9 @@ static CodeEditor *instance = nil;
       [codeText appendString: @"\n"];
     }
   [codeText appendString: @"@end\n"];
+
+  /* Write out the common code.
+   */
   [codeText appendFormat: @"@implementation %@\n", fullName];
   string = [document codeForKey: @"CommonMethods"];
   if ([string length] > 0)
@@ -129,6 +135,7 @@ static CodeEditor *instance = nil;
       [codeText appendString: string];
       [codeText appendString: @"\n"];
     }
+  [codeText appendString: @"@end\n"];
 
   methods = [[NSMutableSet alloc] autorelease];
   if (singleMethod == nil)
@@ -152,6 +159,7 @@ static CodeEditor *instance = nil;
        */
       [methods addObject: singleMethod];
     }
+
   enumerator = [methods objectEnumerator];
   while ((methodName = [enumerator nextObject]) != nil)
     {
@@ -159,11 +167,13 @@ static CodeEditor *instance = nil;
 
       if (code != nil)
 	{
+          [codeText appendFormat: @"@implementation %@ (%@)\n", fullName,
+	    [methodName stringByReplacingString: @":" withString: @"_"]];
 	  [codeText appendString: @"\n"];
 	  [codeText appendString: code];
+	  [codeText appendString: @"@end\n"];
 	}
     }
-  [codeText appendString: @"@end\n"];
 
   path = [NSTemporaryDirectory() stringByAppendingPathComponent:
     [NSString stringWithFormat: @"Thematic%d",
