@@ -137,6 +137,12 @@
        */
       md = [NSMutableDictionary dictionary];
       d = [codeInfo objectForKey: className];
+      if (d == nil)
+	{
+	  NSRunAlertPanel(_(@"Control not supported"),
+	    _(@"Support for %@ is not yet implemented"),
+	    nil, nil, nil, className);
+	}
       classInfo = [d copy];
       d = [d objectForKey: @"Fragments"];
 

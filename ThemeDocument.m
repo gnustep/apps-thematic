@@ -340,6 +340,10 @@ static NSColorList	*systemColorList = nil;
     {
       return nil;
     }
+
+  /* Look through the existing elements and if we already have one for this
+   * view, return it.
+   */
   i = [_elements count];
   while (i-- > 0)
     {
@@ -349,83 +353,79 @@ static NSColorList	*systemColorList = nil;
 	  return e;
 	}
     }
+  e = nil;
   
   if ([aView isKindOfClass: [NSImageView class]] == YES)
     {
+      /* This should be one of the images at the top of the main panel ...
+       * We allocate a specific element depending on which image it is.
+       */
       if (aView == colorsView)
         {
 	  e = [[ColorElement alloc] initWithView: aView owner: self];
-	  [_elements addObject: e];
-	  RELEASE(e);
-	  return e;
 	}
       else if (aView == imagesView)
         {
 	  e = [[ImageElement alloc] initWithView: aView owner: self];
-	  [_elements addObject: e];
-	  RELEASE(e);
-	  return e;
 	}
       else if (aView == menusView)
         {
 	  e = [[MenusElement alloc] initWithView: aView owner: self];
-	  [_elements addObject: e];
-	  RELEASE(e);
-	  return e;
 	}
       else if (aView == extraView)
         {
 	  e = [[MiscElement alloc] initWithView: aView owner: self];
-	  [_elements addObject: e];
-	  RELEASE(e);
-	  return e;
 	}
       else if (aView == windowsView)
         {
 	  e = [[WindowsElement alloc] initWithView: aView owner: self];
-	  [_elements addObject: e];
-	  RELEASE(e);
-	  return e;
 	}
       else
         {
-	  NSLog(@"Not known image");
+	  NSLog(@"Not known image ... this should never happen");
 	}
     }
   else
     {
-      e = nil;
-
+      /* Here we create an element for a specific class of control.
+       */
       if ([aView isKindOfClass: [NSButton class]])
         {
-	  // Nothing special needed.
-	}
-      else if ([aView isKindOfClass: [NSScrollView class]])
-        {
-	}
-      else if ([aView isKindOfClass: [NSScroller class]])
-        {
-	}
-      else
-	{
 	  /* We could have a subclass of ControlElement to handle button
 	   * specific details, but as a button is a simple gui element
 	   * we can get away with using the ControlElement class directly
 	   */
-NSLog(@"Unexpected view of class %@ with frame %@",
-  NSStringFromClass([aView class]), NSStringFromRect([aView frame]));
-	}
-
-      if (e == nil)
-	{
 	  e = [[ControlElement alloc] initWithView: aView
 					     owner: self];
-	  [_elements addObject: e];
-	  RELEASE(e);
 	}
-      return e;
+      else if ([aView isKindOfClass: [NSScroller class]])
+        {
+	  /* Perhaps this is worth a subclass, but we just have a hack in
+	   * the -selectAt: method to do all we need.
+	   */
+	  e = [[ControlElement alloc] initWithView: aView
+					     owner: self];
+	}
+      else
+	{
+	  /* At this point we just assume that the ControlElement class is
+	   * able to handle whatever class we actually have in a generic
+ 	   * manner using information from the Resources/CodeInfo.plist
+	   * definitions.  If there's no data in there, we will raise an
+	   * alert panel later.
+	   */
+	  e = [[ControlElement alloc] initWithView: aView
+					     owner: self];
+	}
     }
-  return nil;
+
+  if (e != nil)
+    {
+      [_elements addObject: e];
+      RELEASE(e);
+    }
+
+  return e;
 }
 
 - (NSColor*) extraColorForKey: (NSString*)aName

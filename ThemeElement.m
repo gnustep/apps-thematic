@@ -65,10 +65,15 @@
 
 - (void) selectAt: (NSPoint)mouse
 {
+  NSWindow	*inspectorWindow;
+
   [window setContentView: nil];
-  [[[AppController sharedController] inspector] setContentView: inspector];
+  inspectorWindow = [[AppController sharedController] inspector];
+  [inspectorWindow setContentView: inspector];
   [[window contentView] setNeedsDisplay: YES];
-  [[[AppController sharedController] inspector] orderFront: self];
+  [inspectorWindow setTitle: [NSString stringWithFormat: @"%@ Inspector",
+    NSStringFromClass([view class])]];
+  [inspectorWindow orderFront: self];
 }
 
 - (NSView*) view

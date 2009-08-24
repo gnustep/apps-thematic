@@ -1,3 +1,12 @@
+2009-08-24 17:05-BST Richard Frith-Macdonald <rfm@gnu.org>
+
+	* ControlElement.m:
+	* ThemeDocument.m:
+	* ThemeElement.m:
+	Show alert panel if we have an unknown control to inspect.
+	Display name of class being inspected in window title.
+	Cleanup a bit.
+
 2009-08-24 14:55-BST Richard Frith-Macdonald <rfm@gnu.org>
 
 	* Resources/CommonMethods.txt:
