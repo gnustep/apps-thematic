@@ -87,12 +87,17 @@
   NSString		*_path;
   NSString		*_work;
   NSString		*_rsrc;
+  NSString		*_build;
   GSTheme		*_theme;
 }
 
 /** Try to make the theme we are editing active for preview purposes.
  */
 - (void) activate;
+
+/** Returns the directory in which cod should be built.
+ */
+- (NSString*) buildDirectory;
 
 - (void) changeSelection: (NSView*)aView at: (NSPoint)mousePoint;
 

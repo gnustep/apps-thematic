@@ -175,11 +175,7 @@ static CodeEditor *instance = nil;
 	}
     }
 
-  path = [NSTemporaryDirectory() stringByAppendingPathComponent:
-    [NSString stringWithFormat: @"Thematic%d",
-    [[NSProcessInfo processInfo] processIdentifier]]];
-  [mgr removeFileAtPath: path handler: nil];
-  [mgr createDirectoryAtPath: path attributes: nil];
+  path = [document buildDirectory];
 
   [makeText writeToFile: [path stringByAppendingPathComponent: @"GNUmakefile"]
 	     atomically: NO];
@@ -222,7 +218,6 @@ static CodeEditor *instance = nil;
     {
       [document setBinaryBundle:
 	[path stringByAppendingPathComponent: @"Theme.bundle"]];
-      [mgr removeFileAtPath: path handler: nil];
     }
   else
     {

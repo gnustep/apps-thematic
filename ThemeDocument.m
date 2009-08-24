@@ -221,6 +221,11 @@ static NSColorList	*systemColorList = nil;
   [_selected selectAt: _selectionPoint];
 }
 
+- (NSString*) buildDirectory
+{
+  return _build;
+}
+
 - (void) changeSelection: (NSView*)aView at: (NSPoint)mousePoint
 {
   ThemeElement	*e = [self elementForView: aView];
@@ -509,6 +514,27 @@ static NSColorList	*systemColorList = nil;
 	  DESTROY(self);
 	  return nil;
 	}
+    }
+
+  _build = RETAIN([_work stringByAppendingPathComponent: @"Build"]);
+  if ([mgr fileExistsAtPath: _build isDirectory: &isDir] == YES)
+    {
+      if ([mgr removeFileAtPath: _build handler: nil] == NO)
+	{
+	  NSRunAlertPanel(_(@"Alert"),
+	    _(@"Unable to remove old Build directory for theme"),
+	    _(@"OK"), nil, nil);
+	  DESTROY(self);
+	  return nil;
+	}
+    }
+  if ([mgr createDirectoryAtPath: _build attributes: nil] == NO)
+    {
+      NSRunAlertPanel(_(@"Alert"),
+	_(@"Unable to create Build directory for theme"),
+	_(@"OK"), nil, nil);
+      DESTROY(self);
+      return nil;
     }
 
   _rsrc = RETAIN([_work stringByAppendingPathComponent: @"Resources"]);
@@ -978,6 +1004,10 @@ static NSColorList	*systemColorList = nil;
 	nil, nil, nil, path);
       return NO;
     }
+  /* Don't want a copy of the build directory in the saved theme.
+   */
+  [mgr removeFileAtPath: [path stringByAppendingPathComponent: @"Build"]
+		handler: nil];
   return YES;
 }
 
@@ -1072,6 +1102,7 @@ static NSColorList	*systemColorList = nil;
 	  Class		c;
 
           ASSIGN(_work, tmp);
+          ASSIGN(_build, [_work stringByAppendingPathComponent: @"Build"]);
           ASSIGN(_rsrc, [_work stringByAppendingPathComponent: @"Resources"]);
 
           bundle = [NSBundle bundleWithPath: _work];
