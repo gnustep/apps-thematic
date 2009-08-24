@@ -284,15 +284,20 @@ static NSColorList	*systemColorList = nil;
   [[AppController sharedController] removeDocument: self];
 }
 
-- (NSString*) codeForKey: (NSString*)key
+- (NSString*) codeForKey: (NSString*)key since: (NSDate**)since
 {
-  NSFileManager	*mgr = [NSFileManager defaultManager];
+  NSFileManager	*mgr;
   NSString	*code = nil;
   NSString	*file;
 
   key = [key stringByReplacingString: @":" withString: @"_"];
+  if (since != 0)
+    {
+      *since = [_modified objectForKey: key];
+    }
   file = [_rsrc stringByAppendingPathComponent: @"ThemeCode"];
   file = [file stringByAppendingPathComponent: key];
+  mgr = [NSFileManager defaultManager];
   if ([mgr isReadableFileAtPath: file] == YES)
     {
       code = [NSString stringWithContentsOfFile: file];
@@ -309,6 +314,7 @@ static NSColorList	*systemColorList = nil;
 {
   [[NSNotificationCenter defaultCenter] removeObserver: self];
   [self close];
+  RELEASE(_modified);
   RELEASE(_elements);
   RELEASE(_colors);
   RELEASE(_extraColors[GSThemeNormalState]);
@@ -469,6 +475,10 @@ static NSColorList	*systemColorList = nil;
   NSString		*s;
   unsigned		i;
   BOOL			isDir;
+
+  /* Timestamps of modified code fragments.
+   */
+  _modified = [NSMutableDictionary new];
 
   /*
    * Create a working directory for temporary storage.
@@ -1092,6 +1102,7 @@ static NSColorList	*systemColorList = nil;
   NSString	*file;
 
   key = [key stringByReplacingString: @":" withString: @"_"];
+  [_modified setObject: [NSDate date] forKey: key];
   file = [_rsrc stringByAppendingPathComponent: @"ThemeCode"];
   file = [file stringByAppendingPathComponent: key];
 

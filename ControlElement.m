@@ -43,7 +43,7 @@
     {
       NSString	*m = [u objectForKey: @"Method"];
       NSString	*t = [u objectForKey: @"Text"];
-      NSString	*code = [owner codeForKey: m];
+      NSString	*code = [owner codeForKey: m since: 0];
 
       t = [t stringByTrimmingSpaces];
       if ([t length] == 0) t = nil;
@@ -314,7 +314,7 @@
 - (void) takeCodeDelete: (id)sender
 {
   NSString	*method = [[codeMenu selectedItem] title];
-  NSString	*code = [owner codeForKey: method];
+  NSString	*code = [owner codeForKey: method since: 0];
 
   if (code != nil)
     {
@@ -340,7 +340,7 @@
 - (void) takeCodeEdit: (id)sender
 {
   NSString	*method = [[codeMenu selectedItem] title];
-  NSString	*code = [owner codeForKey: method];
+  NSString	*code = [owner codeForKey: method since: 0];
 
   if (code == nil)
     {

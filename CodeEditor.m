@@ -91,7 +91,7 @@ static CodeEditor *instance = nil;
   [makeText appendString: @"endif\n"];
   [makeText appendString: @"include $(GNUSTEP_MAKEFILES)/common.make\n"];
   [makeText appendString: @"BUNDLE_NAME=Theme\n"];
-  string = [document codeForKey: @"MakeAdditions"];
+  string = [document codeForKey: @"MakeAdditions" since: 0];
   if ([string length] > 0)
     {
       [makeText appendString: @"\n"];
@@ -105,7 +105,7 @@ static CodeEditor *instance = nil;
   codeText = [NSMutableString string];
   [codeText appendString: @"#import <AppKit/AppKit.h>\n"];
   [codeText appendString: @"#import <GNUstepGUI/GSTheme.h>\n"];
-  string = [document codeForKey: @"IncludeHeaders"];
+  string = [document codeForKey: @"IncludeHeaders" since: 0];
   if ([string length] > 0)
     {
       [codeText appendString: @"\n"];
@@ -116,7 +116,7 @@ static CodeEditor *instance = nil;
   /* Write out the main theme interface document.
    */
   [codeText appendFormat: @"@interface %@ : GSTheme\n", fullName];
-  string = [document codeForKey: @"VariableDeclarations"];
+  string = [document codeForKey: @"VariableDeclarations" since: 0];
   if ([string length] > 0)
     {
       [codeText appendString: @"\n"];
@@ -128,7 +128,7 @@ static CodeEditor *instance = nil;
   /* Write out the common code.
    */
   [codeText appendFormat: @"@implementation %@\n", fullName];
-  string = [document codeForKey: @"CommonMethods"];
+  string = [document codeForKey: @"CommonMethods" since: 0];
   if ([string length] > 0)
     {
       [codeText appendString: @"\n"];
@@ -163,7 +163,7 @@ static CodeEditor *instance = nil;
   enumerator = [methods objectEnumerator];
   while ((methodName = [enumerator nextObject]) != nil)
     {
-      NSString	*code = [document codeForKey: methodName];
+      NSString	*code = [document codeForKey: methodName since: 0];
 
       if (code != nil)
 	{

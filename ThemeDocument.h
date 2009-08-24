@@ -79,6 +79,7 @@
   NSPoint		_selectionPoint;
   NSMutableDictionary	*_info;
   NSMutableDictionary	*_defs;		// Not retained
+  NSMutableDictionary	*_modified;
   NSMutableArray	*_elements;
   NSColorList		*_colors;
   NSColorList		*_extraColors[GSThemeSelectedState+1];
@@ -96,9 +97,10 @@
 - (void) changeSelection: (NSView*)aView at: (NSPoint)mousePoint;
 
 /** Returns the code fragment for the specified key, or nil if none is
- * available.
+ * available. Places the last modifiecation date of the code in *since
+ * if it is not zero.
  */
-- (NSString*) codeForKey: (NSString*)key;
+- (NSString*) codeForKey: (NSString*)key since: (NSDate**)since;
 
 - (NSColor*) colorForKey: (NSString*)aName;
 
