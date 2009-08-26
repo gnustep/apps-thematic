@@ -157,6 +157,10 @@
 	  names = [names sortedArrayUsingSelector: @selector(compare:)];
 	  [codeMenu addItemsWithTitles: names];
 	}
+      else
+	{
+	  [codeMenu addItemWithTitle: _(@"Not applicable")];
+	}
 
       if ([md count] > 0)
 	{
@@ -197,28 +201,42 @@
 	sortedArrayUsingSelector: @selector(compare:)];
       [tilesMenu removeAllItems];
       count = [titles count];
-      for (i = 0; i < count; i++)
-        {
-	  NSString	*title = [titles objectAtIndex: i];
+      if (count > 0)
+	{
+	  for (i = 0; i < count; i++)
+	    {
+	      NSString	*title = [titles objectAtIndex: i];
 
-	  [tilesMenu insertItemWithTitle: title atIndex: i];
+	      [tilesMenu insertItemWithTitle: title atIndex: i];
+	    }
 	}
+      else
+	{
+	  [tilesMenu addItemWithTitle: _(@"Not applicable")];
+	}
+
       /* Select the first image and make it active.
        */
       [tilesMenu selectItemAtIndex: 0];
       [self takeTileStyle: tilesStyle];
       [self takeTileName: tilesMenu];
 
-
       titles = [[[classInfo objectForKey: @"ColorElements"] allKeys]
 	sortedArrayUsingSelector: @selector(compare:)];
       [colorsMenu removeAllItems];
       count = [titles count];
-      for (i = 0; i < count; i++)
-        {
-	  NSString	*title = [titles objectAtIndex: i];
+      if (count > 0)
+	{
+	  for (i = 0; i < count; i++)
+	    {
+	      NSString	*title = [titles objectAtIndex: i];
 
-	  [colorsMenu insertItemWithTitle: title atIndex: i];
+	      [colorsMenu insertItemWithTitle: title atIndex: i];
+	    }
+	}
+      else
+	{
+	  [colorsMenu addItemWithTitle: _(@"Not applicable")];
 	}
       /* Select the color image and make it active.
        */
@@ -231,11 +249,18 @@
       titles = [[d allKeys] sortedArrayUsingSelector: @selector(compare:)];
       [defsMenu removeAllItems];
       count = [titles count];
-      for (i = 0; i < count; i++)
-        {
-	  NSString	*title = [titles objectAtIndex: i];
+      if (count > 0)
+	{
+	  for (i = 0; i < count; i++)
+	    {
+	      NSString	*title = [titles objectAtIndex: i];
 
-	  [defsMenu insertItemWithTitle: title atIndex: i];
+	      [defsMenu insertItemWithTitle: title atIndex: i];
+	    }
+	}
+      else
+	{
+	  [defsMenu addItemWithTitle: _(@"Not applicable")];
 	}
       [defsMenu selectItemAtIndex: 0];
       [self takeDefsName: defsMenu];
@@ -301,7 +326,9 @@
       if (value != nil)
 	{
 	  [tilesMenu selectItem: [tilesMenu itemWithTitle: value]];
+	  [self takeTileName: tilesMenu];
 	  [colorsMenu selectItem: [colorsMenu itemWithTitle: value]];
+	  [self takeColorName: colorsMenu];
 	}
     }
 }

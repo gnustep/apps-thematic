@@ -1,3 +1,9 @@
+2009-08-26 Richard Frith-Macdonald <rfm@gnu.org>
+
+	* ControlElement.m:
+	Improve handling of cases where we have no info in the plist.
+	Try to fix initialisation of scroller element info panel.
+
 2009-08-26 Riccardo Mottola <rmottola@users.sf.net>
 	* ImageElement.m:
 	Added Switch button images
