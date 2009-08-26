@@ -435,6 +435,8 @@ I(@"UnknownApplication", @"Unknown Application");
 I(@"UnknownTool", @"Unknown Tool");
 I(@"RadioOn", @"Selected Radio Button");
 I(@"RadioOff", @"Unselected Radio Button");
+I(@"SwitchOn", @"Selected Switch Button");
+I(@"SwitchOff", @"Unselected Switch Button");
     }
   return self;
 }
