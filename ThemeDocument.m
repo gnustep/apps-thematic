@@ -41,6 +41,14 @@
 
 @implementation	GSTheme (TestTheme)
 /*
+ * Method to prevent the current theme being set from the defaults system
+ * because we ant to set it directly from the current document.
+ */
++ (void) defaultsDidChange: (NSNotification*)n
+{
+  return;
+}
+/*
  * Method to bypass NSBundle's caching of infoDictionary so that changes
  * to the theme will be reflected immediately.
  */
@@ -63,7 +71,6 @@
 @end
 
 
-static GSTheme		*initialTheme = nil;
 static NSMutableSet	*untitledName = nil;
 static NSColorList	*systemColorList = nil;
 
@@ -200,23 +207,26 @@ static NSColorList	*systemColorList = nil;
 
 + (void) initialize
 {
-  initialTheme = RETAIN([GSTheme theme]);
   untitledName = [NSMutableSet new];
   systemColorList = RETAIN([NSColorList colorListNamed: @"System"]);
 }
 
 - (void) activate
 {
-  /* Tell the system that our theme is now active.
-   * If we are already active, we deactivate first so that the
-   * new activation can take effect cleanly.
+  /* Tell the system that our theme is now active as the current theme.
+   * If we are already active, we deactivate first so that the new
+   * activation can take effect cleanly. If we are not the current
+   * theme, we just need to set ourselves to be it.
    */
   if ([GSTheme theme] == _theme)
     {
       [_theme deactivate];
+      [_theme activate];
     }
-  [GSTheme setTheme: _theme];
-  [_theme activate];
+  else
+    {
+      [GSTheme setTheme: _theme];
+    }
 
   [_selected selectAt: _selectionPoint];
 }
@@ -269,11 +279,6 @@ static NSColorList	*systemColorList = nil;
   _selected = nil;
   _selectionPoint = NSZeroPoint;
 
-  /* Stop our theme being the active theme.
-   */
-  [GSTheme setTheme: nil];
-  DESTROY(_theme);
-
   /* Remove our temporary work area.
    */
   if (_work != nil)
@@ -284,9 +289,20 @@ static NSColorList	*systemColorList = nil;
       DESTROY(_work);
     }
 
-  /* Remove self from app controller ... this should deallocate us.
+  /* Remove self from app controller
    */
+  [self retain];
   [[AppController sharedController] removeDocument: self];
+  if (_theme != nil)
+    {
+      if ([GSTheme theme] == _theme
+	&& [[[AppController sharedController] documents] count] == 0)
+	{
+	  [GSTheme setTheme: nil];
+	}
+      DESTROY(_theme);
+    }
+  [self release];
 }
 
 - (NSString*) codeForKey: (NSString*)key since: (NSDate**)since
@@ -589,8 +605,6 @@ static NSColorList	*systemColorList = nil;
 	}
     }
 
-  [GSTheme setTheme: initialTheme];
-
   _elements = [NSMutableArray new];
   if (path != nil)
     {
@@ -721,7 +735,6 @@ static NSColorList	*systemColorList = nil;
 
   _theme = [[GSTheme alloc] initWithBundle: [NSBundle bundleWithPath: _work]];
   [_theme setName: [[self name] stringByDeletingPathExtension]];
-  [GSTheme setTheme: _theme];
 
   [NSBundle loadNibNamed: @"ThemeDocument" owner: self];
   [window setFrameUsingName: @"Document"];
@@ -763,7 +776,6 @@ static NSColorList	*systemColorList = nil;
   [windowsView setToolTip: _(@"window settings")];
   [extraView setToolTip: _(@"general information")];
 
-  [self activate];
   [window orderFront: self];
 
   /* Here we can perform any extra setup needed for the different views
@@ -1111,11 +1123,9 @@ static NSColorList	*systemColorList = nil;
 	    {
 	      c = [GSTheme class];
 	    }
-          [GSTheme setTheme: nil];
           [_theme release];
           _theme = [[c alloc] initWithBundle: bundle];
           [_theme setName: [[self name] stringByDeletingPathExtension]];
-          [GSTheme setTheme: _theme];
 	}
       else
 	{

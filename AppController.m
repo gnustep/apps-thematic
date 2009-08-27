@@ -155,6 +155,11 @@ AppController	*thematicController = nil;
   return codeInfo;
 }
 
+- (NSArray*) documents
+{
+  return [[documents copy] autorelease];
+}
+
 - (NSWindow*) inspector
 {
   if (inspector == nil)

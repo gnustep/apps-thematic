@@ -283,6 +283,7 @@
       part = [(NSScroller*)view testPart:
 	[view convertPoint: mouse toView: nil]];
       frame = [view frame];
+
       if (frame.size.width > frame.size.height)
 	{
 	  switch (part)
@@ -291,7 +292,7 @@
 		value = @"GSScrollerHorizontalKnob";
 		break;
 	      case NSScrollerKnobSlot:
-		value = @"GSScrollerHorizontalKnobSlot";
+		value = @"GSScrollerHorizontalSlot";
 		break;
 	      case NSScrollerDecrementLine:
 		value = @"GSScrollerLeftArrow";
@@ -311,7 +312,7 @@
 		value = @"GSScrollerVerticalKnob";
 		break;
 	      case NSScrollerKnobSlot:
-		value = @"GSScrollerVerticalKnobSlot";
+		value = @"GSScrollerVerticalSlot";
 		break;
 	      case NSScrollerDecrementLine:
 		value = @"GSScrollerUpArrow";

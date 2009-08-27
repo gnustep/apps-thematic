@@ -53,6 +53,7 @@
 - (BOOL) application: (NSApplication *)application
             openFile: (NSString *)fileName;
 
+- (NSArray*) documents;
 - (NSWindow*) inspector;
 - (void) newDocument: (id)sender;
 - (void) openDocument: (id)sender;
