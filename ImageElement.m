@@ -87,8 +87,10 @@
 
 - (void) revert
 {
-  DESTROY(path);
   ASSIGN(current, original);
+  DESTROY(path);
+  [[[AppController sharedController] selectedDocument] setImage: nil
+							 forKey: name];
 }
 
 - (void) setCurrentImage: (NSImage*)i atPath: (NSString*)p
@@ -107,11 +109,13 @@
   NSMutableArray	*objects;
   ImageInfo		*selected;
   NSTextField		*description;
+  NSString		*lastPath;
 }
 - (void) addObject: (ImageInfo*)anObject;
 - (void) makeSelectionVisible: (BOOL)flag;
 - (void) refreshCells;
 - (void) selectObject: (ImageInfo*)obj;
+- (ImageInfo*) selected;
 - (void) setDescription: (NSTextField*)d;
 @end
 
@@ -150,7 +154,15 @@
 - (void) dealloc
 {
   RELEASE(objects);
+  RELEASE(lastPath);
   [super dealloc];
+}
+
+- (void) deleteImage: (id)sender
+{
+  [selected revert];
+  [self selectObject: selected];
+  [self makeSelectionVisible: YES];
 }
 
 - (void) importImage: (id)sender
@@ -162,7 +174,7 @@
   [oPanel setAllowsMultipleSelection: NO];
   [oPanel setCanChooseFiles: YES];
   [oPanel setCanChooseDirectories: NO];
-  result = [oPanel runModalForDirectory: NSHomeDirectory()
+  result = [oPanel runModalForDirectory: lastPath
 				   file: nil
 				  types: fileTypes];
   if (result == NSOKButton)
@@ -184,6 +196,7 @@
       NS_ENDHANDLER
       if (image != nil)
         {
+	  ASSIGN(lastPath, [path stringByDeletingLastPathComponent]);
 	  [selected setCurrentImage: image atPath: path];
 	  RELEASE(image);
 	  [self refreshCells];
@@ -340,6 +353,11 @@
   [self makeSelectionVisible: YES];
 }
 
+- (ImageInfo*) selected
+{
+  return selected;
+}
+
 - (void) setDescription: (NSTextField*)d
 {
   description = d;
@@ -349,6 +367,16 @@
 
 
 @implementation ImageElement
+
+- (void) deleteImage: (id)sender
+{
+  [imagesView deleteImage: sender];
+}
+
+- (void) importImage: (id)sender
+{
+  [imagesView importImage: sender];
+}
 
 - (id) initWithView: (NSView*)aView
 	      owner: (ThemeDocument*)aDocument

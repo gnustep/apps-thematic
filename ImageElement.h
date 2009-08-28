@@ -31,6 +31,10 @@
   ImagesView	*imagesView;
   id		scrollView;
   id		description;
+  id		deleteButton;
+  id		importButton;
 }
+- (void) deleteImage: (id)sender;
+- (void) importImage: (id)sender;
 @end
 

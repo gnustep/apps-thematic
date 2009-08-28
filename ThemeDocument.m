@@ -1269,11 +1269,19 @@ static NSColorList	*systemColorList = nil;
 - (void) setImage: (NSString*)path forKey: (NSString*)key
 {
   NSFileManager	*mgr = [NSFileManager defaultManager];
-  NSArray	*fileTypes = [NSImage imageFileTypes];
-  unsigned	count = [fileTypes count];
+  NSArray	*fileTypes;
+  unsigned	count;
   NSString	*file;
   NSString	*name;
   NSString	*ext;
+
+  if (path != nil && [mgr isReadableFileAtPath: path] == NO)
+    {
+      NSRunAlertPanel(_(@"Problem loading image"),
+	_(@"Could not read file to copy into theme"),
+	nil, nil, nil);
+      return;
+    }
 
   name = [@"common_" stringByAppendingString: key];
   file = [_rsrc stringByAppendingPathComponent: @"ThemeImages"];
@@ -1282,6 +1290,8 @@ static NSColorList	*systemColorList = nil;
   /*
    * Remove any old image of the same name.
    */
+  fileTypes = [NSImage imageFileTypes];
+  count = [fileTypes count];
   while (count-- > 0)
     {
       NSString	*ext = [fileTypes objectAtIndex: count];
@@ -1290,19 +1300,21 @@ static NSColorList	*systemColorList = nil;
 		    handler: nil];
     }
 
-  ext = [path pathExtension];
-  file = [file stringByAppendingPathExtension: ext];
-  if ([mgr copyPath: path toPath: file handler: nil] == NO)
+  if (path != nil)
     {
-      NSRunAlertPanel(_(@"Problem loading image"),
-	_(@"Could not copy file into theme"),
-	nil, nil, nil);
+      ext = [path pathExtension];
+      file = [file stringByAppendingPathExtension: ext];
+      if ([mgr copyPath: path toPath: file handler: nil] == NO)
+	{
+	  NSRunAlertPanel(_(@"Problem loading image"),
+	    _(@"Could not copy file into theme"),
+	    nil, nil, nil);
+	  return;
+	}
     }
-  else
-    {
-      [window setDocumentEdited: YES];
-      [self activate];			// Preview
-    }
+
+  [window setDocumentEdited: YES];
+  [self activate];			// Preview
 }
 
 - (void) setInfo: (id)value forKey: (NSString*)key
