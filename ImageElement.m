@@ -412,7 +412,8 @@ I(@"CloseBrokenH", @"Highlighted Window Close button for document needing saving
 I(@"CloseH", @"Highlighted Window Close button");
 I(@"ColorSwatch", @"Color swatch");
 I(@"DecimalTabStop", @"Ruler mark (decimal tab stop)");
-I(@"Dimple", @"Scroller thumb dimple");
+I(@"Dimple", @"Vertical scroller thumb dimple");
+I(@"DimpleHoriz", @"Horizontal scroller thumb dimple");
 I(@"Home", @"Home directory icon");
 I(@"LeftTabStop", @"Ruler mark (left tab stop)");
 I(@"Miniaturize", @"Window Miniaturize button");

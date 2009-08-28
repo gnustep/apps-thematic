@@ -1,3 +1,8 @@
+2009-08-28 17:37-EDT Gregory John Casamento <greg.casamento@gmail.com>
+
+	* ImageElement.m: Added change to support new image element
+	for horizontal scroller knob.
+
 2009-08-28 Richard Frith-Macdonald <rfm@gnu.org>
 
 	* ImageElement.m:
