@@ -1,3 +1,8 @@
+2009-08-28 Richard Frith-Macdonald <rfm@gnu.org>
+
+	* ImageElement.m:
+	Allow deletion of images to restore default GNUstep images.
+
 2009-08-26 Richard Frith-Macdonald <rfm@gnu.org>
 
 	* ControlElement.m:

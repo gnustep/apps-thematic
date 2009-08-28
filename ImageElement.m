@@ -31,13 +31,12 @@
 @interface	ImageInfo : NSObject
 {
   NSImage	*original;
-  NSImage	*current;
   NSString	*name;
   NSString	*path;
   NSString	*description;	// not retained
 }
-- (NSImage*) current;
 - (NSString*) description;
+- (NSImage*) image;
 - (id) initWithImage: (NSImage*)i description: (NSString*)d;
 - (NSString*) name;
 - (NSString*) path;
@@ -46,15 +45,9 @@
 @end
 
 @implementation	ImageInfo
-- (NSImage*) current
-{
-  return current;
-}
-
 - (void) dealloc
 {
   RELEASE(original);
-  RELEASE(current);
   RELEASE(description);
   RELEASE(name);
   RELEASE(path);
@@ -66,18 +59,22 @@
   return description;
 }
 
+- (NSImage*) image
+{
+  return original;
+}
+
 - (id) initWithImage: (NSImage*)i description: (NSString*)d
 {
   ASSIGN(original, i);
-  ASSIGN(current, i);
   ASSIGN(description, d);
-  ASSIGN(name, [[original name] substringFromIndex: 7]);
+  ASSIGNCOPY(name, [original name]);
   return self;
 }
 
 - (NSString*) name
 {
-  return name;
+  return [name substringFromIndex: 7];
 }
 
 - (NSString*) path
@@ -87,18 +84,16 @@
 
 - (void) revert
 {
-  ASSIGN(current, original);
   DESTROY(path);
   [[[AppController sharedController] selectedDocument] setImage: nil
-							 forKey: name];
+							 forKey: [self name]];
 }
 
 - (void) setCurrentImage: (NSImage*)i atPath: (NSString*)p
 {
-  ASSIGN(current, i);
   ASSIGN(path, p);
   [[[AppController sharedController] selectedDocument] setImage: path
-							 forKey: name];
+							 forKey: [self name]];
 }
 @end
 
@@ -161,8 +156,8 @@
 - (void) deleteImage: (id)sender
 {
   [selected revert];
+  [self makeSelectionVisible: NO];
   [self selectObject: selected];
-  [self makeSelectionVisible: YES];
 }
 
 - (void) importImage: (id)sender
@@ -202,8 +197,8 @@
 	  [self refreshCells];
 	}
     }
+  [self makeSelectionVisible: NO];
   [self selectObject: selected];
-  [self makeSelectionVisible: YES];
 }
 
 - (id) initWithFrame: (NSRect)frame
@@ -283,7 +278,7 @@
       ImageInfo		*img = [objects objectAtIndex: index];
       NSButtonCell	*but = [self cellAtRow: index/cols column: index%cols];
 
-      [but setImage: [img current]];
+      [but setImage: [img image]];
       [but setTitle: @""];
       //[but setTitle: [img name]];
       [but setShowsStateBy: NSChangeGrayCellMask];
