@@ -1,3 +1,7 @@
+2009-08-31 Richard Frith-Macdonald <rfm@gnu.org>
+
+	Set title of inspector window to reflect what is being inspected.
+
 2009-08-28 17:37-EDT Gregory John Casamento <greg.casamento@gmail.com>
 
 	* ImageElement.m: Added change to support new image element

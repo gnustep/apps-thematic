@@ -64,5 +64,10 @@
 	break;
     }
 }
+
+- (NSString*) title
+{
+  return @"Windows";
+}
 @end
 

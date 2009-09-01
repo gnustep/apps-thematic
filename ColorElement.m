@@ -98,5 +98,10 @@
     }
   return name;
 }
+
+- (NSString*) title
+{
+  return @"System Colors";
+}
 @end
 

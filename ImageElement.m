@@ -465,5 +465,9 @@ I(@"SwitchOff", @"Unselected Switch Button");
   return self;
 }
 
+- (NSString*) title
+{
+  return @"System Images";
+}
 @end
 

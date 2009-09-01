@@ -75,5 +75,10 @@
 	break;
     }
 }
+
+- (NSString*) title
+{
+  return @"Menus";
+}
 @end
 

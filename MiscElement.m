@@ -190,5 +190,9 @@
     }
 }
 
+- (NSString*) title
+{
+  return @"Miscellaneous";
+}
 @end
 

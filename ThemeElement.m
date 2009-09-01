@@ -71,16 +71,21 @@
   inspectorWindow = [[AppController sharedController] inspector];
   [inspectorWindow setContentView: inspector];
   [[window contentView] setNeedsDisplay: YES];
-  if ([view isKindOfClass: [NSImageCell class]] == YES)
+  [inspectorWindow setTitle: [NSString stringWithFormat: @"%@ Inspector",
+    [self title]]];
+  [inspectorWindow orderFront: self];
+}
+
+- (NSString*) title
+{
+  if ([view isKindOfClass: [NSImageView class]] == YES)
     {
-      [inspectorWindow setTitle: @"Theme Inspector"];
+      return @"Theme";
     }
   else
     {
-      [inspectorWindow setTitle: [NSString stringWithFormat: @"%@ Inspector",
-        NSStringFromClass([view class])]];
+      return NSStringFromClass([view class]);
     }
-  [inspectorWindow orderFront: self];
 }
 
 - (NSView*) view

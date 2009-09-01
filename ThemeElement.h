@@ -51,6 +51,10 @@
  */
 - (void) selectAt: (NSPoint)mouse;
 
+/** Return the title for the inspector window.
+ */
+- (NSString*) title;
+
 /** Return the view this element is handling
  */
 - (NSView*) view;
