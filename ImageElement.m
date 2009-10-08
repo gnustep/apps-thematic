@@ -461,6 +461,7 @@ I(@"RadioOn", @"Selected Radio Button");
 I(@"RadioOff", @"Unselected Radio Button");
 I(@"SwitchOn", @"Selected Switch Button");
 I(@"SwitchOff", @"Unselected Switch Button");
+I(@"Root_PC", @"Image of the Root computer - PC");
     }
   return self;
 }
