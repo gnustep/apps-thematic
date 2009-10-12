@@ -43,10 +43,22 @@
 /*
  * Method to prevent the current theme being set from the defaults system
  * because we ant to set it directly from the current document.
+ * However, if there are no documents, we do want to use the correc theme.
  */
 + (void) defaultsDidChange: (NSNotification*)n
 {
-  return;
+  if ([[[AppController sharedController] documents] count] == 0)
+    {
+      NSUserDefaults	*defs;
+      NSString		*name;
+
+      defs = [NSUserDefaults standardUserDefaults];
+      name = [defs stringForKey: @"GSTheme"];
+      if ([name isEqual: [[GSTheme theme] name]] == NO)
+	{
+	  [GSTheme setTheme: [GSTheme loadThemeNamed: name]];
+	}
+    }
 }
 /*
  * Method to bypass NSBundle's caching of infoDictionary so that changes

@@ -82,7 +82,7 @@ AppController	*thematicController = nil;
   else
     {
       RELEASE(self);
-      thematicController = RETAIN(thematicController);
+      self = RETAIN(thematicController);
     }
   return self;
 }
