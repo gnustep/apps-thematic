@@ -34,7 +34,7 @@ Resources/MiscElement.gorm \
 Resources/ControlElement.gorm \
 Resources/CodeEditor.gorm \
 Resources/Thematic.png \
-Resources/ThematicHelp.rtfd \
+Resources/ThematicHelp.rtf \
 Resources/CodeInfo.plist \
 Resources/drawButton_in_view_style_state_.txt \
 Resources/CommonMethods.txt \

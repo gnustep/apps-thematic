@@ -24,7 +24,7 @@
     CPPOPTIONS = "";
     CREATION_DATE = "2006-09-18 14:00:14 +0100";
     DOCU_FILES = (
-	ThematicHelp.rtfd
+	ThematicHelp.rtf
     );
     FRAMEWORKS = (
     );
@@ -41,7 +41,7 @@
 	TilesBox.h,
 	CodeEditor.h
     );
-    HELP_FILE = ThematicHelp.rtfd;
+    HELP_FILE = ThematicHelp.rtf;
     IMAGES = (
 	Thematic.png
     );

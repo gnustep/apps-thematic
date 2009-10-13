@@ -2,7 +2,7 @@ Thematic.app is a theme editor for GNUstep.
 
 Install and run Thematic.app, then read online help for details of
 what it can do.
-Alternatively, you can find the help file in Resources/ThematicHelp.rtfd
+Alternatively, you can find the help file in Resources/ThematicHelp.rtf
 
 The remainder of this file is intended for people wishing to help improve
 Thematic.app itsself, rather than for people who merely with to use it to
@@ -13,8 +13,8 @@ to be useful ... this will be an incremental process, with capabilities
 being added to the editor as they are added to the gui library.
 
 To work on Thematic, you also need Gorm.app and ProjectCenter.app,
-and a copy of an rtfd editor such as Ink.app if you wish to improve the
-online help (Resources/ThematicHelp.rtfd).
+and a copy of an rtf editor such as Ink.app if you wish to improve the
+online help (Resources/ThematicHelp.rtf).
 
 Building/using the current editor requires the *latest* version of
 the GUI from SVN.  The major task in theming is now changing all the
