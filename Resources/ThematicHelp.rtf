@@ -1,8 +1,9 @@
 {\rtf1\ansi\ansicpg10000\cocoartf102{\fonttbl\f0\fnil Bitstream Vera Sans;}
 {\colortbl;\red0\green0\blue0;}
-\f0\fs24\pard\tx0\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\ql \uc0 This is a theme editor for GNUstep.  It is at an early stage of development ...\cf1 \uc0 \par
+\f0\fs24\pard\tx0\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\ql \uc0 This is a theme editor for GNUstep.  It is at an early \cf1 \uc0 but usable \cf0 \uc0 stage of development ...\cf0\cf1 \uc0 \par
 \par
-The design of the editor is that any theme changes should take effect immediately and be applied to the running application so that you can effectively preview them.  For instance, if you write code overriding the drawing of a button,  Thematic immediately builts that code, and loads the new theme so that you can see its effects.  Similarly, of you change the control text color, all the control text in Thematic immediately changes color.\par
+The design of the editor is that any theme changes should take effect immediately and be applied to the running application so that you can effectively preview them.  For instance, if you write code overriding the drawing of a button,  Thematic immediately builds that code, and loads the new theme so that you can see its effects.  Similarly, of you change the control text color, all the control text in Thematic immediately changes color.\par
+Unfortunately, due to current limitations in the GUI/backend, changes to whether windows are decorated natively or not do not take effect until the application using the them is restarted :-(\par
 \cf0 \uc0 \par
 Theming has to be built into the GNUstep GUI in order for a theme editor to be useful, and this will be an incremental process, with capabilities being added to the editor as they are added to the GUI library. \par
                 \par
@@ -38,8 +39,17 @@ Clicking on a control in the main theme window raises a tabbed inspector where t
 Clicking on a control in the main theme window raises a tabbed inspector where the \rquote Options\rquote  tab allows you to define any options used to control the behavior of the control.\par
 \par
 9. Implementing new methods to draw controls\par
-Clicking on a control in the main theme window raises a tabbed inspector where the \rquote Code\rquote   tab allows you to select the drawing methods used to draw that control and edit code to subclass those methods (or delete the subclassed version of a method).\par
+Clicking on a control in the main theme window raises a tabbed inspector where the \rquote Code\rquote   tab allows you to select the drawingpi methods used to draw that control and edit code to subclass those methods (or delete the subclassed version of a method).\par
 \par
 It is possible to combine all these mechanisms freely ... for instance by overriding the drawing method, calling the superclass implementation (which draws a background in a specified colour and tiles images to form a border) then draw extra decoration on top of that.\par
+\par
+Much of the  theme functionality is implemented by adjusting values in the user defaults system.  This is carefully done so that the defaults set by a theme will be overridden by any defaults set explicitly for an application.  It is thus possible to use a theme but tweak its exact behavior for a particular application.\par
+\par
+Using a theme is easy ... to make a theme available, the theme bundle itsself simply needs to be copied into either your system-wide Themes directory or your own personal one (usually GNUstep/Library/Themes in your home directory).  Thematic normally edits themes in your personal theme directory.\par
+\par
+If a theme is available then you can set it using the user defaults system to set the GSTheme key to have the theme\rquote s name as its value\par
+(eg. \rquote defaults write NSGlobalDomain GSTheme MyTheme\rquote ). \par
+However an easier way to set the theme for an individual application (if that application has a standard info panel) is to use the application menu to open the Info panel, then click on the name of the current theme to raise the theme selection panel.\par
+\par
 \par
 }

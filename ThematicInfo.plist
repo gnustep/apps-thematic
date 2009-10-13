@@ -9,7 +9,7 @@
     Copyright = "Copyright (C) 2006-2009";
     CopyrightDescription = "Released under ... the GPL3";
     FullVersionID = 0.2;
-    GSHelpContentsFile = ThematicHelp.rtfd;
+    GSHelpContentsFile = ThematicHelp.rtf;
     NSExecutable = Thematic;
     NSIcon = Thematic.png;
     NSMainNibFile = Thematic.gorm;
