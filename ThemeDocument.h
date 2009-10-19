@@ -216,6 +216,7 @@
  */
 - (void) setTiles: (NSString*)name
 	 withPath: (NSString*)path
+	fillStyle: (NSString*)fill
 	hDivision: (int)h
 	vDivision: (int)v;
 
@@ -228,6 +229,7 @@
  * named tiles.
  */
 - (NSImage*) tiles: (NSString*)name
+	 fillStyle: (NSString**)f
 	 hDivision: (int*)h
 	 vDivision: (int*)v;
 

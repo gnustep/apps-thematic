@@ -1503,6 +1503,7 @@ static NSColorList	*systemColorList = nil;
  */
 - (void) setTiles: (NSString*)name
 	 withPath: (NSString*)path
+	fillStyle: (NSString*)fill
 	hDivision: (int)h
 	vDivision: (int)v
 {
@@ -1547,6 +1548,7 @@ static NSColorList	*systemColorList = nil;
     }
   else
     {
+      NSString	*fSet = [d objectForKey: @"FillStyle"];
       NSString	*hDiv = [d objectForKey: @"HorizontalDivision"];
       NSString	*vDiv = [d objectForKey: @"VerticalDivision"];
 
@@ -1568,6 +1570,10 @@ static NSColorList	*systemColorList = nil;
 	    }
 	}
 
+      if (fill != nil)
+	{
+	  fSet = fill;
+	}
       if (h > 0)
         {
 	  hDiv = [NSString stringWithFormat: @"%d", h];
@@ -1576,11 +1582,18 @@ static NSColorList	*systemColorList = nil;
         {
 	  vDiv = [NSString stringWithFormat: @"%d", v];
 	}
+
+      if (fSet == nil) fSet = @"ScaleAll";
+      if (hDiv == nil) hDiv = @"";
+      if (vDiv == nil) vDiv = @"";
+
       d = [NSDictionary dictionaryWithObjectsAndKeys:
         fileName, @"FileName",
+        fSet, @"FillStyle",
 	hDiv, @"HorizontalDivision",
 	vDiv, @"VerticalDivision",
         nil];
+
       [allTiles setObject: d forKey: name];
     }
 
@@ -1606,6 +1619,7 @@ static NSColorList	*systemColorList = nil;
 }
 
 - (NSImage*) tiles: (NSString*)name
+	 fillStyle: (NSString**)f
 	 hDivision: (int*)h
 	 vDivision: (int*)v
 {
@@ -1622,6 +1636,10 @@ static NSColorList	*systemColorList = nil;
       path = [_rsrc stringByAppendingPathComponent: @"ThemeTiles"];
       path = [path stringByAppendingPathComponent: fileName];
       image = AUTORELEASE([[NSImage alloc] initWithContentsOfFile: path]);
+    }
+  if (f != 0)
+    {
+      *f = [td objectForKey: @"FillStyle"];
     }
   if (h != 0)
     {

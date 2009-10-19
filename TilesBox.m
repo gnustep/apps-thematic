@@ -53,25 +53,10 @@
     }
   else
     {
-      GSThemeFillStyle	s = 0;
-
-      switch ([owner style])
-        {
-	  case 5:
-	  case 0:	s = GSThemeFillStyleMatrix; break;
-	  case 6:
-	  case 1:	s = GSThemeFillStyleRepeat; break;
-	  case 7:
-	  case 2:	s = GSThemeFillStyleCenter; break;
-	  case 8:
-	  case 3:	s = GSThemeFillStyleScale; break;
-	  case 9:
-	  case 4:	s = GSThemeFillStyleNone; break;
-        }
       [[GSTheme theme] fillRect: [self bounds]
 		      withTiles: t
 		     background: b
-		      fillStyle: s];
+		      fillStyle: [owner style]];
     }
 }
 

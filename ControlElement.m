@@ -336,7 +336,10 @@
 
 - (int) style
 {
-  return [[tilesStyle selectedItem] tag];
+  int s = [[tilesStyle selectedItem] tag];
+
+  if (s < 0) s = (-1 - s);
+  return s;
 }
 
 - (void) takeCodeDelete: (id)sender
@@ -532,6 +535,7 @@
 {
   [owner setTiles: [self imageName]
 	 withPath: @""
+        fillStyle: nil
 	hDivision: 0
 	vDivision: 0];
   DESTROY(tileName);
@@ -577,6 +581,7 @@
 	  RELEASE(image);
 	  [owner setTiles: [self imageName]
 	  	 withPath: path
+		fillStyle: GSThemeStringFromFillStyle([self style])
 		hDivision: (h / 3)
 		vDivision: (v / 3)];
           DESTROY(tileName);
@@ -589,6 +594,7 @@
 - (void) takeTileName: (id)sender
 {
   NSImage	*image;
+  NSString	*f;
   NSString	*s;
   NSString	*t;
   int		h;
@@ -628,7 +634,10 @@
       return;	// Unchanged.
     }
   ASSIGN(tileName, s);
-  image = [owner tiles: [self imageName] hDivision: &h vDivision: &v];
+  image = [owner tiles: [self imageName]
+	     fillStyle: &f
+	     hDivision: &h
+	     vDivision: &v];
   if (image != nil)
     {
       NSSize	s = [image size];
@@ -645,6 +654,8 @@
       [tilesVertical setNumberOfTickMarks: mv];
       [tilesHorizontal setAllowsTickMarkValuesOnly: YES];
       [tilesVertical setAllowsTickMarkValuesOnly: YES];
+      if (f == nil) f = GSThemeStringFromFillStyle(GSThemeFillStyleNone);
+      [tilesStyle selectItemWithTag: GSThemeFillStyleFromString(f)];
     }
   [tiles setNeedsDisplay: YES];
 }
@@ -652,34 +663,32 @@
 
 - (void) takeTilePosition: (id)sender
 {
-  if (sender == tilesHorizontal)
-    {
-      [owner setTiles: [self imageName]
-	     withPath: nil
-	    hDivision: [sender intValue]
-	    vDivision: 0];
-      [tiles setNeedsDisplay: YES];
-    }
-  if (sender == tilesVertical)
-    {
-      [owner setTiles: [self imageName]
-	     withPath: nil
-	    hDivision: 0
-	    vDivision: [sender intValue]];
-      [tiles setNeedsDisplay: YES];
-    }
+  [owner setTiles: [self imageName]
+	 withPath: nil
+	fillStyle: GSThemeStringFromFillStyle([self style])
+	hDivision: [tilesHorizontal intValue]
+	vDivision: [tilesVertical intValue]];
+  [tiles setNeedsDisplay: YES];
 }
 
 
 - (void) takeTileStyle: (id)sender
 {
+  GSThemeFillStyle	s = (GSThemeFillStyle)[sender tag];
+
+  [owner setTiles: [self imageName]
+	 withPath: nil
+	fillStyle: GSThemeStringFromFillStyle(s)
+	hDivision: [tilesHorizontal intValue]
+	vDivision: [tilesVertical intValue]];
+
   /* Change tiles box to be flipped or non-flipped as necessary,
    * then get it to redraw in the new style.
    * NB. To use this code (debug purposes) you need to edit the TiledElement
    * GORM file so that the popup menu for selecting the display style has
-   * five extra buttons (with tags 5-9) for drawing in a flipped view.
+   * extra buttons (with negstive tags) for drawing in a flipped view.
    */
-  if ([sender tag] > 4)
+  if (s < 0)
     {
       if ([tiles isKindOfClass: [FlippedTilesBox class]] == NO)
         {
