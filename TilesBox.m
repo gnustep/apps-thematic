@@ -74,6 +74,10 @@
 
 - (void) mouseDown: (NSEvent*)anEvent
 {
+  if ([self superview] == [owner tilesPreview])
+    {
+      return;
+    }
   [owner takeTileImage: self];
 }
 
