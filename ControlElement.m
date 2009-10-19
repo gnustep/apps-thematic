@@ -339,6 +339,7 @@
   int s = [[tilesStyle selectedItem] tag];
 
   if (s < 0) s = (-1 - s);
+NSLog(@"style %d", s);
   return s;
 }
 
@@ -678,7 +679,7 @@
 
   [owner setTiles: [self imageName]
 	 withPath: nil
-	fillStyle: GSThemeStringFromFillStyle(s)
+	fillStyle: GSThemeStringFromFillStyle([self style])
 	hDivision: [tilesHorizontal intValue]
 	vDivision: [tilesVertical intValue]];
 
