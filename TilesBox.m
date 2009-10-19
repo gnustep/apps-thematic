@@ -54,10 +54,20 @@
   else
     {
       t = [t copy];
-      [[GSTheme theme] fillRect: [self bounds]
-		      withTiles: t
-		     background: b
-		      fillStyle: GSThemeFillStyleMatrix];
+      if ([self superview] == [owner tilesPreview])
+	{
+	  [[GSTheme theme] fillRect: [self bounds]
+			  withTiles: t
+			 background: b
+			  fillStyle: [owner style]];
+	}
+      else
+	{
+	  [[GSTheme theme] fillRect: [self bounds]
+			  withTiles: t
+			 background: b
+			  fillStyle: GSThemeFillStyleMatrix];
+	}
       [t release];
     }
 }

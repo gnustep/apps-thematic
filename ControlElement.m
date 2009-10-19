@@ -188,6 +188,14 @@
 	name: @"CodeEditDone"
 	object: [CodeEditor codeEditor]];
 
+      /* view for preview of images.
+       */
+      tiles = [[TilesBox alloc]
+	initWithFrame: [[tilesPreview contentView] frame]];
+      [tiles setOwner: self];
+      [tilesPreview setContentView: tiles]; 
+      RELEASE(tiles);
+
       /* Create view in which to draw image
        */
       NSAssert(tilesImages != nil, NSInternalInconsistencyException);
@@ -712,4 +720,8 @@
   [tiles setNeedsDisplay: YES];
 }
 
+- (NSView*) tilesPreview
+{
+  return (NSView*)tilesPreview;
+}
 @end

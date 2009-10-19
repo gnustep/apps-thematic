@@ -51,6 +51,7 @@
   id tilesState;
   id tilesStyle;
   id tilesVertical;
+  id tilesPreview;
 }
 - (NSString*) colorName;
 - (NSString*) elementName;
@@ -71,4 +72,5 @@
 - (void) takeTileName: (id)sender;
 - (void) takeTilePosition: (id)sender;
 - (void) takeTileStyle: (id)sender;
+- (NSView*) tilesPreview;
 @end

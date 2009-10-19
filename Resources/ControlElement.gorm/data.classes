@@ -30,7 +30,8 @@
 	    tilesStyle,
 	    tilesVertical,
 	    colorsState,
-	    tilesState
+	    tilesState,
+	    tilesPreview
 	);
 	Super = ThemeElement;
     };
