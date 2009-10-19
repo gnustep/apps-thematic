@@ -339,7 +339,7 @@
   int s = [[tilesStyle selectedItem] tag];
 
   if (s < 0) s = (-1 - s);
-NSLog(@"style %d", s);
+
   return s;
 }
 
