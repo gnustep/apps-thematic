@@ -53,10 +53,12 @@
     }
   else
     {
+      t = [t copy];
       [[GSTheme theme] fillRect: [self bounds]
 		      withTiles: t
 		     background: b
-		      fillStyle: [owner style]];
+		      fillStyle: GSThemeFillStyleMatrix];
+      [t release];
     }
 }
 
