@@ -126,10 +126,6 @@
 
 - (NSString*) name;
 
-/** Generates a new version number for the theme binary (and returns it).
- */
-- (NSString*) newVersion;
-
 - (void) notified: (NSNotification*)n;
 
 /**
@@ -232,6 +228,10 @@
 	 fillStyle: (NSString**)f
 	 hDivision: (int*)h
 	 vDivision: (int*)v;
+
+/** return current theme version.
+ */
+- (NSString*) versionIncrementMajor: (BOOL)major incrementMinor: (BOOL)minor;
 
 @end
 

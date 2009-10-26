@@ -32,7 +32,9 @@
   id	authors;
   id    details;
   id    themeName;
+  id    themeVersion;
 }
+- (void) newVersion: (id)sender;
 - (void) takeIcon: (id)sender;
 - (void) textDidEndEditing: (NSNotification*)aNotification;
 @end

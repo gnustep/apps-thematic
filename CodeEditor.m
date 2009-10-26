@@ -72,7 +72,9 @@ static CodeEditor *instance = nil;
     }
 
   fullName = [NSString stringWithFormat: @"%@_%@",
-    [[document name] stringByDeletingPathExtension], [document newVersion]];
+    [[document name] stringByDeletingPathExtension],
+    [[document versionIncrementMajor: NO incrementMinor: YES]
+      stringByReplacingString: @"." withString: @"_"]];
   
   codeInfo = [app codeInfo];
   /* The items in the generic dictionary are handled specially rather

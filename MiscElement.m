@@ -102,7 +102,17 @@
   [iconView setImage: [[GSTheme theme] icon]];
   [themeName setFont: [NSFont boldSystemFontOfSize: 32]];
   [themeName setStringValue: [[doc name] stringByDeletingPathExtension]];
+  str = [doc versionIncrementMajor: NO incrementMinor: NO];
+  [themeVersion setStringValue: str];
   [super selectAt: mouse];
+}
+
+- (void) newVersion: (id)sender
+{
+  ThemeDocument *doc = [[AppController sharedController] selectedDocument];
+  NSString	*ver = [doc versionIncrementMajor: YES incrementMinor: NO];
+
+  [themeVersion setStringValue: ver];
 }
 
 - (void) takeIcon: (id)sender
@@ -161,7 +171,7 @@
 {
   ThemeDocument *doc = [[AppController sharedController] selectedDocument];
   NSTextView	*sender = [aNotification object];
-  NSString	*s = [sender string];
+  NSString	*s = [[sender string] stringByTrimmingSpaces];
 
 // NSLog(@"End editing %@", aNotification);
   if (sender == details)

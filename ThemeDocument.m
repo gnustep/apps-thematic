@@ -836,16 +836,6 @@ static NSColorList	*systemColorList = nil;
   return _name;
 }
 
-- (NSString*) newVersion
-{
-  NSString	*version = [_info objectForKey: @"GSThemeVersion"];
-
-  version = [NSString stringWithFormat: @"%d", [version intValue] + 1];
-  [_info setObject: version forKey: @"GSThemeVersion"];
-
-  return version;
-}
-
 - (void) notified: (NSNotification*)n
 {
   NSString	*name = [n name];
@@ -1438,12 +1428,12 @@ static NSColorList	*systemColorList = nil;
       while ([untitledName member: trial] != nil);
       [untitledName addObject: trial];
       ASSIGN(_name, trial);
+     /* New document ... start with zero version number.
+      */
+     [_info setObject: @"0.0" forKey: @"GSThemeVersion"];
     }
   [window setTitle: [self name]];
   [_theme setName: [[self name] stringByDeletingPathExtension]];
-  /* New document ... start with no version number.
-   */
-  [_info removeObjectForKey: @"GSThemeVersion"];
 }
 
 - (void) setResource: (NSString*)path forKey: (NSString*)key
@@ -1651,4 +1641,52 @@ static NSColorList	*systemColorList = nil;
     }
   return image;
 }
+
+- (NSString*) versionIncrementMajor: (BOOL)major incrementMinor: (BOOL)minor
+{
+  NSString	*version;
+  NSRange	r;
+  int		maj;
+  int		min;
+
+  version = [_info objectForKey: @"GSThemeVersion"];
+  if ([version length] == 0) version = @"0.0";
+  maj = [version intValue];
+  if (maj < 0) maj = 0;
+  r = [version rangeOfString: @"."];
+  if (r.length > 0) version = [version substringFromIndex: NSMaxRange(r)];
+  else version = @"0";
+  min = [version intValue];
+  if (min < 0) min = 0;
+
+  if (major == YES)
+    {
+      maj++;
+      min = 0;
+    }
+  else if (minor == YES)
+    {
+      min++;
+    }
+
+  version = [NSString stringWithFormat: @"%d.%d", maj, min]; 
+  [_info setObject: version forKey: @"GSThemeVersion"];
+  if (maj || min)
+    {
+      if ([_info writeToFile: [_rsrc stringByAppendingPathComponent:
+	@"Info-gnustep.plist"] atomically: NO] == NO)
+	{
+	  NSRunAlertPanel(_(@"Problem changing setting"),
+	    _(@"Could not save Info-gnustep.plist into theme"),
+	    nil, nil, nil);
+	}
+      else
+	{
+	  [window setDocumentEdited: YES];
+	}
+    }
+
+  return version;
+}
+
 @end
