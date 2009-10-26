@@ -82,6 +82,7 @@
   NSDictionary	*info = [doc infoDictionary];
   NSArray	*arr;
   NSString	*str;
+  int		fsize = 32;
 
   [nc addObserver: self
 	 selector: @selector(didEndEditing:)
@@ -100,7 +101,13 @@
       [details setString: str];
     }
   [iconView setImage: [[GSTheme theme] icon]];
-  [themeName setFont: [NSFont boldSystemFontOfSize: 32]];
+  do
+    {
+      [themeName setFont: [NSFont boldSystemFontOfSize: fsize]];
+      fsize -= 2;
+      [themeName sizeToFit];
+    }
+  while ([themeName frame].size.width > 200 && fsize > 8);
   [themeName setStringValue: [[doc name] stringByDeletingPathExtension]];
   str = [doc versionIncrementMajor: NO incrementMinor: NO];
   [themeVersion setStringValue: str];
