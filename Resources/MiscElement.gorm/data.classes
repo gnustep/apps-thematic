@@ -2,6 +2,7 @@
     "## Comment" = "Do NOT change this file, Gorm maintains it";
     FirstResponder = {
 	Actions = (
+	    "takePreview:",
 	    "newVersion:",
 	    "takeAuthor:",
 	    "takeDetails:",
@@ -12,7 +13,8 @@
     MiscElement = {
 	Actions = (
 	    "takeIcon:",
-	    "newVersion:"
+	    "newVersion:",
+	    "takePreview:"
 	);
 	Outlets = (
 	    iconView,

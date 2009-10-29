@@ -36,6 +36,7 @@
 }
 - (void) newVersion: (id)sender;
 - (void) takeIcon: (id)sender;
+- (void) takePreview: (id)sender;
 - (void) textDidEndEditing: (NSNotification*)aNotification;
 @end
 
