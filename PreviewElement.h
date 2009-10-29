@@ -1,4 +1,4 @@
-/* MiscElement.h
+/* PreviewElement.h
  *
  * Copyright (C) 2006 Free Software Foundation, Inc.
  *
@@ -26,16 +26,12 @@
 #import <Foundation/NSObject.h>
 #import "ThemeElement.h"
 
-@interface MiscElement : ThemeElement
+@interface PreviewElement : ThemeElement
 {
-  id	iconView;
-  id	authors;
-  id    details;
-  id    themeName;
-  id    themeVersion;
+  id	previewView;
+  id	previewImage;
 }
-- (void) newVersion: (id)sender;
-- (void) takeIcon: (id)sender;
-- (void) textDidEndEditing: (NSNotification*)aNotification;
+- (void) setPreview: (id)sender;
+- (void) takePreview: (id)sender;
 @end
 

@@ -34,6 +34,7 @@
 @class	ImageElement;
 @class	MenusElement;
 @class	MiscElement;
+@class	PreviewElement;
 @class	WindowsElement;
 
 @interface	GSTheme (TestTheme)
@@ -415,6 +416,10 @@ static NSColorList	*systemColorList = nil;
         {
 	  e = [[MiscElement alloc] initWithView: aView owner: self];
 	}
+      else if (aView == previewView)
+        {
+	  e = [[PreviewElement alloc] initWithView: aView owner: self];
+	}
       else if (aView == windowsView)
         {
 	  e = [[WindowsElement alloc] initWithView: aView owner: self];
@@ -787,6 +792,7 @@ static NSColorList	*systemColorList = nil;
   [menusView setToolTip: _(@"menu settings")];
   [windowsView setToolTip: _(@"window settings")];
   [extraView setToolTip: _(@"general information")];
+  [previewView setToolTip: _(@"preview image")];
 
   [window orderFront: self];
 

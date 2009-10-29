@@ -33,6 +33,7 @@ Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
 Resources/ControlElement.gorm \
 Resources/CodeEditor.gorm \
+Resources/PreviewElement.gorm \
 Resources/Thematic.png \
 Resources/ThematicHelp.rtf \
 Resources/CodeInfo.plist \
@@ -57,7 +58,8 @@ WindowsElement.h \
 MiscElement.h \
 ControlElement.h \
 TilesBox.h \
-CodeEditor.h
+CodeEditor.h \
+PreviewElement.h
 
 #
 # Class files
@@ -73,7 +75,8 @@ MiscElement.m \
 ControlElement.m \
 ColorElement.m \
 TilesBox.m \
-CodeEditor.m
+CodeEditor.m \
+PreviewElement.m
 
 #
 # Other sources

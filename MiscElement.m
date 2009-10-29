@@ -174,57 +174,6 @@
     }
 }
 
-- (void) takePreview: (id)sender
-{
-  ThemeDocument *doc = [[AppController sharedController] selectedDocument];
-  NSArray	*fileTypes = [NSImage imageFileTypes];
-  NSOpenPanel	*oPanel = [NSOpenPanel openPanel];
-  int		result;
-
-  [oPanel setAllowsMultipleSelection: NO];
-  [oPanel setCanChooseFiles: YES];
-  [oPanel setCanChooseDirectories: NO];
-  result = [oPanel runModalForDirectory: NSHomeDirectory()
-				   file: nil
-				  types: fileTypes];
-  if (result == NSOKButton)
-    {
-      NSString	*path = [oPanel filename];
-      NSImage	*image = nil;
-
-      NS_DURING
-	{
-	  image = [[NSImage alloc] initWithContentsOfFile: path];
-	}
-      NS_HANDLER
-	{
-	  NSString *message = [localException reason];
-	  NSRunAlertPanel(_(@"Problem loading theme preview image"), 
-	    message, nil, nil, nil);
-	}
-      NS_ENDHANDLER
-      if (image != nil)
-        {
-	  NSSize	s = [image size];
-	  float		scale = 1.0;
-
-	  if (s.height > 128.0)
-	    scale = 128.0 / s.height;
-	  if (128.0 / s.width < scale)
-	    scale = 128.0 / s.width;
-	  if (scale != 1.0)
-	    {
-	      [image setScalesWhenResized: YES];
-	      s.height *= scale;
-	      s.width *= scale;
-	      [image setSize: s];
-	    }
-	  [doc setResource: path forKey: @"GSThemePreview"];
-	  RELEASE(image);
-	}
-    }
-}
-
 - (void) textDidEndEditing: (NSNotification*)aNotification
 {
   ThemeDocument *doc = [[AppController sharedController] selectedDocument];

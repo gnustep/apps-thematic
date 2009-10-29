@@ -74,6 +74,7 @@
   id			menusView;	// Not retained
   id			windowsView;	// Not retained
   id			extraView;	// Not retained
+  id			previewView;	// Not retained
   id			_inspector;	// Not retained
   ThemeElement		*_selected;	// Not retained
   NSPoint		_selectionPoint;
