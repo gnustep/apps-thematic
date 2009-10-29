@@ -1,0 +1,30 @@
+{
+    "## Comment" = "Do NOT change this file, Gorm maintains it";
+    FirstResponder = {
+	Actions = (
+	    "setPreview:",
+	    "takeMenuStyleFrom:",
+	    "takePreview:"
+	);
+	Super = NSObject;
+    };
+    PreviewElement = {
+	Actions = (
+	    "setPreview:",
+	    "takePreview:"
+	);
+	Outlets = (
+	    previewView,
+	    previewImage
+	);
+	Super = ThemeElement;
+    };
+    ThemeElement = {
+	Actions = (
+	);
+	Outlets = (
+	    window
+	);
+	Super = NSObject;
+    };
+}
