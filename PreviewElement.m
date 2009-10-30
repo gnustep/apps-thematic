@@ -37,9 +37,16 @@
   NSString	*path;
   NSImage	*image;
 
+  image = nil;
   path = [[[GSTheme theme] infoDictionary] objectForKey: @"GSThemePreview"];
-  path = [[[GSTheme theme] bundle] pathForResource: path ofType: nil]; 
-  image = [[NSImage alloc] initWithContentsOfFile: path];
+  if (nil != path)
+    {
+      path = [[[GSTheme theme] bundle] pathForResource: path ofType: nil]; 
+      if (nil != path)
+	{
+	  image = [[NSImage alloc] initWithContentsOfFile: path];
+	}
+    }
   return [image autorelease];
 }
 
