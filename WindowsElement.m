@@ -36,13 +36,13 @@
 
   doc = [[AppController sharedController] selectedDocument];
   val = [doc defaultForKey: @"GSBackHandlesWindowDecorations"];
-  if ([val boolValue] == NO)
+  if (val != nil && [val boolValue] == NO)
     {
-      [popup selectItemAtIndex: [popup indexOfItemWithTag: 0]];
+      [popup selectItemAtIndex: [popup indexOfItemWithTag: 1]];
     }
   else
     {
-      [popup selectItemAtIndex: [popup indexOfItemWithTag: 1]];
+      [popup selectItemAtIndex: [popup indexOfItemWithTag: 0]];
     }
   [super selectAt: mouse];
 }
@@ -54,12 +54,12 @@
 
   switch (style)
     {
-      case 0:
-        [doc setDefault: @"NO"
+      case 0:	/* Natively */
+        [doc setDefault: @"YES"
 		 forKey: @"GSBackHandlesWindowDecorations"];
 	break;
-      default:
-        [doc setDefault: @"YES"
+      default:	/* By theme */
+        [doc setDefault: @"NO"
 		 forKey: @"GSBackHandlesWindowDecorations"];
 	break;
     }
