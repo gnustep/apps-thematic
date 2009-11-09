@@ -53,6 +53,7 @@
 - (void) selectAt: (NSPoint)mouse
 {
   [previewImage setImage: [self image]];
+  [previewImage setNeedsDisplay];
   [super selectAt: mouse];
 }
 

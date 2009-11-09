@@ -86,6 +86,16 @@
 	   = NSNextStepInterfaceStyle;
 	};
       };
+      "Buttons offset" = {
+        Name = GSScrollerButtonsOffset;
+        Description = "This controls the offset between the scroller slot border and the buttons within the slot.";
+	DefaultOption = 1.0;
+	Options = {
+	  "No offset between buttons and border" = 0.0;
+	  "Single pixel offset between buttons and border" = 1.0;
+	  "Double pixel offset between buttons and border" = 2.0;
+	};
+      };
     };
     Fragments = {
       "cellForScrollerArrow:horizontal:" =
