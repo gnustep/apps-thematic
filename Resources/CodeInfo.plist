@@ -63,6 +63,23 @@
       };
     };
   };
+  NSMenuItem = {
+    ColorElements = {
+      NSMenuItem = {
+	States = (Normal, Highlighted, Selected);
+      };
+    };
+    Defaults = {
+    };
+    Fragments = {
+      "drawBorderAndBackgroundForMenuItemCell:withFrame:inView:state:isHorizontal:" = "Draws a border and background (not its content) for the specified cell and view.  The flag says whether the menu is horizontal or not.";
+    };
+    TileElements = {
+      NSMenuItem = {
+	States = (Normal, Highlighted, Selected);
+      };
+    };
+  };
   NSScroller = {
     ColorElements = {
       GSScrollerLeftArrow = {};

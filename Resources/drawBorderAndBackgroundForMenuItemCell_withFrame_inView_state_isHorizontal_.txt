@@ -1,0 +1,12 @@
+- (void) drawBorderAndBackgroundForMenuItemCell: (NSMenuItemCell *)cell
+                                      withFrame: (NSRect)cellFrame
+                                         inView: (NSView *)controlView
+                                          state: (GSThemeControlState)state
+                                   isHorizontal: (BOOL)isHorizontal
+{
+  [self drawBorderAndBackgroundForMenuItemCell: cell
+                                     withFrame: cellFrame
+                                        inView: controlView
+                                         state: state
+                                  isHorizontal: isHorizontal];
+}

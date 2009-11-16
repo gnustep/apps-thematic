@@ -14,7 +14,8 @@
 	    windowsView,
 	    extraView,
 	    _inspector,
-	    previewView
+	    previewView,
+	    menuItemView
 	);
 	Super = NSObject;
     };

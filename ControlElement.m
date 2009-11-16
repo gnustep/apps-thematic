@@ -57,6 +57,11 @@
     }
 }
 
+- (NSString*) className
+{
+  return NSStringFromClass([view class]);
+}
+
 - (NSString*) colorName
 {
   NSString	*s = [[colorsMenu selectedItem] title];
@@ -131,7 +136,7 @@
 
       sharedController = [AppController sharedController];
       codeInfo = [sharedController codeInfo];
-      className = [NSStringFromClass([aView class]) retain];
+      className = [[self className] retain];
 
       /* Get information about code/makefile fragments.
        */

@@ -54,6 +54,7 @@
   id tilesPreview;
 }
 - (NSString*) colorName;
+- (NSString*) className;	// The name of the control class
 - (NSString*) elementName;
 - (GSThemeControlState) elementState;
 - (NSString*) imageName;

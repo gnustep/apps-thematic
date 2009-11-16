@@ -41,7 +41,8 @@ Resources/drawButton_in_view_style_state_.txt \
 Resources/CommonMethods.txt \
 Resources/IncludeHeaders.txt \
 Resources/MakeAdditions.txt \
-Resources/VariableDeclarations.txt 
+Resources/VariableDeclarations.txt \
+Resources/drawBorderAndBackgroundForMenuItemCell_withFrame_inView_state_isHorizontal_.txt 
 
 
 #
@@ -58,8 +59,7 @@ WindowsElement.h \
 MiscElement.h \
 ControlElement.h \
 TilesBox.h \
-CodeEditor.h \
-PreviewElement.h
+CodeEditor.h
 
 #
 # Class files
@@ -75,8 +75,7 @@ MiscElement.m \
 ControlElement.m \
 ColorElement.m \
 TilesBox.m \
-CodeEditor.m \
-PreviewElement.m
+CodeEditor.m
 
 #
 # Other sources

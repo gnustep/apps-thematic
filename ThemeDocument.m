@@ -32,6 +32,7 @@
 
 @class	ColorElement;
 @class	ImageElement;
+@class	MenuItemElement;
 @class	MenusElement;
 @class	MiscElement;
 @class	PreviewElement;
@@ -424,9 +425,13 @@ static NSColorList	*systemColorList = nil;
         {
 	  e = [[WindowsElement alloc] initWithView: aView owner: self];
 	}
+      else if (aView == menuItemView)
+        {
+	  e = [[MenuItemElement alloc] initWithView: aView owner: self];
+	}
       else
         {
-	  NSLog(@"Not known image ... this should never happen");
+	  NSLog(@"Unknown image view found");
 	}
     }
   else
