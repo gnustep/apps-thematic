@@ -28,8 +28,10 @@
 
 @interface MenusElement : ThemeElement
 {
+  id	arrowButton;
   id    popup;
 }
+- (void) takeArrowImageFrom: (id)sender;
 - (void) takeMenuStyleFrom: (id)sender;
 @end
 

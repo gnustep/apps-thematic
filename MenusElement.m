@@ -49,7 +49,46 @@
     {
       [popup selectItemAtIndex: [popup indexOfItemWithTag: 0]];
     }
+  [arrowButton setImage: [NSImage imageNamed: @"NSMenuArrow"]];
   [super selectAt: mouse];
+}
+
+- (void) takeArrowImageFrom: (id)sender
+{
+  NSArray	*fileTypes = [NSImage imageFileTypes];
+  NSOpenPanel	*oPanel = [NSOpenPanel openPanel];
+  int		result;
+
+  [oPanel setAllowsMultipleSelection: NO];
+  [oPanel setCanChooseFiles: YES];
+  [oPanel setCanChooseDirectories: NO];
+  result = [oPanel runModalForDirectory: nil
+				   file: nil
+				  types: fileTypes];
+  if (result == NSOKButton)
+    {
+      NSString	*path = [oPanel filename];
+      NSImage	*image = nil;
+
+      NS_DURING
+	{
+	  image = [[NSImage alloc] initWithContentsOfFile: path];
+	}
+      NS_HANDLER
+	{
+	  NSString *message = [localException reason];
+	  NSRunAlertPanel(_(@"Problem loading image"), 
+			  message,
+			  nil, nil, nil);
+	}
+      NS_ENDHANDLER
+      if (image != nil)
+        {
+          [[[AppController sharedController] selectedDocument] setImage: path
+	    forKey: @"NSMenuArrow"];
+	  RELEASE(image);
+	}
+    }
 }
 
 - (void) takeMenuStyleFrom: (id)sender

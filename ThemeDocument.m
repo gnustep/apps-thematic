@@ -1280,7 +1280,6 @@ static NSColorList	*systemColorList = nil;
   NSArray	*fileTypes;
   unsigned	count;
   NSString	*file;
-  NSString	*name;
   NSString	*ext;
 
   if (path != nil && [mgr isReadableFileAtPath: path] == NO)
@@ -1291,9 +1290,8 @@ static NSColorList	*systemColorList = nil;
       return;
     }
 
-  name = [@"common_" stringByAppendingString: key];
   file = [_rsrc stringByAppendingPathComponent: @"ThemeImages"];
-  file = [file stringByAppendingPathComponent: name];
+  file = [file stringByAppendingPathComponent: key];
 
   /*
    * Remove any old image of the same name.

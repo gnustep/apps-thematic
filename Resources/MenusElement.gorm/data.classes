@@ -2,16 +2,19 @@
     "## Comment" = "Do NOT change this file, Gorm maintains it";
     FirstResponder = {
 	Actions = (
+	    "takeArrowImageFrom:",
 	    "takeMenuStyleFrom:"
 	);
 	Super = NSObject;
     };
     MenusElement = {
 	Actions = (
-	    "takeMenuStyleFrom:"
+	    "takeMenuStyleFrom:",
+	    "takeArrowImageFrom:"
 	);
 	Outlets = (
-	    popup
+	    popup,
+	    arrowButton
 	);
 	Super = ThemeElement;
     };
