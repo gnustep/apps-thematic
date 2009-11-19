@@ -1605,9 +1605,7 @@ static NSColorList	*systemColorList = nil;
     }
   [window setDocumentEdited: YES];
   // Refresh cache for this tile array
-  [_theme tilesNamed: name state: GSThemeNormalState cache: NO];
-  [_theme tilesNamed: name state: GSThemeHighlightedState cache: NO];
-  [_theme tilesNamed: name state: GSThemeSelectedState cache: NO];
+  [_theme tilesFlush: name state: -1];
   [self activate];			// Preview
   [arp release];
 }

@@ -33,7 +33,6 @@ Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
 Resources/ControlElement.gorm \
 Resources/CodeEditor.gorm \
-Resources/PreviewElement.gorm \
 Resources/Thematic.png \
 Resources/ThematicHelp.rtf \
 Resources/CodeInfo.plist \
@@ -41,8 +40,7 @@ Resources/drawButton_in_view_style_state_.txt \
 Resources/CommonMethods.txt \
 Resources/IncludeHeaders.txt \
 Resources/MakeAdditions.txt \
-Resources/VariableDeclarations.txt \
-Resources/drawBorderAndBackgroundForMenuItemCell_withFrame_inView_state_isHorizontal_.txt 
+Resources/VariableDeclarations.txt 
 
 
 #
@@ -59,7 +57,9 @@ WindowsElement.h \
 MiscElement.h \
 ControlElement.h \
 TilesBox.h \
-CodeEditor.h
+CodeEditor.h \
+PreviewElement.h \
+MenuItemElement.h
 
 #
 # Class files
@@ -75,7 +75,9 @@ MiscElement.m \
 ControlElement.m \
 ColorElement.m \
 TilesBox.m \
-CodeEditor.m
+CodeEditor.m \
+PreviewElement.m \
+MenuItemElement.m
 
 #
 # Other sources

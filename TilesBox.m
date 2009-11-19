@@ -44,8 +44,7 @@
   else
     {
       t = [[GSTheme theme] tilesNamed: [owner elementName]
-			        state: [owner elementState]
-			        cache: YES];
+			        state: [owner elementState]];
     }
   if (t == nil)
     {
