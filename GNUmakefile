@@ -57,7 +57,9 @@ WindowsElement.h \
 MiscElement.h \
 ControlElement.h \
 TilesBox.h \
-CodeEditor.h
+CodeEditor.h \
+MenuItemElement.h \
+PreviewElement.h
 
 #
 # Class files
@@ -73,7 +75,9 @@ MiscElement.m \
 ControlElement.m \
 ColorElement.m \
 TilesBox.m \
-CodeEditor.m
+CodeEditor.m \
+MenuItemElement.m \
+PreviewElement.m
 
 #
 # Other sources
