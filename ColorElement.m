@@ -29,6 +29,16 @@
 #import	"ColorElement.h"
 
 @implementation ColorElement
+- (void) selectAt: (NSPoint)mouse
+{
+  ThemeDocument	*doc;
+  doc = [[AppController sharedController] selectedDocument];
+
+  [colorWell setColor: [doc colorForKey: @"alternateRowBackgroundColor"]];
+
+  [super selectAt: mouse];
+}
+
 - (void) takeColorFrom: (id)sender
 {
   NSColor	*color = [(NSColorWell*)sender color];

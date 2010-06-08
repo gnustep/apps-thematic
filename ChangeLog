@@ -1,12 +1,17 @@
 2010-06-08 German Arias <german@xelalug.org>
-	
+
+	* ColorElement.m:
+	Changes to set the theme color at begining.
+
+2010-06-08 German Arias <german@xelalug.org>
+
 	* MenusElement.m
 	* Resources/MenusElement.gorm/objects.gorm
 	Changes to set Black and White when extra colors GSMenuBar
 	and GSMenuBarTitle are not specified.
 
 2010-06-08 German Arias <german@xelalug.org>
-	
+
 	* MenusElement.h
 	* MenusElement.m
 	* Resources/MenusElement.gorm/data.info
