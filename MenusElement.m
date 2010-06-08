@@ -50,8 +50,17 @@
       [popup selectItemAtIndex: [popup indexOfItemWithTag: 0]];
     }
   [arrowButton setImage: [NSImage imageNamed: @"NSMenuArrow"]];
-  [barColorWell setColor: [doc extraColorForKey: @"GSMenuBar"]];
-  [barTitleColorWell setColor: [doc extraColorForKey: @"GSMenuBarTitle"]];
+
+  if ([doc extraColorForKey: @"GSMenuBar"] != nil)
+    {
+      [barColorWell setColor: [doc extraColorForKey: @"GSMenuBar"]];
+    }
+
+  if ([doc extraColorForKey: @"GSMenuBarTitle"] != nil)
+    {
+      [barTitleColorWell setColor: [doc extraColorForKey: @"GSMenuBarTitle"]];
+    }
+
   [super selectAt: mouse];
 }
 
