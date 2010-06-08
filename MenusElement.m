@@ -50,6 +50,8 @@
       [popup selectItemAtIndex: [popup indexOfItemWithTag: 0]];
     }
   [arrowButton setImage: [NSImage imageNamed: @"NSMenuArrow"]];
+  [barColorWell setColor: [doc extraColorForKey: @"GSMenuBar"]];
+  [barTitleColorWell setColor: [doc extraColorForKey: @"GSMenuBarTitle"]];
   [super selectAt: mouse];
 }
 
@@ -112,6 +114,28 @@
         [doc setDefault: @"NSNextStepInterfaceStyle"
 		 forKey: @"NSMenuInterfaceStyle"];
 	break;
+    }
+}
+
+- (void) takeBarColorFrom: (id)sender
+{
+  NSColor	*color = [(NSColorWell*)sender color];
+
+  if (color != nil)
+    {
+      ThemeDocument	*doc = [[AppController sharedController] selectedDocument];
+      [doc setExtraColor: color forKey: @"GSMenuBar"];
+    }
+}
+
+- (void) takeBarTitleColorFrom: (id)sender
+{
+  NSColor	*color = [(NSColorWell*)sender color];
+
+  if (color != nil)
+    {
+      ThemeDocument	*doc = [[AppController sharedController] selectedDocument];
+      [doc setExtraColor: color forKey: @"GSMenuBarTitle"];
     }
 }
 

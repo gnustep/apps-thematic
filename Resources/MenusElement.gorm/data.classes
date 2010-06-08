@@ -2,7 +2,9 @@
     "## Comment" = "Do NOT change this file, Gorm maintains it";
     FirstResponder = {
 	Actions = (
+	    "takeBarTitleColorFrom:",
 	    "takeArrowImageFrom:",
+	    "takeBarColorFrom:",
 	    "takeMenuStyleFrom:"
 	);
 	Super = NSObject;
@@ -10,11 +12,15 @@
     MenusElement = {
 	Actions = (
 	    "takeMenuStyleFrom:",
-	    "takeArrowImageFrom:"
+	    "takeArrowImageFrom:",
+	    "takeBarTitleColorFrom:",
+	    "takeBarColorFrom:"
 	);
 	Outlets = (
 	    popup,
-	    arrowButton
+	    arrowButton,
+	    barColorWell,
+	    barTitleColorWell
 	);
 	Super = ThemeElement;
     };

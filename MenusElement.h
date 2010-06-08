@@ -30,8 +30,12 @@
 {
   id	arrowButton;
   id    popup;
+  id    barColorWell;
+  id    barTitleColorWell;
 }
 - (void) takeArrowImageFrom: (id)sender;
 - (void) takeMenuStyleFrom: (id)sender;
+- (void) takeBarColorFrom: (id)sender;
+- (void) takeBarTitleColorFrom: (id)sender;
 @end
 
