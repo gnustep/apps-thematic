@@ -1,6 +1,6 @@
 /* CodeEditor.h
  *
- * Copyright (C) 2008 Free Software Foundation, Inc.
+ * Copyright (C) 2008-2010 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
  * Date:	2008
@@ -21,8 +21,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02111 USA.
  */
+
 #import <AppKit/AppKit.h>
-#import <GNUstepBase/NSTask+GS.h>
 #import "AppController.h"
 #import "ThemeDocument.h"
 #import "CodeEditor.h"

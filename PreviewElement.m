@@ -1,6 +1,6 @@
 /* PreviewElement.m
  *
- * Copyright (C) 2006 Free Software Foundation, Inc.
+ * Copyright (C) 2006-2010 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
  * Date:	2006
@@ -66,7 +66,7 @@
     {
       NSSize	s = [image size];
       float	scale = 1.0;
-      NSString	*path;
+      NSString	*path = nil;
 
       if (s.height > 128.0)
 	scale = 128.0 / s.height;
