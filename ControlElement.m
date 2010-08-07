@@ -97,6 +97,10 @@
     {
       n = [n substringToIndex: [n length] - 8];
     }
+  else if ([n hasSuffix: @"Disabled"])
+    {
+      n = [n substringToIndex: [n length] - 8];
+    }
   return n;
 }
 
@@ -111,6 +115,10 @@
   else if ([n hasSuffix: @"Selected"])
     {
       return GSThemeSelectedState;
+    }
+  else if ([n hasSuffix: @"Disabled"])
+    {
+      return GSThemeDisabledState;
     }
   return GSThemeNormalState;
 }

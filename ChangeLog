@@ -1,3 +1,9 @@
+2010-08-06 German Arias <german@xelalug.org>
+
+	* ControlElement.m:
+	* Resources/CodeInfo.plist:
+	Added Disabled state to buttons.
+
 2010-06-18 Riccardo Mottola
 
 	* PreviewElement.m

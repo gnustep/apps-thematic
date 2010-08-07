@@ -50,7 +50,7 @@
   NSButton = {
     ColorElements = {
       NSButton = {
-	States = (Normal, Highlighted, Selected);
+	States = (Normal, Highlighted, Selected, Disabled);
       };
     };
     Fragments = {
@@ -59,7 +59,7 @@
     };
     TileElements = {
       NSButton = {
-	States = (Normal, Highlighted, Selected);
+	States = (Normal, Highlighted, Selected, Disabled);
       };
     };
   };
