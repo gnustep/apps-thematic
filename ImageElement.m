@@ -1,8 +1,9 @@
 /* ImageElement.m
  *
- * Copyright (C) 2006 Free Software Foundation, Inc.
+ * Copyright (C) 2006-2010 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
+ *              Riccardo Mottola
  * Date:	2006
  * 
  * This file is part of GNUstep.
@@ -453,7 +454,13 @@ I(@"common_outlineExpanded", @"Outline view marker for expanded outline");
 I(@"common_outlineUnexpandable", @"Outline view marker for unexpandable outline");
 I(@"common_ret", @"Return/Enter key");
 I(@"common_retH", @"Highlighted Return/Enter key");
+I(@"common_Root_PC", @"Image of the Root computer - PC");
 I(@"common_Folder", @"Folder");
+I(@"common_DocsFolder", @"Documents Folder");
+I(@"common_ImageFolder", @"Images Folder");
+I(@"common_DownloadFolder", @"Downloads Folder");
+I(@"common_GSFolder", @"System Folder");
+I(@"common_LibraryFolder", @"Library Folder");
 I(@"common_HomeDirectory", @"Home Directory Folder");
 I(@"common_UnknownApplication", @"Unknown Application");
 I(@"common_UnknownTool", @"Unknown Tool");
@@ -461,7 +468,6 @@ I(@"common_RadioOn", @"Selected Radio Button");
 I(@"common_RadioOff", @"Unselected Radio Button");
 I(@"common_SwitchOn", @"Selected Switch Button");
 I(@"common_SwitchOff", @"Unselected Switch Button");
-I(@"common_Root_PC", @"Image of the Root computer - PC");
     }
   return self;
 }
