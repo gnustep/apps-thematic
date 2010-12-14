@@ -455,12 +455,14 @@ I(@"common_outlineUnexpandable", @"Outline view marker for unexpandable outline"
 I(@"common_ret", @"Return/Enter key");
 I(@"common_retH", @"Highlighted Return/Enter key");
 I(@"common_Root_PC", @"Image of the Root computer - PC");
+I(@"common_Desktop", @"Desktop Folder");
 I(@"common_Folder", @"Folder");
 I(@"common_DocsFolder", @"Documents Folder");
 I(@"common_ImageFolder", @"Images Folder");
 I(@"common_DownloadFolder", @"Downloads Folder");
 I(@"common_GSFolder", @"System Folder");
 I(@"common_LibraryFolder", @"Library Folder");
+I(@"common_MusicFolder", @"Music Folder");
 I(@"common_HomeDirectory", @"Home Directory Folder");
 I(@"common_UnknownApplication", @"Unknown Application");
 I(@"common_UnknownTool", @"Unknown Tool");
