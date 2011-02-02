@@ -75,7 +75,7 @@
 
 - (NSString*) name
 {
-  return [name substringFromIndex: 7];
+  return name;
 }
 
 - (NSString*) path
@@ -281,7 +281,6 @@
 
       [but setImage: [img image]];
       [but setTitle: @""];
-      //[but setTitle: [img name]];
       [but setShowsStateBy: NSChangeGrayCellMask];
       [but setHighlightsBy: NSChangeGrayCellMask];
     }
