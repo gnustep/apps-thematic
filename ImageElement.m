@@ -305,7 +305,7 @@
  */
 - (NSRect) rectForObject: (id)anObject
 {
-  unsigned	pos = [objects indexOfObjectIdenticalTo: anObject];
+  NSInteger	pos = [objects indexOfObjectIdenticalTo: anObject];
   NSRect	rect;
   int		r;
   int		c;
@@ -325,7 +325,7 @@
 
 - (void) removeObject: (id)anObject
 {
-  unsigned	pos;
+  NSInteger	pos;
 
   pos = [objects indexOfObjectIdenticalTo: anObject];
   if (pos == NSNotFound)

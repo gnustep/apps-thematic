@@ -26,17 +26,16 @@
 #import <AppKit/AppKit.h>
 #import <GNUstepGUI/GSTheme.h>
 #import	<AppController.h>
-#import	<ThemeDocument.h>
-#import	<ThemeElement.h>
-#import	<ControlElement.h>
-
-@class	ColorElement;
-@class	ImageElement;
-@class	MenuItemElement;
-@class	MenusElement;
-@class	MiscElement;
-@class	PreviewElement;
-@class	WindowsElement;
+#import	"ThemeDocument.h"
+#import	"ThemeElement.h"
+#import	"ControlElement.h"
+#import	"ColorElement.h"
+#import	"ImageElement.h"
+#import	"MenuItemElement.h"
+#import	"MenusElement.h"
+#import	"MiscElement.h"
+#import	"PreviewElement.h"
+#import	"WindowsElement.h"
 
 @interface	GSTheme (TestTheme)
 @end

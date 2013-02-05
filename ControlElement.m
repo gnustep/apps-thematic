@@ -696,7 +696,7 @@
 
 - (void) takeTileStyle: (id)sender
 {
-  GSThemeFillStyle	s = (GSThemeFillStyle)[sender tag];
+  NSInteger	s = [sender tag];
 
   [owner setTiles: [self imageName]
 	 withPath: nil
