@@ -1,3 +1,8 @@
+2013-03-08 Riccardo Mottola <rm@gnu.org>
+
+	* ImageElement.m:
+	Allow theming of unknown files.
+
 2010-12-14 Riccardo Mottola
 
 	* ImageElement.m:
@@ -19,6 +24,7 @@
 	* PreviewElement.m
 	* CodeEditor.m
 	Warning fixes
+
 2010-06-08 German Arias <german@xelalug.org>
 
 	* ColorElement.m:
