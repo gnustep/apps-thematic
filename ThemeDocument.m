@@ -348,6 +348,7 @@ static NSColorList	*systemColorList = nil;
 {
   [[NSNotificationCenter defaultCenter] removeObserver: self];
   [self close];
+  [window setDelegate: nil];
   RELEASE(_modified);
   RELEASE(_elements);
   RELEASE(_colors);
@@ -798,7 +799,7 @@ static NSColorList	*systemColorList = nil;
   [extraView setToolTip: _(@"general information")];
   [previewView setToolTip: _(@"preview image")];
 
-  [window orderFront: self];
+  [window makeKeyAndOrderFront: self];
 
   /* Here we can perform any extra setup needed for the different views
    */
