@@ -13,7 +13,7 @@
 	    menusView,
 	    windowsView,
 	    extraView,
-	    _inspector,
+	    "_inspector",
 	    previewView,
 	    menuItemView
 	);

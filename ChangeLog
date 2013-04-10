@@ -3,6 +3,9 @@
 	* ThemeDocument.m (-dealloc): Reset window delegate to prevent
 	crash when the document is closed.
 
+	* Resources/ThemeDocument.gorm: Set release when closed attribute
+	to fix space leak.
+
 2013-03-08 Riccardo Mottola <rm@gnu.org>
 
 	* ImageElement.m:
