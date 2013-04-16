@@ -96,7 +96,7 @@
       if (image != nil)
         {
           [[[AppController sharedController] selectedDocument] setImage: path
-	    forKey: @"NSMenuArrow"];
+	    forKey: @"common_3DArrowRight"];
 	  RELEASE(image);
 	}
     }
