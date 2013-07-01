@@ -19,7 +19,8 @@
 	    authors,
 	    details,
 	    themeName,
-	    themeVersion
+	    themeVersion,
+	    license
 	);
 	Super = ThemeElement;
     };

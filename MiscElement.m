@@ -1,8 +1,9 @@
 /* MiscElement.m
  *
- * Copyright (C) 2006 Free Software Foundation, Inc.
+ * Copyright (C) 2006-2013 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
+ *              Riccardo Mottola <rm@gnu.org>
  * Date:	2006
  * 
  * This file is part of GNUstep.
@@ -46,6 +47,10 @@
    */
   n = [NSNotification notificationWithName: @"dummy"
 				    object: authors
+				  userInfo: nil];
+  [self textDidEndEditing: n];
+  n = [NSNotification notificationWithName: @"dummy"
+				    object: license
 				  userInfo: nil];
   [self textDidEndEditing: n];
   n = [NSNotification notificationWithName: @"dummy"
@@ -94,6 +99,11 @@
     {
       str = [arr componentsJoinedByString: @"\n"];
       [authors setString: str];
+    }
+  str = [info objectForKey: @"GSThemeLicense"];
+  if ([str length] > 0)
+    {
+      [license setString: str];
     }
   str = [info objectForKey: @"GSThemeDetails"];
   if ([str length] > 0)
@@ -185,8 +195,11 @@
     {
       [doc setInfo: s forKey: @"GSThemeDetails"];
     }
-
-  if (sender == authors)
+  else if (sender == license)
+    {
+      [doc setInfo: s forKey: @"GSThemeLicense"];
+    }
+  else if (sender == authors)
     {
       NSMutableArray    *a;
       unsigned		count;

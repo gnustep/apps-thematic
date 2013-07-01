@@ -1,3 +1,10 @@
+2013-07-01 Riccardo Mottola <rm@gnu.org>
+
+	* MiscElement.h
+	* MiscElement.m
+	* Resources/MiscElement.gorm
+	Add license property and field.
+
 2013-03-16 Riccardo Mottola <rm@gnu.org>
 
 	* MenusElement.m
