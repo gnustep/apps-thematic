@@ -1,3 +1,11 @@
+2013-10-04  Eric Wasylishen  <ewasylishen@gmail.com>
+
+	* ColorElement.h:
+	* ColorElement.m:
+	* Resources/ColorElement.gorm: Rewrite ColorElement using the color list
+	table code from GSTest, so you can see all of the colors at once, and
+	we can easily add more in code.
+
 2013-07-01 Riccardo Mottola <rm@gnu.org>
 
 	* MiscElement.h

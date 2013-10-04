@@ -26,20 +26,20 @@
 
 @interface ColorElement : ThemeElement
 {
-  id	colorMenu;
-  id	colorWell;
+  BOOL ignoreSelectAt;
 }
 
 /** Handle color setting from color well in inspector
  */
 - (void) takeColorFrom: (id)sender;
 
-/** Handle change of menu item.
- */
-- (void) takeNameFrom: (id)sender;
-
-/** Get color name from menu item tag.
+/** Get color name from color well tag.
  */
 - (NSString*) tagToName: (int)tag;
+
+- (NSScrollView *) makeColorListScrollView;
+
+- (int) namesCount;
+
 @end
 

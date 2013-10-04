@@ -24,50 +24,108 @@
 
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
+#import <GNUstepGUI/GSHbox.h>
+#import <GNUstepGUI/GSVbox.h>
 #import	"AppController.h"
 #import	"ThemeDocument.h"
 #import	"ColorElement.h"
 
 @implementation ColorElement
+
+- (NSScrollView *) makeColorListScrollView
+{
+  NSScrollView *scrollView;
+  GSVbox *vbox;
+  int i;
+  int count;
+
+  vbox = [GSVbox new];
+  [vbox setDefaultMinYMargin: 2];
+  [vbox setBorder: 2];
+
+  count = [self namesCount];
+  for (i = 1; i <= count; i++)
+    {
+      GSHbox *hbox;
+      NSTextField *text;
+      NSColorWell *color;
+      NSString *name = [self tagToName: i];
+
+      hbox = [GSHbox new];
+      [hbox setDefaultMinXMargin: 10];
+
+      text = [NSTextField new];
+      [text setEditable: NO];
+      [text setBezeled: NO];
+      [text setDrawsBackground: NO];
+      [text setStringValue: name];
+      [text sizeToFit];
+      [text setAutoresizingMask: (NSViewMinYMargin | NSViewMaxYMargin)];
+      [hbox addView: text];
+      [text release];
+
+      color = [[NSColorWell alloc] initWithFrame: NSMakeRect (0, 0, 50, 30)];
+      [color setTag: i];
+      [color setTarget: self];
+      [color setAction: @selector(takeColorFrom:)];
+      [color setColor: [owner colorForKey: name]];
+      [color setAutoresizingMask: NSViewMinXMargin];
+      [hbox addView: color];
+      [color release];
+
+      [hbox setAutoresizingMask: NSViewWidthSizable];
+      [vbox addView: hbox];
+      [hbox release];
+    }
+
+  scrollView = [[[NSScrollView alloc] 
+		  initWithFrame: NSMakeRect (0, 0, 150, 300)] autorelease];
+  [scrollView setDocumentView: vbox];
+  [vbox release];
+  [scrollView setHasHorizontalScroller: NO];
+  [scrollView setHasVerticalScroller: YES];
+  [scrollView setBorderType: NSBezelBorder];
+  [scrollView setAutoresizingMask: (NSViewWidthSizable | NSViewHeightSizable)];
+  
+  return scrollView;
+}
+
 - (void) selectAt: (NSPoint)mouse
 {
-  ThemeDocument	*doc;
-  doc = [[AppController sharedController] selectedDocument];
+  if (ignoreSelectAt)
+    return;
 
-  [colorWell setColor: [doc colorForKey: @"alternateRowBackgroundColor"]];
-
+  ASSIGN(inspector, [self makeColorListScrollView]);
   [super selectAt: mouse];
 }
 
 - (void) takeColorFrom: (id)sender
 {
-  NSColor	*color = [(NSColorWell*)sender color];
+  int tag = [sender tag];
+  NSColor *color = [(NSColorWell*)sender color];
 
   if (color != nil)
     {
-      int		tag = [[colorMenu selectedItem] tag];
       NSString	*name = [self tagToName: tag];
 
       if (name != nil)
 	{
+	  ignoreSelectAt = YES;
 	  [owner setColor: color forKey: name];
+	  ignoreSelectAt = NO;
 	}
     }
 }
 
-- (void) takeNameFrom: (id)sender
+- (int) namesCount
 {
-  int		tag = [[colorMenu selectedItem] tag];
-  NSString	*name = [self tagToName: tag];
-  NSColor	*color = [owner colorForKey: name];
-
-  [colorWell setColor: color];
+  return 33;
 }
 
 - (NSString*) tagToName: (int)tag
 {
   NSString	*name = nil;
-
+  
   switch (tag)
     {
       case  1: name = @"alternateRowBackgroundColor"; break;
