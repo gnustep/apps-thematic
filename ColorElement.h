@@ -33,13 +33,13 @@
  */
 - (void) takeColorFrom: (id)sender;
 
-/** Get color name from color well tag.
- */
-- (NSString*) tagToName: (int)tag;
+- (NSColor *) colorForName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state;
+- (void) setColor: (NSColor *)aColor forName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state;
 
-- (NSScrollView *) makeColorListScrollView;
-
-- (int) namesCount;
+- (NSInteger) tagForName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state;
+- (NSString *) nameForTag: (NSInteger)tag;
+- (BOOL) tagIsSystem: (NSInteger)tag;
+- (GSThemeControlState) themeControlStateForTag: (NSInteger)tag;
 
 @end
 

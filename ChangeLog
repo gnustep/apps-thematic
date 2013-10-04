@@ -1,6 +1,13 @@
 2013-10-04  Eric Wasylishen  <ewasylishen@gmail.com>
 
 	* ColorElement.h:
+	* ColorElement.m: Add support for setting all the "theme extra colors"
+	currently used in gui.
+	* Resources/ThemeInspector.gorm: Make resizable
+
+2013-10-04  Eric Wasylishen  <ewasylishen@gmail.com>
+
+	* ColorElement.h:
 	* ColorElement.m:
 	* Resources/ColorElement.gorm: Rewrite ColorElement using the color list
 	table code from GSTest, so you can see all of the colors at once, and
