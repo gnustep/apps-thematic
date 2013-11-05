@@ -1,3 +1,8 @@
+2013-11-05  Eric Wasylishen  <ewasylishen@gmail.com>
+
+	* ColorElement.m: Add extra colors @"highlightedTableRowBackgroundColor"
+	and @"highlightedTableRowTextColor".
+
 2013-10-04  Eric Wasylishen  <ewasylishen@gmail.com>
 
 	* ColorElement.h:

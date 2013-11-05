@@ -107,6 +107,8 @@ static NSArray *extraColorNames;
 					 @"windowBorderColor",
 					 @"browserHeaderTextColor",
 					 @"NSScrollView",
+					 @"highlightedTableRowBackgroundColor",
+					 @"highlightedTableRowTextColor",
 					 nil];
     }
 }
