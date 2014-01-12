@@ -128,7 +128,7 @@ static NSColorList	*systemColorList = nil;
 /*
  *	Dragging destination protocol implementation
  */
-- (unsigned) draggingEntered: (id<NSDraggingInfo>)sender
+- (NSDragOperation) draggingEntered: (id<NSDraggingInfo>)sender
 {
   return NSDragOperationCopy;;
 }

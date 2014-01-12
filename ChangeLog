@@ -1,3 +1,8 @@
+2014-01-12  Sebastian Reitenbach <sebastia@l00-bugdead-prods.de>
+	* ThemeDocument.m
+	  change return type of -draggingEntered from unsigned
+	  to NSDragOperation
+
 2013-11-05  Eric Wasylishen  <ewasylishen@gmail.com>
 
 	* ColorElement.m: Add extra colors @"highlightedTableRowBackgroundColor"
