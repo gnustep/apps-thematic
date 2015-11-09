@@ -596,7 +596,7 @@ I(@"common_SwitchOff", @"Unselected Switch Button");
           RELEASE(appView);
           i = [NSImage imageNamed: @"ImageAdd"];
           ii = [[DummyInfo alloc] initWithImage: i
-                                    description: @""
+                                    description: @"Import a new image"
                                            name: @""
                                             app: app];
           [appView addObject: ii];
@@ -612,7 +612,7 @@ I(@"common_SwitchOff", @"Unselected Switch Button");
               key = [app stringByAppendingPathComponent: img];
               img = [img stringByDeletingPathExtension];
               i = [aDocument imageForKey: key];
-              ii = [[DummyInfo alloc] initWithImage: i
+              ii = [[ImageInfo alloc] initWithImage: i
                                         description: img
                                                name: img
                                                 app: app];
@@ -701,7 +701,7 @@ I(@"common_SwitchOff", @"Unselected Switch Button");
       RELEASE(imagesView);
       NSImage *i = [NSImage imageNamed: @"ImageAdd"];
       ImageInfo *ii = [[DummyInfo alloc] initWithImage: i
-                                           description: @""
+                                           description: @"Import a new image"
                                                   name: @""
                                                    app: bundleIdentifier];
       [imagesView addObject: ii];
