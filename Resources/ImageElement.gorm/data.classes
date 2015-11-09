@@ -3,20 +3,23 @@
     FirstResponder = {
 	Actions = (
 	    "deleteImage:",
-	    "importImage:"
+	    "importImage:",
+	    "switchCollection:"
 	);
 	Super = NSObject;
     };
     ImageElement = {
 	Actions = (
 	    "deleteImage:",
-	    "importImage:"
+	    "importImage:",
+	    "switchCollection:"
 	);
 	Outlets = (
 	    scrollView,
 	    description,
 	    deleteButton,
-	    importButton
+	    importButton,
+	    collectionMenu
 	);
 	Super = ThemeElement;
     };

@@ -33,10 +33,17 @@
  */
 - (void) takeColorFrom: (id)sender;
 
-- (NSColor *) colorForName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state;
-- (void) setColor: (NSColor *)aColor forName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state;
+- (NSColor *) colorForName: (NSString *)aName
+                  isSystem: (BOOL)system
+                     state: (GSThemeControlState)state;
+- (void) setColor: (NSColor *)aColor
+          forName: (NSString *)aName
+         isSystem: (BOOL)system
+            state: (GSThemeControlState)state;
 
-- (NSInteger) tagForName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state;
+- (NSInteger) tagForName: (NSString *)aName
+                isSystem: (BOOL)system
+                   state: (GSThemeControlState)state;
 - (NSString *) nameForTag: (NSInteger)tag;
 - (BOOL) tagIsSystem: (NSInteger)tag;
 - (GSThemeControlState) themeControlStateForTag: (NSInteger)tag;

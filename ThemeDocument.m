@@ -244,6 +244,38 @@ static NSColorList	*systemColorList = nil;
   [_selected selectAt: _selectionPoint];
 }
 
+- (NSDictionary*) applicationImageNames
+{
+  NSFileManager	        *mgr;
+  NSString              *path;
+  NSDirectoryEnumerator *enumerator;
+  NSMutableDictionary   *images;
+
+  mgr = [NSFileManager defaultManager];
+  path = [_rsrc stringByAppendingPathComponent: @"ThemeImages"];
+  enumerator = [mgr enumeratorAtPath: path];
+  images = [NSMutableDictionary dictionary];
+  while ((path = [enumerator nextObject]) != nil)
+    {
+      NSString  *file = [path lastPathComponent];
+
+      if (NO == [file isEqual: path])
+        {
+          NSString              *identifier;
+          NSMutableArray        *array;
+
+          identifier = [path stringByDeletingLastPathComponent];
+          if (nil == (array = [images objectForKey: identifier]))
+            {
+              array = [NSMutableArray array];
+              [images setObject: array forKey: identifier];
+            }
+          [array addObject: file];
+        }
+    }
+  return images;
+}
+
 - (NSString*) buildDirectory
 {
   return _build;
@@ -494,6 +526,17 @@ static NSColorList	*systemColorList = nil;
   return [_extraColors[state] colorWithKey: aName];
 }
 
+- (NSImage*) imageForKey: (NSString*)aKey
+{
+  NSImage       *image;
+  NSString      *path;
+
+  path = [_rsrc stringByAppendingPathComponent: @"ThemeImages"];
+  path = [path stringByAppendingPathComponent: aKey];
+  image = AUTORELEASE([[NSImage alloc] initWithContentsOfFile: path]);
+  return image;
+}
+
 - (NSDictionary*) infoDictionary
 {
   return AUTORELEASE([_info copy]);
@@ -538,7 +581,7 @@ static NSColorList	*systemColorList = nil;
 	  NSRunAlertPanel(_(@"Alert"),
 	    _(@"Unable to load theme into work area from %@"),
 	    nil, nil, nil, path);
-	  return NO;
+	  return nil;
 	}
     }
 
@@ -1297,6 +1340,27 @@ static NSColorList	*systemColorList = nil;
 
   file = [_rsrc stringByAppendingPathComponent: @"ThemeImages"];
   file = [file stringByAppendingPathComponent: key];
+
+  /* If the key contains a bundle identifier subdirectory,
+   * make sure that the subdirectory exists (or delete it
+   * if this is only the bundle identifier and the path is nil).
+   */
+  if ([key rangeOfString: @"/"].length > 0)
+    {
+      if ([key hasSuffix: @"/"] && nil == path)
+        {
+          [mgr removeFileAtPath: path handler: nil];
+        }
+      else
+        {
+          NSString  *sub = [file stringByDeletingLastPathComponent];
+
+          [mgr createDirectoryAtPath: sub
+         withIntermediateDirectories: YES
+                          attributes: nil
+                               error: 0];
+        }
+    }
 
   /*
    * Remove any old image of the same name.

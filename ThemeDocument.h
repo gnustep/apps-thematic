@@ -97,6 +97,11 @@
  */
 - (void) activate;
 
+/** Return a dictionary whose keys are application bundle identifiers
+ * and whose values are arrays of image names for those applications.
+ */
+- (NSDictionary*) applicationImageNames;
+
 /** Returns the directory in which cod should be built.
  */
 - (NSString*) buildDirectory;
@@ -119,6 +124,9 @@
 - (ThemeElement*) elementForView: (NSView*)aView;
 
 - (NSColor*) extraColorForKey: (NSString*)aName;
+
+- (NSImage*) imageForKey: (NSString*)aKey;
+
 /**
  * Returns the current info dictionary for the document.
  */

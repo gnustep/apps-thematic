@@ -28,13 +28,20 @@
 
 @interface ImageElement : ThemeElement
 {
-  ImagesView	*imagesView;
-  id		scrollView;
-  id		description;
-  id		deleteButton;
-  id		importButton;
+  NSInteger             selectedTag;
+  NSMutableArray        *texts;
+  NSMutableArray        *views;
+  ImagesView            *imagesView;
+  ImagesView            *systemView;    // Tag -1
+  NSTextView            *textView;      // Tag -2
+  id		        scrollView;
+  id		        description;
+  id		        deleteButton;
+  id		        importButton;
+  id                    collectionMenu;
 }
 - (void) deleteImage: (id)sender;
 - (void) importImage: (id)sender;
+- (void) switchCollection: (id)sender;
 @end
 

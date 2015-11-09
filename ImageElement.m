@@ -32,26 +32,39 @@
 @interface	ImageInfo : NSObject
 {
   NSImage	*original;
+  NSString	*app;
   NSString	*name;
   NSString	*path;
   NSString	*description;	// not retained
 }
+- (NSString*) app;
 - (NSString*) description;
 - (NSImage*) image;
-- (id) initWithImage: (NSImage*)i description: (NSString*)d;
+- (id) initWithImage: (NSImage*)i
+         description: (NSString*)d
+                name: (NSString*)n
+                 app: (NSString*)a;
 - (NSString*) name;
 - (NSString*) path;
 - (void) revert;
-- (void) setCurrentImage: (NSImage*)i atPath: (NSString*)p;
+- (void) setCurrentImage: (NSImage*)i
+                  atPath: (NSString*)p;
 @end
 
 @implementation	ImageInfo
+
+- (NSString*) app
+{
+  return app;
+}
+
 - (void) dealloc
 {
   RELEASE(original);
   RELEASE(description);
   RELEASE(name);
   RELEASE(path);
+  RELEASE(app);
   [super dealloc];
 }
 
@@ -65,11 +78,15 @@
   return original;
 }
 
-- (id) initWithImage: (NSImage*)i description: (NSString*)d
+- (id) initWithImage: (NSImage*)i
+         description: (NSString*)d
+                name: (NSString*)n
+                 app: (NSString*)a
 {
   ASSIGN(original, i);
   ASSIGN(description, d);
-  ASSIGNCOPY(name, [original name]);
+  ASSIGNCOPY(app, a);
+  ASSIGNCOPY(name, n);
   return self;
 }
 
@@ -85,19 +102,40 @@
 
 - (void) revert
 {
+  NSString      *key;
+
   DESTROY(path);
+  key = [self name];
+  if (nil != app) key = [app stringByAppendingPathComponent: key];
   [[[AppController sharedController] selectedDocument] setImage: nil
-							 forKey: [self name]];
+							 forKey: key];
 }
 
-- (void) setCurrentImage: (NSImage*)i atPath: (NSString*)p
+- (void) setCurrentImage: (NSImage*)i
+                  atPath: (NSString*)p
 {
+  NSString      *key;
+
   ASSIGN(path, p);
+  key = [self name];
+  if (nil != app) key = [app stringByAppendingPathComponent: key];
   [[[AppController sharedController] selectedDocument] setImage: path
-							 forKey: [self name]];
+							 forKey: key];
 }
 @end
 
+@interface	DummyInfo : ImageInfo
+@end
+@implementation DummyInfo
+- (NSString*) name
+{
+  return @"";
+}
+- (void) revert
+{
+  return;
+}
+@end
 
 
 @interface	ImagesView : NSMatrix
@@ -106,12 +144,14 @@
   ImageInfo		*selected;
   NSTextField		*description;
   NSString		*lastPath;
+  NSString              *bundleIdentifier;
 }
 - (void) addObject: (ImageInfo*)anObject;
 - (void) makeSelectionVisible: (BOOL)flag;
 - (void) refreshCells;
 - (void) selectObject: (ImageInfo*)obj;
 - (ImageInfo*) selected;
+- (void) setBundleIdentifier: (NSString*)i;
 - (void) setDescription: (NSTextField*)d;
 @end
 
@@ -151,14 +191,24 @@
 {
   RELEASE(objects);
   RELEASE(lastPath);
+  RELEASE(bundleIdentifier);
   [super dealloc];
 }
 
 - (void) deleteImage: (id)sender
 {
-  [selected revert];
-  [self makeSelectionVisible: NO];
-  [self selectObject: selected];
+  if (NO == [selected isKindOfClass: [DummyInfo class]])
+    {
+      [selected revert];
+      [self makeSelectionVisible: NO];
+      if (nil != bundleIdentifier)
+        {
+          [objects removeObjectIdenticalTo: selected];
+          [self refreshCells];
+          selected = [objects objectAtIndex: 0];        // Add new image
+        }
+      [self selectObject: selected];
+    }
 }
 
 - (void) importImage: (id)sender
@@ -193,7 +243,19 @@
       if (image != nil)
         {
 	  ASSIGN(lastPath, [path stringByDeletingLastPathComponent]);
-	  [selected setCurrentImage: image atPath: path];
+          if ([selected isKindOfClass: [DummyInfo class]])
+            {
+              NSString  *name;
+
+              name = [[path lastPathComponent] stringByDeletingPathExtension];
+              selected = [[ImageInfo alloc] initWithImage: image
+                                              description: name
+                                                     name: name
+                                                      app: bundleIdentifier];
+              [self addObject: selected];
+              RELEASE(selected);
+            }
+          [selected setCurrentImage: image atPath: path];
 	  RELEASE(image);
 	  [self refreshCells];
 	}
@@ -280,6 +342,17 @@
       NSButtonCell	*but = [self cellAtRow: index/cols column: index%cols];
 
       [but setImage: [img image]];
+      /* Make sure big images are shrunk to fit.
+       */
+      if ([[img image] size].width > 64
+        || [[img image] size].height > 64)
+        {
+          [but setImageScaling: NSImageScaleProportionallyUpOrDown];
+        }
+      else
+        {
+          [but setImageScaling: NSImageScaleNone];
+        }
       [but setTitle: @""];
       [but setShowsStateBy: NSChangeGrayCellMask];
       [but setHighlightsBy: NSChangeGrayCellMask];
@@ -353,15 +426,30 @@
   return selected;
 }
 
+- (void) setBundleIdentifier: (NSString*)i
+{
+  ASSIGN(bundleIdentifier, i);
+}
+
 - (void) setDescription: (NSTextField*)d
 {
   description = d;
 }
+
 @end
 
 
 
 @implementation ImageElement
+
+- (void) dealloc
+{
+  RELEASE(texts);
+  RELEASE(views);
+  RELEASE(systemView);
+  RELEASE(textView);
+  [super dealloc];
+}
 
 - (void) deleteImage: (id)sender
 {
@@ -378,19 +466,37 @@
 {
   if ((self = [super initWithView: aView owner: aDocument]) != nil)
     {
-      NSRect		frame;
+      NSRect	        frame;
+      NSDictionary      *apps;
+      NSEnumerator      *appEnum;
+      NSString          *app;
+
+      selectedTag = -2;
 
       frame = [[scrollView documentView] frame];
       frame.origin = NSZeroPoint;
   
-      imagesView = [[ImagesView alloc] initWithFrame: frame];
-      [imagesView setDescription: description];
-      [scrollView setDocumentView: imagesView];
-      RELEASE(imagesView);
+      texts = [NSMutableArray new];
+      views = [NSMutableArray new];
+
+      systemView = [[ImagesView alloc] initWithFrame: frame];
+      [systemView setDescription: description];
   
+      textView = [[NSTextView alloc] init];
+      [textView setSelectable: YES];
+      [textView setEditable: NO];
+      [textView setDrawsBackground: YES];
+      [textView setHorizontallyResizable: NO];
+      [textView setVerticallyResizable: NO];
+      [textView setFrameSize: frame.size];
+      [[textView textStorage] replaceCharactersInRange: NSMakeRange(0,0)
+        withString: @"Enter the bundle identifier of an application in order to start adding application-specific images.  You may then import images to replace the named images provided and used by that application."];
+
+      imagesView = systemView;
+      [scrollView setDocumentView: imagesView];
 #define	I(X,Y) {\
 NSImage *i = [NSImage imageNamed: X]; \
-ImageInfo *ii = [[ImageInfo alloc] initWithImage: i description: Y]; \
+ImageInfo *ii = [[ImageInfo alloc] initWithImage: i description: Y name: X app: nil]; \
 [imagesView addObject: ii]; \
 RELEASE(ii); \
 }
@@ -470,13 +576,153 @@ I(@"common_RadioOn", @"Selected Radio Button");
 I(@"common_RadioOff", @"Unselected Radio Button");
 I(@"common_SwitchOn", @"Selected Switch Button");
 I(@"common_SwitchOff", @"Unselected Switch Button");
+#undef  I
+
+      apps = [aDocument applicationImageNames];
+      appEnum = [[[apps allKeys]
+        sortedArrayUsingSelector: @selector(compare:)] objectEnumerator]; 
+      while (nil != (app = [appEnum nextObject]))
+        {
+          NSEnumerator  *imgEnum;
+          NSString      *img;
+          ImagesView    *appView;
+          NSImage       *i;
+          ImageInfo     *ii;
+
+          appView = [[ImagesView alloc] initWithFrame: frame];
+          [appView setBundleIdentifier: app];
+          [appView setDescription: description];
+          [views addObject: appView];
+          RELEASE(appView);
+          i = [NSImage imageNamed: @"ImageAdd"];
+          ii = [[DummyInfo alloc] initWithImage: i
+                                    description: @""
+                                           name: @""
+                                            app: app];
+          [appView addObject: ii];
+          RELEASE(ii);
+          [texts addObject: app];
+
+          imgEnum = [[[apps objectForKey: app]
+            sortedArrayUsingSelector: @selector(compare:)] objectEnumerator]; 
+          while (nil != (img = [imgEnum nextObject]))
+            {
+              NSString  *key;
+
+              key = [app stringByAppendingPathComponent: img];
+              img = [img stringByDeletingPathExtension];
+              i = [aDocument imageForKey: key];
+              ii = [[DummyInfo alloc] initWithImage: i
+                                        description: img
+                                               name: img
+                                                app: app];
+              [appView addObject: ii];
+              RELEASE(ii);
+            }
+          [collectionMenu addItemWithTitle: app];
+        }
     }
   return self;
 }
 
+- (void) switchCollection: (id)sender
+{
+  selectedTag = [[sender selectedItem] tag];
+
+  if (-2 == selectedTag)
+    {
+      imagesView = nil;
+      [deleteButton setEnabled: NO];
+      [importButton setEnabled: NO];
+      [description setSelectable: YES];
+      [description setEditable: YES];
+      [description setBezeled: YES];
+      [description setDrawsBackground: YES];
+      [description setStringValue: @"Enter App bundle identifier"];
+      [description setAction: @selector(textEntered:)];
+      [description setTarget: self];
+      [description setStringValue: @"New application"];
+      [scrollView setDocumentView: textView];
+    }
+  else
+    {
+      if (-1 == selectedTag)
+        {
+          imagesView = systemView;
+          [description setStringValue: @"System images"];
+        }
+      else
+        {
+          imagesView = [views objectAtIndex: selectedTag];
+          [description setStringValue: [@"Images specific to: "
+            stringByAppendingString: [texts objectAtIndex: selectedTag]]];
+        }
+      [scrollView setDocumentView: imagesView];
+      [deleteButton setEnabled: YES];
+      [importButton setEnabled: YES];
+      [description setSelectable: NO];
+      [description setEditable: NO];
+      [description setBezeled: NO];
+      [description setDrawsBackground: NO];
+    }
+  [description display];
+  [[imagesView window] setTitle:
+    [NSString stringWithFormat: @"%@ Inspector", [self title]]];
+}
+
+- (void) textEntered: (id)sender
+{
+  NSString      *bundleIdentifier = [sender stringValue];
+  NSUInteger    tag;
+
+  bundleIdentifier = [bundleIdentifier stringByTrimmingSpaces];
+  if ([bundleIdentifier length] == 0)
+    {
+      NSLog(@"Empty bundle identifier ignored");
+      return;
+    }
+  if ([bundleIdentifier rangeOfString: @"/"].length > 0)
+    {
+      NSLog(@"Bundle identifier containing '/' ignored");
+      return;
+    }
+  /* Do we already have this bundle identifier?
+   * If so, select it.
+   */
+  tag = [texts indexOfObject: bundleIdentifier];
+  if (NSNotFound == tag)
+    {
+      tag = [texts count];
+
+      imagesView = [[ImagesView alloc] initWithFrame: [imagesView frame]];
+      [imagesView setBundleIdentifier: bundleIdentifier];
+      [imagesView setDescription: description];
+      [views addObject: imagesView];
+      RELEASE(imagesView);
+      NSImage *i = [NSImage imageNamed: @"ImageAdd"];
+      ImageInfo *ii = [[DummyInfo alloc] initWithImage: i
+                                           description: @""
+                                                  name: @""
+                                                   app: bundleIdentifier];
+      [imagesView addObject: ii];
+      RELEASE(ii);
+      [texts addObject: bundleIdentifier];
+      [collectionMenu addItemWithTitle: bundleIdentifier];
+      [[collectionMenu lastItem] setTag: tag];
+    }
+
+  [collectionMenu selectItemAtIndex:
+    [collectionMenu indexOfItemWithTag: tag]];
+  [self switchCollection: collectionMenu];
+}
+
 - (NSString*) title
 {
-  return @"System Images";
+  if (selectedTag < 0)
+    {
+      return @"System Images";
+    }
+  return @"Application Images";
 }
 @end
 

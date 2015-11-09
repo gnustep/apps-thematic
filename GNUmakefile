@@ -27,6 +27,7 @@ Resources/Thematic.gorm \
 Resources/ThemeInspector.gorm \
 Resources/ColorElement.gorm \
 Resources/ThemeDocument.gorm \
+Resources/ImageAdd.png \
 Resources/ImageElement.gorm \
 Resources/WindowsElement.gorm \
 Resources/MenusElement.gorm \

@@ -52,103 +52,115 @@ static NSArray *extraColorNames;
     {
       // This list should not be changed
       systemColorNames = [[NSArray alloc] initWithObjects:
-					    @"alternateRowBackgroundColor",
-					  @"alternateSelectedControlColor",
-					  @"alternateSelectedControlTextColor",
-					  @"controlBackgroundColor",
-					  @"controlColor",
-					  @"controlDarkShadowColor",
-					  @"controlHighlightColor",
-					  @"controlLightHighlightColor",
-					  @"controlShadowColor",
-					  @"controlTextColor",
-					  @"disabledControlTextColor",
-					  @"gridColor",
-					  @"headerColor",
-					  @"headerTextColor",
-					  @"highlightColor",
-					  @"nameboardFocusIndicatorColor",
-					  @"knobColor",
-					  @"rowBackgroundColor",
-					  @"scrollBarColor",
-					  @"secondarySelectedControlColor",
-					  @"selectedControlColor",
-					  @"selectedControlTextColor",
-					  @"selectedKnobColor",
-					  @"selectedMenuItemColor",
-					  @"selectedMenuItemTextColor",
-					  @"selectedTextBackgroundColor",
-					  @"selectedTextColor",
-					  @"shadowColor",
-					  @"textBackgroundColor",
-					  @"textColor",
-					  @"windowBackgroundColor",
-					  @"windowFrameColor",
-					  @"windowFrameTextColor",
-					  nil];
+        @"alternateRowBackgroundColor",
+        @"alternateSelectedControlColor",
+        @"alternateSelectedControlTextColor",
+        @"controlBackgroundColor",
+        @"controlColor",
+        @"controlDarkShadowColor",
+        @"controlHighlightColor",
+        @"controlLightHighlightColor",
+        @"controlShadowColor",
+        @"controlTextColor",
+        @"disabledControlTextColor",
+        @"gridColor",
+        @"headerColor",
+        @"headerTextColor",
+        @"highlightColor",
+        @"nameboardFocusIndicatorColor",
+        @"knobColor",
+        @"rowBackgroundColor",
+        @"scrollBarColor",
+        @"secondarySelectedControlColor",
+        @"selectedControlColor",
+        @"selectedControlTextColor",
+        @"selectedKnobColor",
+        @"selectedMenuItemColor",
+        @"selectedMenuItemTextColor",
+        @"selectedTextBackgroundColor",
+        @"selectedTextColor",
+        @"shadowColor",
+        @"textBackgroundColor",
+        @"textColor",
+        @"windowBackgroundColor",
+        @"windowFrameColor",
+        @"windowFrameTextColor",
+        nil];
 
-      // Feel free to add extra colors here as they are added
-      // in GSThemeDrawing.m
+      /* Feel free to add extra colors here as they are added
+       * in GSThemeDrawing.m
+       */
       extraColorNames = [[NSArray alloc] initWithObjects:
-					   @"toolbarBackgroundColor",
-					 @"toolbarBorderColor",
-					 @"menuBackgroundColor",
-					 @"menuItemBackgroundColor",
-					 @"menuBorderColor",
-					 @"menuBarBackgroundColor",
-					 @"menuBarBorderColor",
-					 @"menuSeparatorColor",
-					 @"GSMenuBar",
-					 @"GSMenuBarTitle",
-					 @"tableHeaderTextColor",			  
-					 @"keyWindowFrameTextColor",
-					 @"normalWindowFrameTextColor",
-					 @"mainWindowFrameTextColor",
-					 @"windowBorderColor",
-					 @"browserHeaderTextColor",
-					 @"NSScrollView",
-					 @"highlightedTableRowBackgroundColor",
-					 @"highlightedTableRowTextColor",
-					 nil];
+        @"toolbarBackgroundColor",
+        @"toolbarBorderColor",
+        @"menuBackgroundColor",
+        @"menuItemBackgroundColor",
+        @"menuBorderColor",
+        @"menuBarBackgroundColor",
+        @"menuBarBorderColor",
+        @"menuSeparatorColor",
+        @"GSMenuBar",
+        @"GSMenuBarTitle",
+        @"tableHeaderTextColor",			  
+        @"keyWindowFrameTextColor",
+        @"normalWindowFrameTextColor",
+        @"mainWindowFrameTextColor",
+        @"windowBorderColor",
+        @"browserHeaderTextColor",
+        @"NSScrollView",
+        @"highlightedTableRowBackgroundColor",
+        @"highlightedTableRowTextColor",
+        nil];
     }
 }
 
 - (NSTextField *) makeTextFieldWithLabel: (NSString *)aLabel
 {
-  NSTextField *text = [[[NSTextField alloc] init] autorelease];
+  NSTextField *text = [[NSTextField alloc] init];
+
   [text setEditable: NO];
   [text setBezeled: NO];
   [text setDrawsBackground: NO];
   [text setStringValue: aLabel];
   [text sizeToFit];
   [text setAutoresizingMask: (NSViewMinYMargin | NSViewMaxYMargin)];
-  return text;
+  return AUTORELEASE(text);
 }
 
 - (NSTextField *) makeBoldLabel: (NSString *)aLabel
 {
   NSTextField *text = [self makeTextFieldWithLabel: aLabel];
+
   [text setFont: [NSFont boldSystemFontOfSize: 12.0]];
   [text setSelectable: NO];
   [text sizeToFit];
   return text;
 }
 
-- (NSColorWell *) makeColorWellWithTag: (NSInteger)aTag color: (NSColor *)aColor
+- (NSColorWell *) makeColorWellWithTag: (NSInteger)aTag
+                                 color: (NSColor *)aColor
 {
-  NSColorWell *color = [[[NSColorWell alloc] initWithFrame: NSMakeRect (0, 0, 50, 30)] autorelease];
+  NSColorWell   *color;
+
+  color = [[NSColorWell alloc] initWithFrame: NSMakeRect (0, 0, 50, 30)];
   [color setTag: aTag];
   [color setTarget: self];
   [color setAction: @selector(takeColorFrom:)];
   [color setColor: aColor];
   [color setAutoresizingMask: NSViewMinXMargin];
-  return color;
+  return AUTORELEASE(color);
 }
 
-- (NSColorWell *) makeColorWellWithName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state
+- (NSColorWell *) makeColorWellWithName: (NSString *)aName
+                               isSystem: (BOOL)system
+                                  state: (GSThemeControlState)state
 {
-  return [self makeColorWellWithTag: [self tagForName: aName isSystem: system state: state]
-			      color: [self colorForName: aName isSystem: system state: state]];
+  int           tag;
+  NSColor       *color;
+
+  tag = [self tagForName: aName isSystem: system state: state];
+  color = [self colorForName: aName isSystem: system state: state];
+  return [self makeColorWellWithTag: tag color: color];
 }
 
 - (GSVbox *) makeSystemColorListVbox
@@ -195,10 +207,23 @@ static NSArray *extraColorNames;
 
       [hbox setDefaultMinXMargin: 10];
 
-      [hbox addView: [self makeTextFieldWithLabel: name] enablingXResizing: YES];
-      [hbox addView: [self makeColorWellWithName: name isSystem: NO state: GSThemeNormalState] enablingXResizing: NO];
-      [hbox addView: [self makeColorWellWithName: name isSystem: NO state: GSThemeSelectedState] enablingXResizing: NO];
-      [hbox addView: [self makeColorWellWithName: name isSystem: NO state: GSThemeHighlightedState] enablingXResizing: NO];
+      [hbox addView: [self makeTextFieldWithLabel: name]
+        enablingXResizing: YES];
+      [hbox addView:
+        [self makeColorWellWithName: name
+                           isSystem: NO
+                              state: GSThemeNormalState]
+        enablingXResizing: NO];
+      [hbox addView:
+        [self makeColorWellWithName: name
+                           isSystem: NO
+                              state: GSThemeSelectedState]
+        enablingXResizing: NO];
+      [hbox addView:
+        [self makeColorWellWithName: name
+                           isSystem: NO
+                              state: GSThemeHighlightedState]
+        enablingXResizing: NO];
       
       [hbox setAutoresizingMask: NSViewWidthSizable];
       [vbox addView: hbox];
@@ -206,7 +231,8 @@ static NSArray *extraColorNames;
   
   // Labels
   {
-    GSHbox *hbox = [[[GSHbox alloc] init] autorelease];
+    GSHbox *hbox = [[GSHbox alloc] init];
+
     [hbox setDefaultMinXMargin: 10];
     [hbox addView: [self makeBoldLabel: @"Name"] enablingXResizing: YES];
     [hbox addView: [self makeBoldLabel: @"Normal"] enablingXResizing: NO];
@@ -214,6 +240,7 @@ static NSArray *extraColorNames;
     [hbox addView: [self makeBoldLabel: @"Highlighted"] enablingXResizing: NO];
     [hbox setAutoresizingMask: NSViewWidthSizable];
     [vbox addView: hbox];
+    RELEASE(hbox);
   }
 
   return vbox;
@@ -221,22 +248,25 @@ static NSArray *extraColorNames;
 
 - (NSScrollView *) makeScrollView
 {
-  NSScrollView *scrollView = [[[NSScrollView alloc] 
-				initWithFrame: NSMakeRect (0, 0, 150, 300)] autorelease];
-  GSVbox *vbox = [[[GSVbox alloc] init] autorelease];
+  NSScrollView  *scrollView;
+  GSVbox        *vbox;
 
+  vbox = [[GSVbox alloc] init];
   [vbox addView: [self makeExtraColorListVbox]];
   [vbox addView: [self makeBoldLabel: @"Extra Colors"]];
 
   [vbox addView: [self makeSystemColorListVbox]];
   [vbox addView: [self makeBoldLabel: @"System Colors"]];
 
+  scrollView
+    = [[NSScrollView alloc] initWithFrame: NSMakeRect (0, 0, 150, 300)];
   [scrollView setDocumentView: vbox];
+  RELEASE(vbox);
   [scrollView setHasHorizontalScroller: NO];
   [scrollView setHasVerticalScroller: YES];
   [scrollView setBorderType: NSBezelBorder];
   [scrollView setAutoresizingMask: (NSViewWidthSizable | NSViewHeightSizable)];  
-  return scrollView;
+  return AUTORELEASE(scrollView);
 }
 
 - (void) selectAt: (NSPoint)mouse
@@ -270,9 +300,12 @@ static NSArray *extraColorNames;
     }
  }
 	    
-- (NSColor *) colorForName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state
+- (NSColor *) colorForName: (NSString *)aName
+                  isSystem: (BOOL)system
+                     state: (GSThemeControlState)state
 {
   NSColor *result = nil;
+
   if (system)
     {
       result = [owner colorForKey: aName];
@@ -308,7 +341,10 @@ static NSArray *extraColorNames;
   return result;
 }
 
-- (void) setColor: (NSColor *)aColor forName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state
+- (void) setColor: (NSColor *)aColor
+          forName: (NSString *)aName
+         isSystem: (BOOL)system
+            state: (GSThemeControlState)state
 {
   if (system)
     {
@@ -338,7 +374,9 @@ static NSArray *extraColorNames;
 
 // Ugly: map (name, isSystem, state) tuple to an integer and back
 
-- (NSInteger) tagForName: (NSString *)aName isSystem: (BOOL)system state: (GSThemeControlState)state
+- (NSInteger) tagForName: (NSString *)aName
+                isSystem: (BOOL)system
+                   state: (GSThemeControlState)state
 {
   const NSUInteger systemCount = [systemColorNames count];
   const NSUInteger extraCount = [extraColorNames count];

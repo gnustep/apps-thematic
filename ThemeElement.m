@@ -50,7 +50,7 @@
 
 - (NSString*) gormName
 {
-  return NSStringFromClass(isa);
+  return NSStringFromClass(object_getClass(self));
 }
 
 - (id) initWithView: (NSView*)aView
