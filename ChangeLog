@@ -1,3 +1,8 @@
+2015-11-19 Riccardo Mottola <rm@gnu.org>
+
+	* ImageElement.m
+	Add new images (Recycler, Multiple selection).
+
 2014-01-12  Sebastian Reitenbach <sebastia@l00-bugdead-prods.de>
 	* ThemeDocument.m
 	  change return type of -draggingEntered from unsigned

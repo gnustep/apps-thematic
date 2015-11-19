@@ -1,6 +1,6 @@
 /* ImageElement.m
  *
- * Copyright (C) 2006-2013 Free Software Foundation, Inc.
+ * Copyright (C) 2006-2015 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
  *              Riccardo Mottola
@@ -576,6 +576,10 @@ I(@"common_RadioOn", @"Selected Radio Button");
 I(@"common_RadioOff", @"Unselected Radio Button");
 I(@"common_SwitchOn", @"Selected Switch Button");
 I(@"common_SwitchOff", @"Unselected Switch Button");
+I(@"common_RecyclerEmpty", @"Recycler bin Empty");
+I(@"common_RecyclerFull", @"Recycler bin Full");
+I(@"common_MultipleSelection", @"Multiple selection");
+ 
 #undef  I
 
       apps = [aDocument applicationImageNames];
