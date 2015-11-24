@@ -175,9 +175,9 @@
 
 - (void) changeSelection: (id)sender
 {
-  int	row = [self selectedRow];
-  int	col = [self selectedColumn];
-  int	index = row * [self numberOfColumns] + col;
+  NSInteger row = [self selectedRow];
+  NSInteger col = [self selectedColumn];
+  NSInteger index = row * [self numberOfColumns] + col;
   id	obj = nil;
 
   if (index >= 0 && index < [objects count])
@@ -215,7 +215,7 @@
 {
   NSArray	*fileTypes = [NSImage imageFileTypes];
   NSOpenPanel	*oPanel = [NSOpenPanel openPanel];
-  int		result;
+  NSInteger	result;
 
   [oPanel setAllowsMultipleSelection: NO];
   [oPanel setCanChooseFiles: YES];
@@ -313,11 +313,11 @@
 
 - (void) refreshCells
 {
-  unsigned	count = [objects count];
-  unsigned	index;
-  int		cols = 0;
-  int		rows;
-  int		width;
+  NSUInteger	count = [objects count];
+  NSUInteger	index;
+  NSInteger	cols = 0;
+  NSInteger	rows;
+  NSInteger	width;
 
   width = [[self superview] bounds].size.width;
   while (width >= 72)
@@ -380,8 +380,8 @@
 {
   NSInteger	pos = [objects indexOfObjectIdenticalTo: anObject];
   NSRect	rect;
-  int		r;
-  int		c;
+  NSInteger	r;
+  NSInteger	c;
 
   if (pos == NSNotFound)
     return NSZeroRect;
