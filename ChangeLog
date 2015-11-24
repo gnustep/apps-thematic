@@ -1,3 +1,8 @@
+2015-11-24 Riccardo Mottola <rm@gnu.org>
+
+	* ThemeDocument.m (applicationImageNames)
+	Scan for Images and su-dirs explicitely and skip over all hidden directories, instead of one big directory enumerator.
+
 2015-11-19 Riccardo Mottola <rm@gnu.org>
 
 	* ImageElement.m

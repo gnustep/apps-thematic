@@ -247,30 +247,60 @@ static NSColorList	*systemColorList = nil;
 - (NSDictionary*) applicationImageNames
 {
   NSFileManager	        *mgr;
-  NSString              *path;
-  NSDirectoryEnumerator *enumerator;
+  NSString              *pathOfTI;
+  NSString              *path1;
+  NSEnumerator          *enumerator1;
   NSMutableDictionary   *images;
 
+  /*
+    We may have top-level images in ThemeImages. These are common images.
+    We may have then subdirectories with bundle identifieres.
+    We loop twice and scan only subdirectories.
+    We want to avoid hidden subdirs (like those created by version control systems).
+   */
+  
   mgr = [NSFileManager defaultManager];
-  path = [_rsrc stringByAppendingPathComponent: @"ThemeImages"];
-  enumerator = [mgr enumeratorAtPath: path];
+  pathOfTI = [_rsrc stringByAppendingPathComponent: @"ThemeImages"];
+  enumerator1 = [[mgr directoryContentsAtPath: pathOfTI] objectEnumerator];
   images = [NSMutableDictionary dictionary];
-  while ((path = [enumerator nextObject]) != nil)
+
+  while ((path1 = [enumerator1 nextObject]) != nil)
     {
-      NSString  *file = [path lastPathComponent];
+      BOOL isDir1;
+      NSString  *fileOrDir1;
 
-      if (NO == [file isEqual: path])
+
+      fileOrDir1 = [pathOfTI stringByAppendingPathComponent:path1];
+      if (![path1 hasPrefix:@"."])
         {
-          NSString              *identifier;
-          NSMutableArray        *array;
-
-          identifier = [path stringByDeletingLastPathComponent];
-          if (nil == (array = [images objectForKey: identifier]))
+          if ([mgr fileExistsAtPath:fileOrDir1 isDirectory:&isDir1] && isDir1)
             {
+              NSString              *path2;
+              NSEnumerator          *enumerator2;
+              NSMutableArray        *array;
+
               array = [NSMutableArray array];
-              [images setObject: array forKey: identifier];
+              [images setObject: array forKey:path1];
+              enumerator2 = [[mgr directoryContentsAtPath: fileOrDir1] objectEnumerator];
+              while ((path2 = [enumerator2 nextObject]) != nil)
+                {
+                  BOOL isDir2;
+                  NSString  *fileOrDir2;
+
+                  fileOrDir2 = [fileOrDir1 stringByAppendingPathComponent:path2];        
+                  if (![path2 hasPrefix:@"."])
+                    {
+                      if ([mgr fileExistsAtPath:fileOrDir2 isDirectory:&isDir2] && !isDir2)
+                        {
+                          [array addObject: path2];
+                        }
+                    }
+                }
             }
-          [array addObject: file];
+          else
+            {
+              // Here we would have images in the root (common)      
+            }
         }
     }
   return images;
