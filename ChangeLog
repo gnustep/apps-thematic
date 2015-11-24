@@ -3,6 +3,9 @@
 	* ThemeDocument.m (applicationImageNames)
 	Scan for Images and su-dirs explicitely and skip over all hidden directories, instead of one big directory enumerator.
 
+	* ImageElement.m (initWithView:)
+	Set appropriate tag for each collection.
+
 2015-11-19 Riccardo Mottola <rm@gnu.org>
 
 	* ImageElement.m

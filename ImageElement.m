@@ -470,6 +470,7 @@
       NSDictionary      *apps;
       NSEnumerator      *appEnum;
       NSString          *app;
+      NSInteger         tag;
 
       selectedTag = -2;
 
@@ -584,7 +585,8 @@ I(@"common_MultipleSelection", @"Multiple selection");
 
       apps = [aDocument applicationImageNames];
       appEnum = [[[apps allKeys]
-        sortedArrayUsingSelector: @selector(compare:)] objectEnumerator]; 
+        sortedArrayUsingSelector: @selector(compare:)] objectEnumerator];
+      tag = 0;
       while (nil != (app = [appEnum nextObject]))
         {
           NSEnumerator  *imgEnum;
@@ -608,7 +610,7 @@ I(@"common_MultipleSelection", @"Multiple selection");
           [texts addObject: app];
 
           imgEnum = [[[apps objectForKey: app]
-            sortedArrayUsingSelector: @selector(compare:)] objectEnumerator]; 
+            sortedArrayUsingSelector: @selector(compare:)] objectEnumerator];
           while (nil != (img = [imgEnum nextObject]))
             {
               NSString  *key;
@@ -623,7 +625,9 @@ I(@"common_MultipleSelection", @"Multiple selection");
               [appView addObject: ii];
               RELEASE(ii);
             }
-          [collectionMenu addItemWithTitle: app];
+          [collectionMenu addItemWithTitle:app];
+          [[collectionMenu itemWithTitle:app] setTag:tag];
+          tag++;
         }
     }
   return self;
