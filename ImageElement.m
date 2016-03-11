@@ -1,6 +1,6 @@
 /* ImageElement.m
  *
- * Copyright (C) 2006-2015 Free Software Foundation, Inc.
+ * Copyright (C) 2006-2016 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
  *              Riccardo Mottola
@@ -573,6 +573,7 @@ I(@"common_HomeDirectory", @"Home Directory Folder");
 I(@"common_Unknown", @"Unknown File");
 I(@"common_UnknownApplication", @"Unknown Application");
 I(@"common_UnknownTool", @"Unknown Tool");
+I(@"common_VideoFolder", @"Movie Folder");
 I(@"common_RadioOn", @"Selected Radio Button");
 I(@"common_RadioOff", @"Unselected Radio Button");
 I(@"common_SwitchOn", @"Selected Switch Button");
