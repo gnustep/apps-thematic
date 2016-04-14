@@ -567,6 +567,7 @@ I(@"common_DocsFolder", @"Documents Folder");
 I(@"common_ImageFolder", @"Images Folder");
 I(@"common_DownloadFolder", @"Downloads Folder");
 I(@"common_GSFolder", @"System Folder");
+ I(@"common_ApplicationFolder",@"Application Folder");
 I(@"common_LibraryFolder", @"Library Folder");
 I(@"common_MusicFolder", @"Music Folder");
 I(@"common_HomeDirectory", @"Home Directory Folder");
