@@ -786,7 +786,7 @@ static NSColorList	*systemColorList = nil;
   _defs = [_info objectForKey: @"GSThemeDomain"];
   if (_defs == nil)
     {
-      _defs = [NSDictionary dictionary];
+      _defs = (NSMutableDictionary *)[NSDictionary dictionary];
     }
   _defs = [_defs mutableCopy];
   [_info setObject: _defs forKey: @"GSThemeDomain"];
