@@ -33,6 +33,7 @@ Resources/WindowsElement.gorm \
 Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
 Resources/ControlElement.gorm \
+Resources/PreviewElement.gorm \
 Resources/CodeEditor.gorm \
 Resources/Thematic.png \
 Resources/ThematicHelp.rtf \
