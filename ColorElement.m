@@ -1,6 +1,6 @@
 /* ColorElement.m
  *
- * Copyright (C) 2006 Free Software Foundation, Inc.
+ * Copyright (C) 2006-2019 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
  * Date:	2006
@@ -82,6 +82,8 @@ static NSArray *extraColorNames;
         @"shadowColor",
         @"textBackgroundColor",
         @"textColor",
+        @"toolTipColor",
+        @"toolTipTextColor",
         @"windowBackgroundColor",
         @"windowFrameColor",
         @"windowFrameTextColor",

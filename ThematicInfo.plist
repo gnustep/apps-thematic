@@ -4,9 +4,10 @@
     ApplicationName = Thematic;
     ApplicationRelease = 0.2;
     Authors = (
-	"Richard Frith-Macdonald"
+	"Richard Frith-Macdonald",
+	"Riccardo Mottola"
     );
-    Copyright = "Copyright (C) 2006-2009";
+    Copyright = "Copyright (C) 2006-2019";
     CopyrightDescription = "Released under ... the GPL3";
     FullVersionID = 0.2;
     GSHelpContentsFile = ThematicHelp.rtf;
