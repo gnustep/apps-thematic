@@ -1,9 +1,10 @@
 /* 
    Project: Thematic
 
-   Copyright (C) 2006 Free Software Foundation
+   Copyright (C) 2006-2020 Free Software Foundation
 
-   Author: richard,,,
+   Authors: Richard Frith-MacDonald
+            Riccardo Mottola
 
    Created: 2006-09-18 14:00:14 +0100 by richard
    
@@ -36,6 +37,7 @@
   NSMutableArray	*documents;
   ThemeDocument		*currentDocument;	// Not retained
   NSDictionary		*codeInfo;
+  NSString              *lastPathUsed;
 }
 
 + (void) initialize;

@@ -1,9 +1,10 @@
 /* 
    Project:  Thematic
 
-   Copyright (C) 2006 Free Software Foundation
+   Copyright (C) 2006-2020 Free Software Foundation
 
-   Author:  richard,,,
+   Authors:  Richard Frith-MacDonald
+             Riccardo Mottola
 
    Created:  2006-09-18 14:00:14 +0100 by richard
    
@@ -77,6 +78,8 @@ AppController	*thematicController = nil;
 	  codeInfo = [[NSDictionary alloc] initWithContentsOfFile:
 	    [[NSBundle mainBundle] pathForResource: @"CodeInfo"
 					    ofType: @"plist"]];
+
+	  lastPathUsed = nil;
 	}
     }
   else
@@ -96,6 +99,7 @@ AppController	*thematicController = nil;
   RELEASE(currentDocument);
   RELEASE(documents);
   RELEASE(codeInfo);
+  RELEASE(lastPathUsed);
   [super dealloc];
 }
 
@@ -207,11 +211,13 @@ AppController	*thematicController = nil;
     {
       base = NSHomeDirectory();
     }
+  if (lastPathUsed == nil)
+    lastPathUsed = [base retain];
 
   [oPanel setAllowsMultipleSelection: NO];
   [oPanel setCanChooseFiles: YES];
   [oPanel setCanChooseDirectories: NO];
-  result = [oPanel runModalForDirectory: base
+  result = [oPanel runModalForDirectory: lastPathUsed
 				   file: nil
 				  types: fileTypes];
   if (result == NSOKButton)
@@ -220,7 +226,11 @@ AppController	*thematicController = nil;
 
       NS_DURING
 	{
+	  [path retain];
 	  [self application: NSApp openFile: path];
+	  DESTROY(lastPathUsed);
+	  lastPathUsed = [[path stringByDeletingLastPathComponent] retain];
+	  [path release];
 	}
       NS_HANDLER
 	{

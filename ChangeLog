@@ -1,3 +1,9 @@
+2020-11-27 Riccardo Mottola <rm@gnu.org>
+
+	* AppController.h
+	* AppController.m
+	Remember last opened directory and suggest it to the user again.
+
 2019-07-08 Riccardo Mottola <rm@gnu.org>
 
 	* ColorElement.m
