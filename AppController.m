@@ -122,6 +122,15 @@ AppController	*thematicController = nil;
 {
 }
 
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+  // We don't want to terminate immediately and we force this to NO
+  // GUI tries to be smart and say YES if a NSWindows95InterfaceStyle is loaded
+  // But We only want to edit such a theme, othwise during a theme load
+  // it may crash
+  return NO;
+}
+
 - (BOOL) application: (NSApplication *)application
             openFile: (NSString *)fileName
 {
