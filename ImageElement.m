@@ -1,6 +1,6 @@
 /* ImageElement.m
  *
- * Copyright (C) 2006-2016 Free Software Foundation, Inc.
+ * Copyright (C) 2006-2020 Free Software Foundation, Inc.
  *
  * Author:	Richard Frith-Macdonald <rfm@gnu.org>
  *              Riccardo Mottola
@@ -340,18 +340,23 @@
     {
       ImageInfo		*img = [objects objectAtIndex: index];
       NSButtonCell	*but = [self cellAtRow: index/cols column: index%cols];
+      NSImage           *image;
 
-      [but setImage: [img image]];
-      /* Make sure big images are shrunk to fit.
-       */
-      if ([[img image] size].width > 64
-        || [[img image] size].height > 64)
+      image = [img image];
+      if (image != nil)
         {
-          [but setImageScaling: NSImageScaleProportionallyUpOrDown];
-        }
-      else
-        {
-          [but setImageScaling: NSImageScaleNone];
+          [but setImage: image];
+          /* Make sure big images are shrunk to fit.
+           */
+          if ([image size].width > 64
+              || [image size].height > 64)
+            {
+              [but setImageScaling: NSImageScaleProportionallyUpOrDown];
+            }
+          else
+            {
+              [but setImageScaling: NSImageScaleNone];
+            }
         }
       [but setTitle: @""];
       [but setShowsStateBy: NSChangeGrayCellMask];
