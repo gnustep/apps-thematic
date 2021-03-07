@@ -1,3 +1,8 @@
+2021-03-07 Gregory John Casamento <greg.casamento@gmail.com>
+
+	* Resources/ControlElement.gorm: Correct resizing so that the elements
+	correctly redraw themselves after a resize of the window.
+
 2020-11-29 Riccardo Mottola <rm@gnu.org>
 
 	* AppController.m
