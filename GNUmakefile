@@ -3,6 +3,15 @@
 #
 ifeq ($(GNUSTEP_MAKEFILES),)
  GNUSTEP_MAKEFILES := $(shell gnustep-config --variable=GNUSTEP_MAKEFILES 2>/dev/null)
+  ifeq ($(GNUSTEP_MAKEFILES),)
+    $(warning )
+    $(warning Unable to obtain GNUSTEP_MAKEFILES setting from gnustep-config!)
+    $(warning Perhaps gnustep-make is not properly installed,)
+    $(warning so gnustep-config is not in your PATH.)
+    $(warning )
+    $(warning Your PATH is currently $(PATH))
+    $(warning )
+  endif
 endif
 ifeq ($(GNUSTEP_MAKEFILES),)
  $(error You need to set GNUSTEP_MAKEFILES before compiling!)
@@ -17,6 +26,7 @@ VERSION = 0.2
 PACKAGE_NAME = Thematic
 APP_NAME = Thematic
 Thematic_APPLICATION_ICON = Thematic.png
+GNUSTEP_INSTALLATION_DOMAIN = SYSTEM
 
 
 #
@@ -27,13 +37,11 @@ Resources/Thematic.gorm \
 Resources/ThemeInspector.gorm \
 Resources/ColorElement.gorm \
 Resources/ThemeDocument.gorm \
-Resources/ImageAdd.png \
 Resources/ImageElement.gorm \
 Resources/WindowsElement.gorm \
 Resources/MenusElement.gorm \
 Resources/MiscElement.gorm \
 Resources/ControlElement.gorm \
-Resources/PreviewElement.gorm \
 Resources/CodeEditor.gorm \
 Resources/Thematic.png \
 Resources/ThematicHelp.rtf \
@@ -64,7 +72,7 @@ MenuItemElement.h \
 PreviewElement.h
 
 #
-# Class files
+# Objective-C Class files
 #
 Thematic_OBJC_FILES = \
 AppController.m \
@@ -94,4 +102,3 @@ main.m
 include $(GNUSTEP_MAKEFILES)/aggregate.make
 include $(GNUSTEP_MAKEFILES)/application.make
 -include GNUmakefile.postamble
-include $(GNUSTEP_MAKEFILES)/Master/nsis.make
