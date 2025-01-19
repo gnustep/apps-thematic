@@ -88,7 +88,7 @@
   NSArray	*arr;
   NSString	*str;
   int		fsize = 32;
-
+  
   [nc addObserver: self
 	 selector: @selector(didEndEditing:)
 	     name: NSWindowDidResignKeyNotification
@@ -109,6 +109,11 @@
   if ([str length] > 0)
     {
       [details setString: str];
+    }
+  str = [info objectForKey: @"GSThemeDarkMode"];
+  if ([str length] > 0)
+    {
+      [darkMode setState: ([str isEqualToString: @"YES"] ? NSOnState:NSOffState) ];
     }
   [iconView setImage: [[GSTheme theme] icon]];
   do
@@ -218,6 +223,13 @@
       [doc setInfo: a forKey: @"GSThemeAuthors"];
       RELEASE(a);
     }
+}
+
+- (IBAction) darkModeSwitch: (id)sender
+{
+  ThemeDocument *doc = [[AppController sharedController] selectedDocument];
+  [doc setInfo: ([sender state] == NSOnState) ? @"YES":@"NO"
+	forKey: @"GSThemeDarkMode"];
 }
 
 - (NSString*) title

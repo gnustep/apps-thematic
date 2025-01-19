@@ -35,9 +35,13 @@
   id    details;
   id    themeName;
   id    themeVersion;
+  id    darkMode;
 }
+
 - (void) newVersion: (id)sender;
 - (void) takeIcon: (id)sender;
 - (void) textDidEndEditing: (NSNotification*)aNotification;
+- (IBAction) darkModeSwitch: (id)sender;
+
 @end
 
