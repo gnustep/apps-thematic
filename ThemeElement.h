@@ -59,4 +59,3 @@
  */
 - (NSView*) view;
 @end
-

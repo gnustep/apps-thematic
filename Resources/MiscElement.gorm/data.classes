@@ -22,7 +22,8 @@
 	    details,
 	    themeName,
 	    themeVersion,
-	    license
+	    license,
+	    darkMode
 	);
 	Super = ThemeElement;
     };

@@ -33,6 +33,66 @@
 
 @implementation MiscElement
 
+- (instancetype) init
+{
+  self = [super init];
+  if (self != nil)
+    {
+    }
+  return self;
+}
+
+- (void) loadValues
+{
+  AppController *ctl = [AppController sharedController];
+  ThemeDocument *doc = [ctl selectedDocument];
+  NSDictionary	*info = [doc infoDictionary];
+  NSArray	*arr;
+  NSString	*str;
+  int		fsize = 32;
+
+  NSLog(@"info = %@", info);
+  arr = [info objectForKey: @"GSThemeAuthors"];
+  if ([arr count] > 0)
+    {
+      str = [arr componentsJoinedByString: @"\n"];
+      [authors setString: str];
+    }
+  str = [info objectForKey: @"GSThemeLicense"];
+  if ([str length] > 0)
+    {
+      [license setString: str];
+    }
+  str = [info objectForKey: @"GSThemeDetails"];
+  if ([str length] > 0)
+    {
+      [details setString: str];
+    }
+  str = [info objectForKey: @"GSThemeDarkMode"];
+  if ([str length] > 0)
+    {
+      NSLog(@"DARKMODE = %@", str);
+      NSLog(@"Button = %@", darkMode);
+      [darkMode setState: ([str isEqualToString: @"YES"] ? NSOnState:NSOffState) ];
+    }
+  [iconView setImage: [[GSTheme theme] icon]];
+  do
+    {
+      [themeName setFont: [NSFont boldSystemFontOfSize: fsize]];
+      fsize -= 2;
+      [themeName sizeToFit];
+    }
+  while ([themeName frame].size.width > 200 && fsize > 8);
+  [themeName setStringValue: [[doc name] stringByDeletingPathExtension]];
+  str = [doc versionIncrementMajor: NO incrementMinor: NO];
+  [themeVersion setStringValue: str];
+}
+
+- (void) awakeFromNib
+{
+  [self loadValues];
+}
+
 - (void) any: (NSNotification*)o
 {
   NSLog(@"Notified: %@", o);
@@ -83,49 +143,13 @@
 {
   NSNotificationCenter	*nc = [NSNotificationCenter defaultCenter];
   AppController *ctl = [AppController sharedController];
-  ThemeDocument *doc = [ctl selectedDocument];
-  NSDictionary	*info = [doc infoDictionary];
-  NSArray	*arr;
-  NSString	*str;
-  int		fsize = 32;
   
   [nc addObserver: self
 	 selector: @selector(didEndEditing:)
 	     name: NSWindowDidResignKeyNotification
 	   object: [ctl inspector]];
-
-  arr = [info objectForKey: @"GSThemeAuthors"];
-  if ([arr count] > 0)
-    {
-      str = [arr componentsJoinedByString: @"\n"];
-      [authors setString: str];
-    }
-  str = [info objectForKey: @"GSThemeLicense"];
-  if ([str length] > 0)
-    {
-      [license setString: str];
-    }
-  str = [info objectForKey: @"GSThemeDetails"];
-  if ([str length] > 0)
-    {
-      [details setString: str];
-    }
-  str = [info objectForKey: @"GSThemeDarkMode"];
-  if ([str length] > 0)
-    {
-      [darkMode setState: ([str isEqualToString: @"YES"] ? NSOnState:NSOffState) ];
-    }
-  [iconView setImage: [[GSTheme theme] icon]];
-  do
-    {
-      [themeName setFont: [NSFont boldSystemFontOfSize: fsize]];
-      fsize -= 2;
-      [themeName sizeToFit];
-    }
-  while ([themeName frame].size.width > 200 && fsize > 8);
-  [themeName setStringValue: [[doc name] stringByDeletingPathExtension]];
-  str = [doc versionIncrementMajor: NO incrementMinor: NO];
-  [themeVersion setStringValue: str];
+  
+  [self loadValues];
   [super selectAt: mouse];
 }
 
